@@ -9,12 +9,14 @@ const http = createServer(app);
 
 /* router */
 const router = require('./routes');
+const ejsRouter = require('./routes/ejs.routes');
 const errorHandler = require('./middleware/errorhandler');
 
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', router);
+app.use(ejsRouter);
 app.use(errorHandler);
 
 /* views */
