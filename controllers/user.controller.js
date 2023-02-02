@@ -1,7 +1,7 @@
 const UserService = require('../services/user.service');
 
 /* joi */
-const { userRegisterDataValidate } = require('../lib/joischema');
+const { userRegisterDataValidate, userLoginDataValidate } = require('../lib/joischema');
 
 class UserController {
     userService = new UserService();
@@ -18,11 +18,35 @@ class UserController {
         }
     };
 
+    login = async (req, res, next) => {
+        try {
+            const userInfo = await userLoginDataValidate.validateAsync(req.body);
+
+            const loginResult = await this.userService.login(userInfo);
+
+            res.cookie('accessToken', accessToken);
+            return res.status(loginResult.status).json({ accessToken: loginResult.accessToken });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    logout = async (req, res, next) => {
+        try {
+            res.clearCookie('accessToken');
+
+            return res.status(200).json({ message: '정상적으로 로그아웃 되었습니다.' });
+        } catch (error) {
+            next(error);
+        }
+    };
+
     getUserInfoById = async (req, res) => {
         try {
             const { id } = req.params;
 
             const user = await this.userService.getUserInfoById(id);
+            console.log(user);
 
             return res.status(200).json({ user });
         } catch (error) {

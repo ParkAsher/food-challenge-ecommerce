@@ -10,6 +10,10 @@ router.get('/register', (req, res, next) => {
     res.render('index.ejs', { components: 'register' });
 });
 
+router.get('/items', (req, res, next) => {
+    res.render('index.ejs', { components: 'oneItem' });
+});
+
 router.get('/mypage/:id', (req, res, next) => {
     res.render('index.ejs', { components: 'mypage' });
 });

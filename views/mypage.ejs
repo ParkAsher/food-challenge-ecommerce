@@ -1,5 +1,38 @@
 <div class="mypage-background">
-	<div>
-		asdasdasdasd
+	<div class="mypage-user-info" id="user-info-box">
+
 	</div>
 </div>
+
+<script>
+	$(document).ready(function () {
+        getUserInfoById()
+    });
+
+	function getUserInfoById(user) {
+		$.ajax({
+			type: 'GET',
+			url: '/api/users/mypage/:id',
+			data: {},
+			success: function (response) {
+				let {name, nickname, email, point} = response.user
+
+				let temp_html = `	
+						<div class="mypage-user-name">
+							<p class="name">이름 : ${name}</p>
+						</div>
+						<div class="mypage-user-nickname">
+							<p class="nickname">닉네임 : ${nickname}</p>
+						</div>
+						<div class="mypage-user-email">
+							<p class="email">이메일 : ${email}</p>
+						</div>
+						<div class="mypage-user-point">
+							<p class="point">포인트 : ${point}</p>
+						</div>
+					`
+				$('#user-info-box').append(temp_html)
+			}
+		})
+	}
+</script>

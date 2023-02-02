@@ -1,0 +1,96 @@
+<div class="con">
+        <img src="https://cdn.travelview.co.kr/travelview/2020/05/21045113/2-30.jpg" alt="">
+    
+</div>
+<div class="con">
+    <div class="menu-box">
+        <ul class="row" >
+            <li onclick= getItems(0) class="cell"><a href="#">전체보기</a></li>
+            <li onclick= getItems(1) class="cell"><a href="#">1단계 음식</a></li>
+            <li onclick= getItems(2) class="cell"><a href="#">2단계 음식</a></li>
+            <li onclick= getItems(3) class="cell"><a href="#">3단계 음식</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="mycards">
+    <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box">
+
+    </div>
+</div>
+
+<script>
+        $(document).ready(function () {
+            getItems(0)
+        });
+
+        // 아이템 전체조회
+        function getItems(level) {
+        $('#cards-box').empty()
+
+        if (level === 0) {
+    
+        $.ajax({
+          type: 'GET',
+          url: `/api/items/list`,
+          data: {},
+          headers: {
+        //   authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+          success: function (response) {
+            let rows = response['items'];
+            
+            for (let i = 0; i < rows.length; i++) {
+              let itemId = rows[i]['itemId'];
+              let name = rows[i]['name'];
+              let price = rows[i]['price'];
+              let image = rows[i]['image'];
+
+              let temp_html = `<div class="col">
+                                <div class="card h-100">
+                                    <img onclick="location.href='/items?itemId=${itemId}'"; src="./극혐.avif"/class="card-img-top">
+                                    <div class="card-body">
+                                    <h5 class="card-title" style="text-align: center;">${name}</h5>
+                                    <p class="card-text" style="text-align: center;">${price}원</p>
+                                </div>
+                            </div>
+                        </div>`;
+              $('#cards-box').append(temp_html);
+            }
+          },
+        });
+        }
+        else {   
+        $.ajax({
+          type: 'GET',
+          url: `/api/items/list/${level}`,
+          data: {},
+          headers: {
+        //   authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+          success: function (response) {
+            let rows = response['itemsByLevel'];
+            
+            for (let i = 0; i < rows.length; i++) {
+              let itemId = rows[i]['itemId'];
+              let name = rows[i]['name'];
+              let price = rows[i]['price'];
+              let image = rows[i]['image'];
+
+              let temp_html = `<div class="col">
+                                <div class="card h-100">
+                                    <img onclick="location.href='/register'"; src="./별난음식.jpeg"/class="card-img-top">
+                                    <div class="card-body">
+                                    <h5 class="card-title" style="text-align: center;">${name}</h5>
+                                    <p class="card-text" style="text-align: center;">${price}원</p>
+                                </div>
+                            </div>
+                        </div>`;
+              $('#cards-box').append(temp_html);
+            }
+          },
+        });
+        };
+    }
+
+</script>
