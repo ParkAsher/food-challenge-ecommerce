@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- css -->
+    <link rel="stylesheet" href="./css/reset.css" />
+    <title>맛대갈</title>
+  </head>
+  <body>
+  <div id="info">
+    
+  </div>
+</body>
+</html>
+<script>
+  function count(type)  {
+  // 결과를 표시할 element
+  const resultElement = document.getElementById('total');
+  const price = document.getElementById('price').innerText.split(" ")[1]
+  const multi = document.getElementById('stock').value;
+  console.log(multi)
+  
+  // 현재 화면에 표시된 값
+  let number = resultElement.innerText;
+  
+  // 더하기/빼기
+  if(type === 'plus') {
+    number = price * multi;
+  }else if(type === 'minus')  {
+    number = price * multi;
+  }
+  
+  // 결과 출력
+  resultElement.innerText = number;
+}
+
+let query = window.location.search;
+  let param = new URLSearchParams(query);
+  let id = Number(param.get('id'));
+fetch(`http://localhost:3000/api/items?id=${id}`, {credentials: "include"}).then(response => response.json()).then(({data}) => {
+    const row = `
+    <img src="${data.image}" alt="상품 이미지">
+    <div>
+    <span>상품명 ${data.name}</span>
+    <span>맛대갈단계 ${data.level}</span>
+    <span id="price">가격 ${data.price}</span>
+    <span>적립포인트 ${data.price / (1 * 100)}</span>
+    <form action="">
+      <span>구매수량</span>
+      <input style="HEIGHT: 20px" onclick="javascript:this.form.stock.value--;count('minus')" type="button" value="-">
+      <input type="number" name="stock" value="1" id="stock" min="1">
+      <input style="HEIGHT: 20px" onclick="javascript:this.form.stock.value++;count('plus')" type="button" value="+">
+    </form>
+    <span id="total">100</span>
+    <button>장바구니</button>
+    <button>바로구매</button>
+    </div>
+    ` 
+
+    const tr = document.createElement("div")
+    tr.innerHTML = row
+    document.getElementById("info").appendChild(tr)
+})
+</script>

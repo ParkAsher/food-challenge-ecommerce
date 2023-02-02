@@ -28,6 +28,13 @@
 
         <title>Document</title>
     </head>
-    <body></body>
+    <body>
+        <!-- header -->
+        <%- include('header.ejs') %>
+        <!-- body -->
+        <% if (components === 'register') { %> <%- include('register.ejs') %> <% } %>
+        <% if (components === 'userMain') { %> <%- include('userMain.ejs') %> <% } %>
+        <% if (components === 'oneItem') { %> <%- include('detail.ejs') %> <% } %>
+    </body>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 </html>
