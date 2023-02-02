@@ -97,6 +97,21 @@ class UserService {
             throw error;
         }
     };
+
+    getUserEmail = async (userInfo) => {
+        try {
+            const userEmail = await this.userRepository.getUserEmail(userInfo);
+            // 존재하지 않는다면?
+            if (!userEmail) {
+                const error = new UserNotFound();
+                throw error;
+            }
+
+            return { status: 200, email: userEmail.email };
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = UserService;
