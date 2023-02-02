@@ -18,11 +18,17 @@
             </div>
             <div class="register-password-wrap">
                 <p>비밀번호</p>
-                <input id="password" class="register-password-input" placeholder="비밀번호" />
+                <input
+                    type="password"
+                    id="password"
+                    class="register-password-input"
+                    placeholder="비밀번호"
+                />
             </div>
             <div class="register-password-check-wrap">
                 <p>비밀번호확인</p>
                 <input
+                    type="password"
                     id="password-check"
                     class="register-password-check-input"
                     placeholder="비밀번호확인"
@@ -32,9 +38,40 @@
                 <p>휴대폰 번호</p>
                 <input id="phone" class="register-phone-input" placeholder="휴대폰번호" />
             </div>
+            <div class="error-message-wrap"></div>
             <div class="register-btn-wrap">
-                <button type="button">가입하기</button>
+                <button type="button" onclick="register()">가입하기</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    function register() {
+        // 유저 정보
+        const userInfo = {
+            name: $('#name').val(),
+            nickname: $('#nickname').val(),
+            email: $('#email').val(),
+            password: $('#password').val(),
+            passwordCheck: $('#password-check').val(),
+            phone: $('#phone').val(),
+        };
+
+        // console.log(userInfo);
+        $.ajax({
+            type: 'POST',
+            url: '/api/users/register',
+            data: userInfo,
+            success: function (response) {
+                alert(response.message);
+                window.location.href = '/';
+            },
+            error: function (response) {
+                $('.error-message-wrap').empty();
+                let temp = `<p>${response.responseJSON.message}</p>`;
+                $('.error-message-wrap').append(temp);
+            },
+        });
+    }
+</script>
