@@ -42,7 +42,8 @@
 .register-nickname-wrap,
 .register-email-wrap,
 .register-password-wrap,
-.register-password-check-wrap {
+.register-password-check-wrap,
+.register-phone-wrap {
     width: 100%;
     margin-bottom: 1.25rem;
 }
@@ -51,7 +52,8 @@
 .register-nickname-wrap p,
 .register-email-wrap p,
 .register-password-wrap p,
-.register-password-check-wrap p {
+.register-password-check-wrap p,
+.register-phone-wrap p {
     font-size: 1.25rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
