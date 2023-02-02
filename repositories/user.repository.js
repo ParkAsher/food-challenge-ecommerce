@@ -8,6 +8,9 @@ class UserRepository {
 
     findUser = async (userInfo) => {
         try {
+            // 로그인에서 요청을 하면 userInfo.nickname이 없다.
+            if (!userInfo.nickname) userInfo.nickname = '';
+
             const user = await this.userModel.findOne({
                 where: {
                     [Op.or]: [{ email: userInfo.email }, { nickname: userInfo.nickname }],
