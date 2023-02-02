@@ -56,6 +56,10 @@ module.exports = (err, req, res, next) => {
         if (err.name === 'UserNotFound') {
             return res.status(err.status).json({ message: err.message });
         }
+        /* 비밀번호가 일치하지 않음 */
+        if (err.name === 'IncorrectPassword') {
+            return res.status(err.status).json({ message: err.message });
+        }
         /* else */
         return res.status(400).json({ message: '로그인에 실패했습니다.' });
     }
