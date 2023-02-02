@@ -86,3 +86,17 @@
     color: #ffffff;
     font-weight: bold;
 }
+
+.error-message-wrap {
+    width: 100%;
+    margin-bottom: 1.25rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.error-message-wrap p {
+    font-weight: bold;
+    color: red;
+}

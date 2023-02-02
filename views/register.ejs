@@ -71,6 +71,7 @@
                 $('.error-message-wrap').empty();
                 let temp = `<p>${response.responseJSON.message}</p>`;
                 $('.error-message-wrap').append(temp);
+                $('input').val('');
             },
         });
     }
