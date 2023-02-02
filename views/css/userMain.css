@@ -1,0 +1,38 @@
+
+/*노말라이즈*/
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.con {
+    margin: 20px auto 0px auto;
+    text-align: center;
+    width: 95%;
+    max-width: 1200px;
+}
+
+
+.menu-box > ul > li {
+    width: calc(100% / 4);
+    text-align: center;
+
+}
+
+.menu-box > ul > li > a {
+    display: block;
+    text-align: center;
+    font-weight: bold;
+    position: relative;
+}
+.menu-box > ul > li:hover > a {
+    color: red;
+    text-decoration: underline;
+}
+
+.mycards {
+    margin: 20px auto 0px auto;
+    width: 95%;
+    max-width: 1200px;
+}
+

@@ -1,0 +1,77 @@
+<div class="register-background">
+    <div class="register-wrap">
+        <div class="register-form">
+            <div class="register-title-wrap">
+                <p>회원가입</p>
+            </div>
+            <div class="register-name-wrap">
+                <p>이름</p>
+                <input id="name" class="register-name-input" placeholder="이름" />
+            </div>
+            <div class="register-nickname-wrap">
+                <p>닉네임</p>
+                <input id="nickname" class="register-nickname-input" placeholder="닉네임" />
+            </div>
+            <div class="register-email-wrap">
+                <p>이메일</p>
+                <input id="email" class="register-email-input" placeholder="이메일" />
+            </div>
+            <div class="register-password-wrap">
+                <p>비밀번호</p>
+                <input
+                    type="password"
+                    id="password"
+                    class="register-password-input"
+                    placeholder="비밀번호"
+                />
+            </div>
+            <div class="register-password-check-wrap">
+                <p>비밀번호확인</p>
+                <input
+                    type="password"
+                    id="password-check"
+                    class="register-password-check-input"
+                    placeholder="비밀번호확인"
+                />
+            </div>
+            <div class="register-phone-wrap">
+                <p>휴대폰 번호</p>
+                <input id="phone" class="register-phone-input" placeholder="휴대폰번호" />
+            </div>
+            <div class="error-message-wrap"></div>
+            <div class="register-btn-wrap">
+                <button type="button" onclick="register()">가입하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function register() {
+        // 유저 정보
+        const userInfo = {
+            name: $('#name').val(),
+            nickname: $('#nickname').val(),
+            email: $('#email').val(),
+            password: $('#password').val(),
+            passwordCheck: $('#password-check').val(),
+            phone: $('#phone').val(),
+        };
+        // console.log(userInfo);
+        $.ajax({
+            type: 'POST',
+            url: '/api/users/register',
+            data: userInfo,
+            success: function (response) {
+                alert(response.message);
+                window.location.href = '/';
+            },
+            error: function (response) {
+                $('.error-message-wrap').empty();
+                let temp = `<p>${response.responseJSON.message}</p>`;
+                $('.error-message-wrap').append(temp);
+                $('input').val('');
+            },
+        });
+    }
+</script>

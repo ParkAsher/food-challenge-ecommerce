@@ -1,4 +1,4 @@
-const ItemRepository = require('../repositories/main.repository');
+const ItemRepository = require('../repositories/userMain.repository');
 
 class ItemService {
     itemRepository = new ItemRepository();
@@ -8,7 +8,7 @@ class ItemService {
 
         return allItems.map((item) => {
             return {
-                item_id: item.id,
+                itemId: item.id,
                 name: item.name,
                 price: item.price,
                 image: item.image,
@@ -22,7 +22,7 @@ class ItemService {
 
         return itemsByLevel.map((item) => {
             return {
-                item_id: item.id,
+                itemId: item.id,
                 name: item.name,
                 price: item.price,
                 image: item.image,

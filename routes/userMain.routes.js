@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router()
 
-const MainController = require('../controllers/main.controller')
+const MainController = require('../controllers/userMain.controller')
 const mainController = new MainController()
 
 router.get('/item_list', mainController.getAllItems);
