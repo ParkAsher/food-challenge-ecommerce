@@ -34,6 +34,19 @@ class UserRepository {
             throw error;
         }
     };
+
+    getUserInfoById = async (id) => {
+        try {
+            const userInfo = await this.userModel.findOne({ id });
+
+            console.log('this is my ---- +++++ ' + userInfo);
+
+            return userInfo;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    };
 }
 
 module.exports = UserRepository;

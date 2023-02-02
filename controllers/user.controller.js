@@ -17,6 +17,19 @@ class UserController {
             next(error);
         }
     };
+
+    getUserInfoById = async (req, res) => {
+        try {
+            const { id } = req.params;
+
+            const user = await this.userService.getUserInfoById(id);
+
+            return res.status(200).json({ user });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'error!!' });
+        }
+    };
 }
 
 module.exports = UserController;

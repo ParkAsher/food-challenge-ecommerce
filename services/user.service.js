@@ -28,6 +28,16 @@ class UserService {
             throw error;
         }
     };
+
+    getUserInfoById = async (id) => {
+        try {
+            const user = await this.userRepository.getUserInfoById(id);
+
+            return user;
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = UserService;
