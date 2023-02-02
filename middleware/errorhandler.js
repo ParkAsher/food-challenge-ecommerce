@@ -7,6 +7,11 @@ module.exports = (err, req, res, next) => {
         const joiErredKey = err.details[0].context.key;
         const joiErrorStatus = 412;
 
+        /* 빈칸 */
+        if (err.details[0].type.includes('empty')) {
+            return res.status(joiErrorStatus).json({ message: '빈칸을 입력해주세요.' });
+        }
+
         if (joiErredKey === 'name') {
             return res.status(joiErrorStatus).json({ message: '이름의 형식이 일치하지 않습니다.' });
         }
@@ -43,5 +48,15 @@ module.exports = (err, req, res, next) => {
         }
         /* else */
         return res.status(400).json({ message: '회원가입에 실패했습니다.' });
+    }
+
+    /* 로그인 */
+    if (req.route.path === '/login') {
+        /* 회원이 존재하지 않음 */
+        if (err.name === 'UserNotFound') {
+            return res.status(err.status).json({ message: err.message });
+        }
+        /* else */
+        return res.status(400).json({ message: '로그인에 실패했습니다.' });
     }
 };

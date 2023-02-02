@@ -1,7 +1,7 @@
 const UserService = require('../services/user.service');
 
 /* joi */
-const { userRegisterDataValidate } = require('../lib/joischema');
+const { userRegisterDataValidate, userLoginDataValidate } = require('../lib/joischema');
 
 class UserController {
     userService = new UserService();
@@ -13,6 +13,19 @@ class UserController {
             const registerResult = await this.userService.register(userInfo);
 
             return res.status(registerResult.status).json({ message: registerResult.message });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    login = async (req, res, next) => {
+        try {
+            const userInfo = await userLoginDataValidate.validateAsync(req.body);
+
+            const loginResult = await this.userService.login(userInfo);
+
+            res.cookie('accessToken', accessToken);
+            return res.status(loginResult.status).json({ accessToken: loginResult.accessToken });
         } catch (error) {
             next(error);
         }
