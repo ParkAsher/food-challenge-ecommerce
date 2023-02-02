@@ -79,7 +79,7 @@ class UserController {
 
             return res.status(200).json({ user });
         } catch (error) {
-            res.status(500).json({ message: 'error!!' });
+            next(error);
         }
     };
 }

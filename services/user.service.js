@@ -102,6 +102,12 @@ class UserService {
         try {
             const user = await this.userRepository.getUserInfoById(id);
 
+            // 존재하지 않는다면?
+            if (!user) {
+                const error = new UserNotFound();
+                throw error;
+            }
+
             const userInfo = {
                 name: user.name,
                 nickname: user.nickname,
