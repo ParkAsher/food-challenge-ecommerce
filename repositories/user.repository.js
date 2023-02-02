@@ -57,6 +57,25 @@ class UserRepository {
             throw error;
         }
     };
+
+    updatePassword = async (userInfo) => {
+        try {
+            await this.userModel.update(
+                {
+                    password: userInfo.password,
+                },
+                {
+                    where: {
+                        id: userInfo.id,
+                    },
+                }
+            );
+
+            return { status: 200, message: '비밀번호를 수정했습니다.' };
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = UserRepository;

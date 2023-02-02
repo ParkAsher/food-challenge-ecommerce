@@ -85,6 +85,18 @@ class UserService {
             throw error;
         }
     };
+
+    updatePassword = async (userInfo) => {
+        try {
+            // 비밀번호 암호화
+            const hashedPassword = await bcrypt.hash(userInfo.password, 10);
+            userInfo.password = hashedPassword;
+
+            return await this.userRepository.updatePassword(userInfo);
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = UserService;

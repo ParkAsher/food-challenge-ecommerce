@@ -4,7 +4,8 @@ const UserService = require('../services/user.service');
 const {
     userRegisterDataValidate,
     userLoginDataValidate,
-    userFindPasswordDataValidate,
+    getUserIdDataValidate,
+    userUpdatePasswordDataValidate,
 } = require('../lib/joischema');
 
 class UserController {
@@ -47,11 +48,23 @@ class UserController {
 
     getUserId = async (req, res, next) => {
         try {
-            const userInfo = await userFindPasswordDataValidate.validateAsync(req.body);
+            const userInfo = await getUserIdDataValidate.validateAsync(req.body);
 
             const { status, id } = await this.userService.getUserId(userInfo);
 
             return res.status(status).json({ id });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    updatePassword = async (req, res, next) => {
+        try {
+            const userInfo = await userUpdatePasswordDataValidate.validateAsync(req.body);
+
+            const { status, message } = await this.userService.updatePassword(userInfo);
+
+            return res.status(status).json({ message });
         } catch (error) {
             next(error);
         }
