@@ -1,4 +1,4 @@
-const ItemService = require('../services/userMain.service');
+const ItemService = require('../services/item.service');
 
 class ItemContorller {
     itemService = new ItemService();
