@@ -16,7 +16,7 @@ class UserService {
     register = async (userInfo) => {
         try {
             // 닉네임이나 Email을 가진 회원이 존재하는지 체크
-            const user = await this.userRepository.findUser(userInfo);
+            const user = await this.userRepository.findUser(userInfo, 'register');
             // 존재한다면?
             if (user) {
                 const error = new UserAlreadyExist();
@@ -37,7 +37,7 @@ class UserService {
     login = async (userInfo) => {
         try {
             // 해당 Email을 가진 회원이 존재하는지 체크
-            const user = await this.userRepository.findUser(userInfo);
+            const user = await this.userRepository.findUser(userInfo, 'login');
             // 존재하지 않는다면?
             if (!user) {
                 const error = new UserNotFound();
@@ -65,6 +65,22 @@ class UserService {
             );
 
             return { status: 200, accessToken };
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    getUserId = async (userInfo) => {
+        try {
+            // 해당 Name, Email, Phone을 가진 유저가 존재하는지
+            const userId = await this.userRepository.getUserId(userInfo);
+            // 존재하지 않는다면?
+            if (!userId) {
+                const error = new UserNotFound();
+                throw error;
+            }
+
+            return { status: 200, id: userId.id };
         } catch (error) {
             throw error;
         }

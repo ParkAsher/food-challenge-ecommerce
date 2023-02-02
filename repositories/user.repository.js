@@ -6,18 +6,21 @@ class UserRepository {
         this.userModel = UserModel;
     }
 
-    findUser = async (userInfo) => {
+    findUser = async (userInfo, type) => {
         try {
-            // 로그인에서 요청을 하면 userInfo.nickname이 없다.
-            if (!userInfo.nickname) userInfo.nickname = '';
+            if (type === 'register') {
+                return await this.userModel.findOne({
+                    where: {
+                        [Op.or]: [{ email: userInfo.email }, { nickname: userInfo.nickname }],
+                    },
+                });
+            }
 
-            const user = await this.userModel.findOne({
-                where: {
-                    [Op.or]: [{ email: userInfo.email }, { nickname: userInfo.nickname }],
-                },
-            });
-
-            return user;
+            if (type === 'login') {
+                return await this.userModel.findOne({
+                    where: { email: userInfo.email },
+                });
+            }
         } catch (error) {
             throw error;
         }
@@ -33,6 +36,23 @@ class UserRepository {
                 phone: userInfo.phone,
             });
             return { status: 200, message: '회원가입에 성공했습니다.' };
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    getUserId = async (userInfo) => {
+        try {
+            const userId = await this.userModel.findOne({
+                attributes: ['id'],
+                where: {
+                    name: userInfo.name,
+                    email: userInfo.email,
+                    phone: userInfo.phone,
+                },
+            });
+
+            return userId;
         } catch (error) {
             throw error;
         }
