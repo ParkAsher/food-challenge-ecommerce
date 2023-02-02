@@ -14,5 +14,8 @@ router.get('/userMain', (req, res, next) => {
     res.render('index.ejs', { components: 'userMain' });
 });
 
+router.get('/items', (req, res, next) => {
+    res.render('index.ejs', { components: 'oneItem' });
+});
 
 module.exports = router;

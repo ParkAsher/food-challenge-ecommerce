@@ -6,9 +6,9 @@
     <div class="menu-box">
         <ul class="row" >
             <li onclick= getItems(0) class="cell"><a href="#">전체보기</a></li>
-            <li onclick = getItems(1) class="cell"><a href="#">1단계 음식</a></li>
-            <li onclick = getItems(2) class="cell"><a href="#">2단계 음식</a></li>
-            <li onclick = getItems(3) class="cell"><a href="#">3단계 음식</a></li>
+            <li onclick= getItems(1) class="cell"><a href="#">1단계 음식</a></li>
+            <li onclick= getItems(2) class="cell"><a href="#">2단계 음식</a></li>
+            <li onclick= getItems(3) class="cell"><a href="#">3단계 음식</a></li>
         </ul>
     </div>
 </div>
@@ -48,7 +48,7 @@
 
               let temp_html = `<div class="col">
                                 <div class="card h-100">
-                                    <img onclick="location.href='/register'"; src="./극혐.avif"/class="card-img-top">
+                                    <img onclick="location.href='/items?itemId=${itemId}'"; src="./극혐.avif"/class="card-img-top">
                                     <div class="card-body">
                                     <h5 class="card-title" style="text-align: center;">${name}</h5>
                                     <p class="card-text" style="text-align: center;">${price}원</p>
