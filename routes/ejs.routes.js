@@ -3,7 +3,11 @@ const router = express.Router();
 
 /* View Mapping */
 router.get('/', (req, res, next) => {
-    res.render('index.ejs');
+    res.render('index.ejs', { components: 'main' });
+});
+
+router.get('/register', (req, res, next) => {
+    res.render('index.ejs', { components: 'register' });
 });
 
 module.exports = router;

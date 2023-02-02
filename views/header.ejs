@@ -1,3 +1,12 @@
+<% if (components === 'login' || components === 'register') { %>
+<div class="header none-background-header">
+    <div class="header-wrap">
+        <div class="logo">
+            <a href="/">푸드챌린지</a>
+        </div>
+    </div>
+</div>
+<% } else { %>
 <div class="header">
     <div class="header-wrap">
         <div class="logo">
@@ -13,3 +22,4 @@
         </div>
     </div>
 </div>
+<% } %>
