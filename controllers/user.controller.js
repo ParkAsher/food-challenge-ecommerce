@@ -30,6 +30,16 @@ class UserController {
             next(error);
         }
     };
+
+    logout = async (req, res, next) => {
+        try {
+            res.clearCookie('accessToken');
+
+            return res.status(200).json({ message: '정상적으로 로그아웃 되었습니다.' });
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 
 module.exports = UserController;
