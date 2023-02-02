@@ -11,7 +11,11 @@ module.exports = (err, req, res, next) => {
         if (err.details[0].type.includes('empty')) {
             return res.status(joiErrorStatus).json({ message: '빈칸을 입력해주세요.' });
         }
-
+        if (joiErredKey === 'id') {
+            return res
+                .status(joiErrorStatus)
+                .json({ message: '회원번호의 형식이 일치하지 않습니다.' });
+        }
         if (joiErredKey === 'name') {
             return res.status(joiErrorStatus).json({ message: '이름의 형식이 일치하지 않습니다.' });
         }
@@ -69,5 +73,21 @@ module.exports = (err, req, res, next) => {
         return res
             .status(400)
             .json({ message: '로그아웃에 실패했습니다. 관리자에게 문의하여주십시오.' });
+    }
+
+    /* 회원체크 */
+    if (req.route.path === '/userid') {
+        /* 회원이 존재하지 않음 */
+        if (err.name === 'UserNotFound') {
+            return res.status(err.status).json({ message: err.message });
+        }
+        /* else */
+        return res.status(400).json({ message: '알수없는 에러. 관리자에게 문의하여주십시오.' });
+    }
+
+    /* 비밀번호 재설정 */
+    if (req.route.path === '/password') {
+        /* else */
+        return res.status(400).json({ message: '비밀번호 재설정에 실패했습니다.' });
     }
 };
