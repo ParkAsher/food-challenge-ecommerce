@@ -1,3 +1,5 @@
+const { Op } = require('sequelize');
+
 class UserRepository {
     constructor(UserModel) {
         // DI
@@ -7,7 +9,9 @@ class UserRepository {
     findUser = async (userInfo) => {
         try {
             const user = await this.userModel.findOne({
-                where: { email: userInfo.email },
+                where: {
+                    [Op.or]: [{ email: userInfo.email }, { nickname: userInfo.nickname }],
+                },
             });
 
             return user;
