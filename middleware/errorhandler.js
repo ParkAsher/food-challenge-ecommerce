@@ -63,4 +63,11 @@ module.exports = (err, req, res, next) => {
         /* else */
         return res.status(400).json({ message: '로그인에 실패했습니다.' });
     }
+
+    /* 로그아웃 */
+    if (req.route.path === '/logout') {
+        return res
+            .status(400)
+            .json({ message: '로그아웃에 실패했습니다. 관리자에게 문의하여주십시오.' });
+    }
 };
