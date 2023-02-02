@@ -76,6 +76,22 @@ class UserRepository {
             throw error;
         }
     };
+
+    getUserEmail = async (userInfo) => {
+        try {
+            const userEmail = await this.userModel.findOne({
+                attributes: ['email'],
+                where: {
+                    name: userInfo.name,
+                    phone: userInfo.phone,
+                },
+            });
+
+            return userEmail;
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = UserRepository;
