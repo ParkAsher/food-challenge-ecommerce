@@ -6,7 +6,7 @@ const { User } = require('../models/index');
 const { UserAlreadyExist } = require('../lib/customerror');
 
 class UserService {
-    userRepository = new UserRepository();
+    userRepository = new UserRepository(User);
 
     register = async (userInfo) => {
         try {
@@ -20,6 +20,10 @@ class UserService {
 
             // 비밀번호 암호화
             const hashedPassword = await bcrypt.hash(userInfo.password, 10);
+            userInfo.password = hashedPassword;
+
+            // 회원가입 진행
+            return await this.userRepository.registerUser(userInfo);
         } catch (error) {
             throw error;
         }

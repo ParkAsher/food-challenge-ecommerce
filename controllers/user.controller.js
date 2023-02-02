@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt');
 const UserService = require('../services/user.service');
 
 /* joi */
@@ -10,9 +9,11 @@ class UserController {
     register = async (req, res, next) => {
         try {
             const userInfo = await userRegisterDataValidate.validateAsync(req.body);
+
+            const registerResult = await this.userService.register(userInfo);
+
+            return res.status(registerResult.status).json({ message: registerResult.message });
         } catch (error) {
-            console.log(error.isJoi);
-            console.log(error);
             next(error);
         }
     };
