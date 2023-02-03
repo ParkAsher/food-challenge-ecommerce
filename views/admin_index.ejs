@@ -25,6 +25,7 @@
         <!-- css -->
         <link rel="stylesheet" href="/css/reset.css" />
         <link rel="stylesheet" href="/css/common.css" />
+        <link rel="stylesheet" href="/css/admin_index.css" />
         <link rel="stylesheet" href="/css/admin_header.css" />
 
         <title>푸드챌린지 관리자페이지</title>
@@ -33,6 +34,17 @@
         <!-- header -->
         <%- include('admin_header.ejs') %>
         <!-- body -->
+        <div class="admin-manage-btn-wrap">
+            <div class="admin-manage-user-btn-wrap">
+                <button type="button">회원 관리</button>
+            </div>
+            <div class="admin-manage-user-btn-wrap">
+                <button type="button">주문 관리</button>
+            </div>
+            <div class="admin-manage-user-btn-wrap">
+                <button type="button">상품 관리</button>
+            </div>
+        </div>
     </body>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 </html>

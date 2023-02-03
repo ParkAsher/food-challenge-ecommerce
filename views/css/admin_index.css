@@ -1,0 +1,13 @@
+.admin-manage-btn-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+
+    padding: 2rem 0;
+}
+
+.admin-manage-btn-wrap button {
+    font-size: 2rem;
+    padding: 2.5rem 4rem;
+}
