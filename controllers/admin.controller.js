@@ -8,10 +8,12 @@ class AdminController {
         try {
             const { page } = await pageValidate.validateAsync(req.query);
 
-            const { status, userList, firstPage, lastPage, totalPage } =
+            const { status, usersCount, userList, firstPage, lastPage, totalPage } =
                 await this.adminService.getAllUsers(page);
 
-            return res.status(status).json({ userList, firstPage, lastPage, totalPage });
+            return res
+                .status(status)
+                .json({ usersCount, userList, firstPage, lastPage, totalPage });
         } catch (error) {
             next(error);
         }

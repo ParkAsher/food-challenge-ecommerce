@@ -29,7 +29,7 @@ class AdminService {
             // 회원 리스트 가져오기
             const userList = await this.adminRepository.getAllUsers(page);
 
-            return { status: 200, userList, firstPage, lastPage, totalPage };
+            return { status: 200, usersCount, userList, firstPage, lastPage, totalPage };
         } catch (error) {
             throw error;
         }
