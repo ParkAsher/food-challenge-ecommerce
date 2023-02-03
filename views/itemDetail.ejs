@@ -1,0 +1,83 @@
+<div id="info"></div>
+<script>
+    const id = window.location.pathname.split('/')[2] || 1;
+
+    fetch(`http://localhost:3000/api/items/${id}`)
+        .then((response) => response.json())
+        .then(({ data }) => {
+            const row = `
+    <img src="./극혐.avif" alt="상품 이미지" style="margin-top:50px; margin-left:50px; width:500px;heigth:500px;">
+    <div>
+    <span>상품명</span><span id="name">${data.name}</span>
+    <span>챌린지 단계 ${data.level}단계</span>
+    <span>가격</span><span id="price">${data.price}</span><span>원</span>
+    <span>적립포인트 ${data.price / (5 * 100)}</span><span>P</span>
+    <form action="">
+      <span>구매수량</span>
+      <input style="HEIGHT: 20px" onclick="javascript:this.form.count.value--;mul('minus')" type="button" value="-">
+      <input type="number" name="count" value="1" id="count" min="1">
+      <input style="HEIGHT: 20px" onclick="javascript:this.form.count.value++;mul('plus')" type="button" value="+">
+    </form>
+    <p id="total" style="display:inline-block">100</p><span>원</span>
+    <button onclick="addMyCart()">장바구니</button>
+    <button onclick="pass()">바로구매</button>
+    </div>
+    `;
+
+            const tr = document.createElement('div');
+            tr.innerHTML = row;
+            document.getElementById('info').appendChild(tr);
+        });
+
+    function mul(type) {
+        // 결과를 표시할 element
+        const resultElement = document.getElementById('total');
+        const price = document.getElementById('price').innerText;
+        const multi = document.getElementById('count').value;
+
+        // 현재 화면에 표시된 값
+        let number = resultElement.innerText;
+
+        // 더하기/빼기
+        if (type === 'plus') {
+            number = price * multi;
+        } else if (type === 'minus') {
+            number = price * multi;
+        }
+
+        // 결과 출력
+        resultElement.innerText = number;
+    }
+
+    function addMyCart() {
+        const data = {
+            count: document.getElementById('count').value,
+        };
+
+        fetch(`http://localhost:3000/api/items/${id}`, {
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                location.href = '/';
+            })
+            .catch((err) => {
+                alert(err.message);
+                window.location.reload();
+            });
+    }
+
+    function pass() {
+        let count = document.getElementById('count').value;
+        let name = document.getElementById('name').innerHTML;
+        let price = document.getElementById('total').innerText;
+        console.log(document.getElementById('name'));
+
+        location.href = `/order?name=${name}&count=${count}&price=${price}`;
+    }
+</script>

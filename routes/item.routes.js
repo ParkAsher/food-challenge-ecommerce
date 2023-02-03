@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { ItemController } = require('../controllers/item.controller');
-const { CartController } = require('../controllers/basket.controller');
-const {} = require("../middleware/auth")
-const itemCotroller = new ItemController();
+
+const ItemController = require('../controllers/item.controller');
+const CartController = require('../controllers/basket.controller');
+const itemController = new ItemController();
 const cartController = new CartController();
 
-router.get('/', itemCotroller.findOneItem);
-router.post('/', cartController.addMyCart);
+router.get('/list', itemController.getAllItems);
+router.get('/list/:level', itemController.getItemsByLevel);
+router.get('/:id', itemController.findOneItem);
+router.post('/:id', cartController.addMyCart);
 
 module.exports = router;
