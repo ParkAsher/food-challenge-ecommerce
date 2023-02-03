@@ -1,21 +1,25 @@
 <div class="mypage-background">
 	<div class="mypage-user-info" id="user-info-box">
-
+	</div>
+	<div class="mypage-order-list" id="order-list-box">
 	</div>
 </div>
 
 <script>
 	$(document).ready(function () {
-        getUserInfoById()
+		const id = new URLSearchParams(location.search).get('id')
+        getMypage(2)
     });
 
-	function getUserInfoById(user) {
+	function getMypage(id) {
+
 		$.ajax({
 			type: 'GET',
-			url: '/api/users/mypage/:id',
-			data: {},
+			url: `/api/users/mypage/${id}`,
 			success: function (response) {
 				let {name, nickname, email, point} = response.user
+
+				console.log(response)
 
 				let temp_html = `	
 						<div class="mypage-user-name">
@@ -34,5 +38,39 @@
 				$('#user-info-box').append(temp_html)
 			}
 		})
+
+		$.ajax({
+			type: 'GET',
+			url: `/api/orders/mypage/${id}`,
+			success: function (response) {
+
+				console.log(response)
+
+				let {order_id, createdAt, name, count, total_item_price, save_point} = response.orderList
+
+				let temp_html = `
+							<div class="mypage-order-list-id">
+								<p class="id">주문번호 : ${order_id}</p>
+							</div>
+							<div class="mypage-order-list-item-name">
+								<p class="item-name">상품명 : ${name}</p>
+							</div>
+							<div class="mypage-order-list-count">
+								<p class="count">구매수량 : ${count}</p>
+							</div>
+							<div class="mypage-order-list-total_item_price">
+								<p class="total_item_price">총금액 : ${total_item_price}</p>
+							</div>
+							<div class="mypage-order-list-save_point">
+								<p class="save_point">적립포인트 : ${save_point}</p>
+							</div>
+							<div class="mypage-order-list-createdAt">
+								<p class="createdAt">구매시기 : ${createdAt}</p>
+							</div>
+					`
+				$('#order-list-box').append(temp_html)
+			}
+		})
 	}
+
 </script>

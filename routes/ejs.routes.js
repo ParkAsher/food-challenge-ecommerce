@@ -18,7 +18,7 @@ router.get('/itemDetail/:id', (req, res, next) => {
 //     res.render('index.ejs', { components: 'itemDetail' });
 // });
 
-router.get('/mypage/:id', (req, res, next) => {
+router.get('/mypage', (req, res, next) => {
     res.render('index.ejs', { components: 'mypage' });
 });
 

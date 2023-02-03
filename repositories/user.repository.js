@@ -97,10 +97,8 @@ class UserRepository {
         try {
             const user = await this.userModel.findOne({
                 attributes: ['name', 'nickname', 'email', 'point'],
-                id,
+                where: { id },
             });
-
-            console.log(user);
 
             return user;
         } catch (error) {
