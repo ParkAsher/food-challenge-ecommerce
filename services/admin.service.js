@@ -1,3 +1,4 @@
+const moment = require('moment/moment');
 const { User } = require('../models/index');
 const AdminRepository = require('../repositories/admin.repository');
 
@@ -29,7 +30,21 @@ class AdminService {
             // 회원 리스트 가져오기
             const userList = await this.adminRepository.getAllUsers(page);
 
-            return { status: 200, usersCount, userList, firstPage, lastPage, totalPage };
+            const customUserList = userList.map((user) => {
+                return {
+                    ...user.dataValues,
+                    createdAt: moment(user.createdAt).format('YYYY-MM-DD HH:mm:ss'),
+                };
+            });
+
+            return {
+                status: 200,
+                usersCount,
+                userList: customUserList,
+                firstPage,
+                lastPage,
+                totalPage,
+            };
         } catch (error) {
             throw error;
         }
