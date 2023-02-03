@@ -6,6 +6,7 @@ const {
     userLoginDataValidate,
     getUserIdDataValidate,
     userUpdatePasswordDataValidate,
+    userGetEmailDataValidate,
 } = require('../lib/joischema');
 
 class UserController {
@@ -65,6 +66,18 @@ class UserController {
             const { status, message } = await this.userService.updatePassword(userInfo);
 
             return res.status(status).json({ message });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    getUserEmail = async (req, res, next) => {
+        try {
+            const userInfo = await userGetEmailDataValidate.validateAsync(req.body);
+
+            const { status, email } = await this.userService.getUserEmail(userInfo);
+
+            return res.status(status).json({ email });
         } catch (error) {
             next(error);
         }
