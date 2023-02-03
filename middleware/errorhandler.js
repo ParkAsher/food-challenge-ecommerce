@@ -108,7 +108,6 @@ module.exports = (err, req, res, next) => {
 
     /* 이메일 찾기 */
     if (req.path === '/api/users/email') {
-        console.log(req.path);
         /* 회원이 존재하지 않음 */
         if (err.name === 'UserNotFound') {
             return res.status(err.status).json({ message: err.message });
@@ -118,12 +117,16 @@ module.exports = (err, req, res, next) => {
     }
 
     if (req.path.substr(0, 11) === '/api/items/') {
-        console.log(err.name);
         if (err.name === 'NotFoundItem') {
             return res.status(err.status).json({ message: err.message });
         }
         if (err.name === 'TokenNotFound') {
             return res.status(err.status).json({ message: err.message });
         }
+    }
+
+    /* 관리자페이지 회원관리 회원 리스트 불러오기 */
+    if (req.path === '/api/admin/users') {
+        return res.status(400).json({ message: '데이터를 불러올 수 없습니다.' });
     }
 };
