@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate({ User, Item }) {
             // define association here
-            this.belongsTo(User, { foreignKey: 'user_id', targetKey: 'id' });
-            this.belongsTo(Item, { foreignKey: 'item_id', targetKey: 'id' });
+            this.belongsTo(User, { foreignKey: 'user_id' });
+            this.belongsTo(Item, { foreignKey: 'item_id' });
         }
     }
     Basket.init(
