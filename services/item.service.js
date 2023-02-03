@@ -1,4 +1,5 @@
 const ItemRepository = require('../repositories/item.repository');
+const { NotFoundItem } = require('../lib/customerror');
 
 class ItemService {
     itemRepository = new ItemRepository();
@@ -28,6 +29,21 @@ class ItemService {
                 image: item.image,
             };
         });
+    };
+
+    findOneItem = async (id) => {
+        try {
+            const item = await this.itemRepository.findOneItem(id);
+
+            if (!item) {
+                const error = new NotFoundItem();
+                throw error;
+            }
+
+            return item;
+        } catch (err) {
+            throw err;
+        }
     };
 }
 

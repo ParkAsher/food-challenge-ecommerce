@@ -1,0 +1,105 @@
+<div id="info"></div>
+<script>
+    const id = window.location.pathname.split('/')[2] || 1;
+
+    fetch(`http://localhost:5000/api/items/${id}`)
+        .then((response) => response.json())
+        .then(( data ) => {
+            if (data.message) {
+                alert(data.message)
+                return location.href = "/"
+            } else{
+            const row = `
+    <img src="/극혐.avif" alt="상품 이미지" style="margin-top:50px; margin-left:50px; width:500px;heigth:500px;">
+    <div>
+    <div style="margin-left:50px;margin-top:10px"><span>상품명</span><span id="name">${
+        data.data.name
+    }</span></div>
+    <div style="margin-left:50px;margin-top:10px"><span>챌린지 단계</span><span>${
+        data.data.level
+    }단계</span></div>
+    <div style="margin-left:50px;margin-top:10px"><span>가격</span><span id="price">${
+        data.data.price
+    }</span><span>원</span></div>
+    <div style="margin-left:50px;margin-top:10px"><span>적립포인트 ${
+        data.data.price / (5 * 100)
+    }</span><span>P</span></div>
+    <form action="" style="margin-left:50px;margin-top:10px">
+      <span>구매수량</span>
+      <input style="HEIGHT: 20px" onclick="javascript:this.form.count.value--;mul('minus')" type="button" value="-">
+      <input type="number" name="count" value="1" id="count" min="1">
+      <input style="HEIGHT: 20px" onclick="javascript:this.form.count.value++;mul('plus')" type="button" value="+">
+    </form>
+    <div style="margin-left:50px;margin-top:10px"><p id="total" style="display:inline-block">100</p><span>원</span></div>
+    <div style="margin-left:50px;margin-top:10px"><button onclick="addMyCart()">장바구니</button>
+    <button onclick="pass()">바로구매</button></div>
+    </div>
+    `;
+
+            const tr = document.createElement('div');
+            tr.innerHTML = row;
+            document.getElementById('info').appendChild(tr);
+}
+        })
+        .catch((err) => {
+                console.log(err)
+                location.href= "/"
+            });
+        
+
+    function mul(type) {
+        // 결과를 표시할 element
+        const resultElement = document.getElementById('total');
+        const price = document.getElementById('price').innerText;
+        const multi = document.getElementById('count').value;
+
+        // 현재 화면에 표시된 값
+        let number = resultElement.innerText;
+
+        // 더하기/빼기
+        if (type === 'plus') {
+            number = price * multi;
+        } else if (type === 'minus') {
+            number = price * multi;
+        }
+
+        // 결과 출력
+        resultElement.innerText = number;
+    }
+
+    function addMyCart() {
+        const data = {
+            count: document.getElementById('count').value,
+        };
+
+        fetch(`http://localhost:5000/api/items/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+            if (data.message) {
+                alert(data.message)
+                return location.href = '/login';
+            }
+                console.log(data);
+                location.href = '/';
+            })
+            .catch((err) => {
+                alert(err.message)
+                location.href = '/';
+            });
+    }
+
+    function pass() {
+        let count = document.getElementById('count').value;
+        let name = document.getElementById('name').innerHTML;
+        let price = document.getElementById('total').innerText;
+        console.log(document.getElementById('name'));
+
+        location.href = `/order?name=${name}&count=${count}&price=${price}`;
+    }
+</script>
