@@ -1,0 +1,93 @@
+.user-menagement-background {
+    width: 100%;
+}
+
+.user-management-wrap {
+    width: 1600px;
+    margin: 0 auto;
+    margin-top: 4rem;
+}
+
+.user-management-title {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.user-management-title p {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.user-management-items {
+    width: 100%;
+    margin-bottom: 2rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-management-count-wrap {
+    display: flex;
+    align-items: center;
+}
+
+.user-management-count-title,
+.user-management-count {
+    padding: 1rem;
+}
+
+.user-management-count-title {
+    border-radius: 5px 0 0 5px;
+    background-color: #9eacc6;
+    color: #ffffff;
+}
+
+.user-management-count {
+    border-radius: 0 5px 5px 0;
+    background-color: lightgray;
+}
+
+.table-wrap {
+    margin-bottom: 2rem;
+}
+
+.table-wrap table {
+    border-collapse: collapse;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.table-wrap table thead {
+    width: 100%;
+    font-size: 2rem;
+    font-weight: bold;
+    background-color: #9eacc6;
+    color: #ffffff;
+}
+
+.table-wrap table th,
+.table-wrap table td {
+    padding: 1.5rem 1.25rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.pagination-btn-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination-btn {
+    border: 1px solid #9eacc6;
+    box-sizing: border-box;
+    padding: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pagination-btn.active {
+    border: none;
+    background-color: lightcoral;
+    color: #ffffff;
+}

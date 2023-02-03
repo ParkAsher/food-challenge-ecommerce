@@ -32,7 +32,15 @@ router.get('/itemDetail/:id', (req, res, next) => {
 /* 테스트 */
 router.get('/adm', (req, res, next) => {
     try {
-        res.render('admin_index');
+        res.render('admin_index', { components: 'userManagement' });
+    } catch (error) {
+        throw error;
+    }
+});
+
+router.get('/adm/user-management', (req, res, next) => {
+    try {
+        res.render('admin_index', { components: 'userManagement' });
     } catch (error) {
         throw error;
     }
