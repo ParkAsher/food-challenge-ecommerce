@@ -70,12 +70,12 @@ class UserController {
         }
     };
 
-    getUserInfoById = async (req, res) => {
+    getUserInfoById = async (req, res, next) => {
+        console.log('파람즈 확인 =========++++++++', req.params);
         try {
             const { id } = req.params;
 
             const user = await this.userService.getUserInfoById(id);
-            console.log(user);
 
             return res.status(200).json({ user });
         } catch (error) {

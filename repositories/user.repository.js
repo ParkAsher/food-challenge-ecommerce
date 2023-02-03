@@ -79,7 +79,12 @@ class UserRepository {
 
     getUserInfoById = async (id) => {
         try {
-            const user = await this.userModel.findOne({ id });
+            const user = await this.userModel.findOne({
+                attributes: ['name', 'nickname', 'email', 'point'],
+                id,
+            });
+
+            console.log(user);
 
             return user;
         } catch (error) {
