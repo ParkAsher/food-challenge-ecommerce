@@ -2,6 +2,12 @@ module.exports = (err, req, res, next) => {
     console.log('Error Handling Middleware');
     console.log(err);
 
+    /* token error */
+    if (err.name === 'TokenNotFound') {
+        res.write(`<script>alert(${err.message});</script>`);
+        res.write('<script>window.location="/login";</script>');
+    }
+
     /* Joi Validation Error */
     if (err.isJoi) {
         const joiErredKey = err.details[0].context.key;
