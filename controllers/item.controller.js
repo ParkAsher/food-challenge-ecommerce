@@ -6,7 +6,7 @@ class ItemController {
 
     findOneItem = async (req, res, next) => {
         try {
-            let { id } = req.query;
+            let { id } = req.query
     
             const oneItem = await this.itemService.findOneItem(id);
     

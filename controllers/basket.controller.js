@@ -1,5 +1,5 @@
 const { CartService } = require('../services/basket.service');
-const jwt = require("jsonwebtoken")
+const jwt = require('jsonwebtoken');
 
 class CartController {
     cartController = new CartService();
