@@ -11,4 +11,6 @@ router.get('/logout', userController.logout);
 router.post('/userid', userController.getUserId);
 router.patch('/password', userController.updatePassword);
 
+router.post('/email', userController.getUserEmail);
+
 module.exports = router;
