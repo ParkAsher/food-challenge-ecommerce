@@ -17,6 +17,7 @@ class AdminRepository {
             return await this.userModel.findAll({
                 offset: (page - 1) * 8,
                 limit: 8,
+                order: [['id', 'DESC']],
             });
         } catch (error) {
             throw error;
