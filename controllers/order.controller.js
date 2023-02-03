@@ -4,8 +4,7 @@ class OrderContorller {
     orderService = new OrderService();
 
     saveOrder = async (req, res, next) => {
-        console.log("LETTTTTTTTTTTTTT")
-        // const { id: user_id } = res.locals.user;
+        // // const { id: user_id } = res.locals.user;
         const user_id = 2
         const { 
             id: item_id, 
@@ -13,9 +12,7 @@ class OrderContorller {
             address, 
             order_price, 
             order_point, 
-            receipt_price } = req.query;
-            console.log(count, "CHECKKKKKKK")
-            
+            receipt_price } = req.query;            
 
         const saveOrder = await this.orderService.addToOrder(
             user_id,

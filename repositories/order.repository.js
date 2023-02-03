@@ -10,7 +10,8 @@ class orderRepository {
         order_point,
         receipt_price
     ) => {
-        const saveOrder = await Order.create({
+
+        const orderTable = await Order.create({
             user_id,
             address,
             order_price,
@@ -18,11 +19,13 @@ class orderRepository {
             receipt_price,
         });
 
-        const saveOrderItem = await Orderitem.create({
-            order_id: saveOrder.id,
+        const orderItemTable = await Orderitem.create({
+            order_id: orderTable.id,
             item_id,
             count,
         });
+        
+        return { orderTable, orderItemTable }
     };
 }
 
