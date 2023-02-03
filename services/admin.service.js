@@ -7,19 +7,19 @@ class AdminService {
     getAllUsers = async (page) => {
         try {
             // 전체 회원 수 가져오기
-            const usersCount = this.adminRepository.allUsersCount();
+            const usersCount = await this.adminRepository.allUsersCount();
 
             // 총 페이지 수 : 한 페이지당 8명씩
-            const totalPage = Math.ceil(usersCount / 8);
+            let totalPage = Math.ceil(usersCount / 8);
 
             // 화면에 보여줄 그룹 : 한 그룹당 5개 페이지 띄우기
-            const pageGroup = Math.ceil(page / 5);
+            let pageGroup = Math.ceil(page / 5);
 
             // 한 그룹의 마지막 페이지 번호
-            const lastPage = pageGroup * 5;
+            let lastPage = pageGroup * 5;
 
             // 한 그룹의 첫 페이지 번호
-            const firstPage = lastPage - 5 + 1 <= 0 ? 1 : lastPage - 5 + 1;
+            let firstPage = lastPage - 5 + 1 <= 0 ? 1 : lastPage - 5 + 1;
 
             // 만약 마지막 페이지 번호가 총 페이지 수 보다 크다면?
             if (lastPage > totalPage) {
