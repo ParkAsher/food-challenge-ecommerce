@@ -4,8 +4,12 @@ module.exports = (err, req, res, next) => {
 
     /* token error */
     if (err.name === 'TokenNotFound') {
-        res.write(`<script>alert(${err.message});</script>`);
-        res.write('<script>window.location="/login";</script>');
+        return res.render('alert.ejs', { message: err.message, href: '/login' });
+    }
+
+    /* 관리자가 아님 */
+    if (err.name === 'NotAdmin') {
+        return res.render('alert.ejs', { message: err.message, href: '/' });
     }
 
     /* Joi Validation Error */
