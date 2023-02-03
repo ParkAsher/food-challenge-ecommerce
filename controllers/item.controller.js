@@ -9,7 +9,7 @@ class ItemContorller {
     };
 
     getItemsByLevel = async (req, res, next) => {
-        const { level } = req.params;
+        const { level } = req.query;
         const itemsByLevel = await this.itemService.findItemsByLevel(level);
 
         return res.status(200).json({ itemsByLevel });

@@ -10,8 +10,13 @@ router.get('/register', (req, res, next) => {
     res.render('index.ejs', { components: 'register' });
 });
 
-router.get('/items', (req, res, next) => {
-    res.render('index.ejs', { components: 'oneItem' });
+router.get('/itemDetail', (req, res, next) => {
+    res.render('index.ejs', { components: 'itemDetail' });
 });
+
+router.get('/order', (req, res, next) => {
+    res.render('index.ejs', { components: 'order' });
+});
+
 
 module.exports = router;
