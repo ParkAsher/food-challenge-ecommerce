@@ -37,8 +37,5 @@ router.get('/adm', (req, res, next) => {
         throw error;
     }
 });
-// router.get('/itemDetail/*', (req, res, next) => {
-//     res.render('index.ejs', { components: 'itemDetail' });
-// });
 
 module.exports = router;
