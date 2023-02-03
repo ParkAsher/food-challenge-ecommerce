@@ -19,8 +19,6 @@ class ItemContorller {
     findOneItem = async (req, res, next) => {
         try {
             let { id } = req.params;
-            const a = jwt.sign({id:2}, process.env.COOKIE_SECRET)
-            res.cookie("accessToken", a)
 
             const itemDetail = await this.itemService.findOneItem(id);
 
