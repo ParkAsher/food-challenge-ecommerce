@@ -52,6 +52,11 @@ module.exports = (err, req, res, next) => {
                 .status(joiErrorStatus)
                 .json({ message: '휴대폰 번호의 형식이 일치하지 않습니다.' });
         }
+        if (joiErredKey === 'page') {
+            return res
+                .status(joiErrorStatus)
+                .json({ message: '페이지 번호의 형식이 올바르지 않습니다.' });
+        }
     }
 
     /* 회원가입 */
@@ -112,13 +117,13 @@ module.exports = (err, req, res, next) => {
         return res.status(400).json({ message: '알수없는 에러. 관리자에게 문의하여주십시오.' });
     }
 
-    if (req.path.substr(0,11) === '/api/items/') {
+    if (req.path.substr(0, 11) === '/api/items/') {
         console.log(err.name);
         if (err.name === 'NotFoundItem') {
             return res.status(err.status).json({ message: err.message });
         }
-        if (err.name === "TokenNotFound") {
-            return res.status(err.status).json({message: err.message})
+        if (err.name === 'TokenNotFound') {
+            return res.status(err.status).json({ message: err.message });
         }
     }
 };
