@@ -1,7 +1,7 @@
 const moment = require('moment/moment');
 const { User } = require('../models/index');
 const AdminRepository = require('../repositories/admin.repository');
-const { UserNotFound, userNotDeleted } = require('../lib/customerror');
+const { UserNotFound, UserNotDeleted } = require('../lib/customerror');
 
 class AdminService {
     adminRepository = new AdminRepository(User);
@@ -76,7 +76,7 @@ class AdminService {
             // sequelize destroy는 삭제한 행 수를 반환한다.
             if (deleteCount === 0) {
                 // 조건에 맞지않아 삭제한 것이 없다
-                const error = new userNotDeleted();
+                const error = new UserNotDeleted();
                 throw error;
             }
 

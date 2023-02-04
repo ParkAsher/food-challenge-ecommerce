@@ -1,6 +1,7 @@
 module.exports = (err, req, res, next) => {
     console.log('Error Handling Middleware');
     console.log(err);
+    console.log(req.path);
     console.log(req.route.path);
 
     /* token error */
@@ -142,5 +143,13 @@ module.exports = (err, req, res, next) => {
             return res.status(err.status).json({ message: err.message });
         }
         return res.status(400).json({ message: '데이터를 불러올 수 없습니다.' });
+    }
+
+    /* 관리자페이지 회원 삭제 */
+    if (req.path === '/api/admin/user') {
+        if (err.name === 'UserNotDeleted') {
+            return res.status(err.status.json({ message: err.message }));
+        }
+        return res.status(400).json({ message: '삭제에 실패했습니다.' });
     }
 };
