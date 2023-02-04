@@ -5,7 +5,12 @@
         </div>
         <div class="user-management-items">
             <div class="user-management-count-wrap" id="count"></div>
-            <div class="user-management-search-wrap">dfdf</div>
+            <div class="user-management-search-wrap">
+                <input type="text" id="email" placeholder="회원 이메일" />
+                <button type="button" onclick="userSearch()">
+                    <span class="material-icons"> search </span>
+                </button>
+            </div>
         </div>
         <div class="table-wrap">
             <table id="table" class="table" border="1">
@@ -80,7 +85,7 @@
             // pages 버튼
             for (let i = firstPage; i <= lastPage; i++) {
                 const pageList =
-                    page === i
+                    Number(page) === i
                         ? `<a href='?page=${i}'><div class="pagination-btn active">${i}</div></a>`
                         : `<a href='?page=${i}'><div class="pagination-btn">${i}</div></a>`;
 
