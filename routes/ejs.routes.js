@@ -24,7 +24,7 @@ router.get('/login', auth, (req, res, next) => {
             throw error;
         }
 
-        res.render('index', { components: 'login' });
+        res.render('index', { components: 'login', user: res.locals.user });
     } catch (error) {
         throw error;
     }
