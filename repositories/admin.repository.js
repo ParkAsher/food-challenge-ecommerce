@@ -33,6 +33,19 @@ class AdminRepository {
             throw error;
         }
     };
+
+    deleteUser = async (userInfo) => {
+        try {
+            return await this.userModel.destroy({
+                where: {
+                    id: userInfo.id,
+                    email: userInfo.email,
+                },
+            });
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = AdminRepository;

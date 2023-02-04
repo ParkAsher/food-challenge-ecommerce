@@ -1,4 +1,8 @@
-const { pageValidate, searchByEmailValidate } = require('../lib/joischema');
+const {
+    pageValidate,
+    searchByEmailValidate,
+    deleteByIdEmailValidate,
+} = require('../lib/joischema');
 const AdminService = require('../services/admin.service');
 
 class AdminController {
@@ -26,6 +30,18 @@ class AdminController {
             const { status, user } = await this.adminService.searchUser(email);
 
             return res.status(status).json({ user });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    deleteUser = async (req, res, next) => {
+        try {
+            const userInfo = await deleteByIdEmailValidate.validateAsync(req.query);
+
+            const { status, message } = await this.adminService.deleteUser(userInfo);
+
+            return res.status(status).json({ message });
         } catch (error) {
             next(error);
         }
