@@ -146,3 +146,19 @@
     color: red;
     font-size: 2rem;
 }
+
+.user-update-btn,
+.user-delete-btn {
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 5px;
+}
+
+.user-update-btn {
+    background: #3f51b5;
+}
+
+.user-delete-btn {
+    background: #ff4081;
+}

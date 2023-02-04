@@ -70,7 +70,10 @@
                         <td>${user.phone}</td>
                         <td>${user.point}</td>
                         <td>${user.createdAt}</td>
-                        <td>dfdf</td>
+                        <td>
+                            <button type="button" class="user-update-btn">수정</button>
+                            <button type="button" class="user-delete-btn" onclick="userDelete(${user.id}, '${user.email}')">삭제</button>
+                        </td>
                     </tr>
                 `;
             });
