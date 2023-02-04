@@ -32,6 +32,7 @@ class AdminService {
             const userList = await this.adminRepository.getAllUsers(page);
 
             const customUserList = userList.map((user) => {
+                delete user.dataValues.password;
                 return {
                     ...user.dataValues,
                     createdAt: moment(user.createdAt).format('YYYY-MM-DD HH:mm:ss'),

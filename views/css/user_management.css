@@ -94,6 +94,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    margin-bottom: 4rem;
 }
 
 .pagination-btn {
@@ -161,4 +163,71 @@
 
 .user-delete-btn {
     background: #ff4081;
+}
+
+.user-management-update-form {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.user-management-update-form-row {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    border-top: 0.5px solid lightgray;
+}
+
+.user-management-update-form-row:last-child {
+    border-bottom: 0.5px solid lightgray;
+}
+
+.update-item-title {
+    background-color: beige;
+    height: 3rem;
+    width: 20%;
+    padding-left: 1.5rem;
+
+    display: flex;
+    align-items: center;
+}
+
+.update-item-title p {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.update-item-value {
+    height: 3rem;
+    width: 30%;
+    padding-left: 1.5rem;
+
+    display: flex;
+    align-items: center;
+}
+
+.update-item-value input {
+    border: 0.5px solid lightgray;
+    padding: 0.5rem 0.25rem;
+}
+
+.update-item-value input:focus {
+    outline: none;
+}
+
+.user-update-btn-wrap {
+    width: 100%;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.user-update-btn-wrap button {
+    padding: 0.75rem 1.25rem;
+    border: none;
+    background: #3f51b5;
+    color: #ffffff;
+    border-radius: 5px;
 }

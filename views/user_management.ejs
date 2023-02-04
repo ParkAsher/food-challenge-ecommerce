@@ -36,6 +36,52 @@
             <div id="error-message" class="error-message"></div>
         </div>
         <div id="pagination" class="pagination-btn-wrap"></div>
+
+        <div class="user-management-title">
+            <p>회원정보 수정</p>
+        </div>
+        <div class="user-management-update-form">
+            <input type="hidden" id="user-id" />
+            <div class="user-management-update-form-row">
+                <div class="update-item-title">
+                    <p>이름</p>
+                </div>
+                <div class="update-item-value">
+                    <input type="text" id="user-name" />
+                </div>
+                <div class="update-item-title">
+                    <p>닉네임</p>
+                </div>
+                <div class="update-item-value">
+                    <input type="text" id="user-nickname" />
+                </div>
+            </div>
+            <div class="user-management-update-form-row">
+                <div class="update-item-title">
+                    <p>이메일</p>
+                </div>
+                <div class="update-item-value">
+                    <input type="text" id="user-email" />
+                </div>
+                <div class="update-item-title">
+                    <p>휴대폰</p>
+                </div>
+                <div class="update-item-value">
+                    <input type="text" id="user-phone" />
+                </div>
+            </div>
+            <div class="user-management-update-form-row">
+                <div class="update-item-title">
+                    <p>포인트</p>
+                </div>
+                <div class="update-item-value">
+                    <input type="text" id="user-point" />
+                </div>
+            </div>
+        </div>
+        <div class="user-update-btn-wrap">
+            <button type="button" onclick="userUpdate()">수정</button>
+        </div>
     </div>
 </div>
 
@@ -61,6 +107,7 @@
 
             // table 에 회원 리스트 붙이기 : 1페이지당 8명
             const html = userList.map((user) => {
+                const stringifyUserObj = JSON.stringify(user);
                 return `
                     <tr>
                         <td>${user.id}</td>
@@ -71,7 +118,7 @@
                         <td>${user.point}</td>
                         <td>${user.createdAt}</td>
                         <td>
-                            <button type="button" class="user-update-btn">수정</button>
+                            <button type="button" class="user-update-btn" onclick='userUpdateFormOpen(${stringifyUserObj})'>수정</button>
                             <button type="button" class="user-delete-btn" onclick="userDelete(${user.id}, '${user.email}')">삭제</button>
                         </td>
                     </tr>
@@ -150,6 +197,57 @@
 
                 document.getElementById('userList').innerHTML = '';
                 document.getElementById('error-message').innerHTML = html;
+            },
+        });
+    }
+
+    function userDelete(id, email) {
+        if (confirm('정말 삭제하시겠습니까?')) {
+            $.ajax({
+                type: 'DELETE',
+                url: `/api/admin/user?id=${id}&email=${email}`,
+                success: function (response) {
+                    alert(response.message);
+                    window.location.reload();
+                },
+                error: function (response) {
+                    alert(response.responseJSON.message);
+                    window.location.reload();
+                },
+            });
+        }
+
+        window.location.reload();
+    }
+
+    function userUpdateFormOpen(user) {
+        document.getElementById('user-id').value = user.id;
+        document.getElementById('user-name').value = user.name;
+        document.getElementById('user-nickname').value = user.nickname;
+        document.getElementById('user-email').value = user.email;
+        document.getElementById('user-phone').value = user.phone;
+        document.getElementById('user-point').value = user.point;
+    }
+
+    function userUpdate() {
+        const userInfo = {
+            id: document.getElementById('user-id').value,
+            name: document.getElementById('user-name').value,
+            nickname: document.getElementById('user-nickname').value,
+            email: document.getElementById('user-email').value,
+            phone: document.getElementById('user-phone').value,
+            point: document.getElementById('user-point').value,
+        };
+
+        $.ajax({
+            type: 'PUT',
+            url: '/api/admin/user',
+            data: userInfo,
+            success: function (response) {
+                console.log('성공');
+            },
+            error: function (response) {
+                consol.log(response.responseJSON.error);
             },
         });
     }
