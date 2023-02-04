@@ -60,6 +60,9 @@ class AdminService {
                 throw error;
             }
 
+            // 비밀번호 정보 삭제
+            delete user.dataValues.password;
+
             return { status: 200, user };
         } catch (error) {
             throw error;
