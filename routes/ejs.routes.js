@@ -4,8 +4,10 @@ const auth = require('../middleware/auth');
 const router = express.Router();
 
 /* View Mapping */
-router.get('/', (req, res, next) => {
-    res.render('index.ejs', { components: 'main' });
+router.get('/', auth, (req, res, next) => {
+    const user = !res.locals.user ? null : res.locals.user; // 로그인 안한 상태면 user = null
+
+    res.render('index.ejs', { components: 'main', user: user });
 });
 
 router.get('/register', (req, res, next) => {
@@ -24,9 +26,9 @@ router.get('/login', auth, (req, res, next) => {
             throw error;
         }
 
-        res.render('index', { components: 'login', user: res.locals.user });
+        res.render('index', { components: 'login' });
     } catch (error) {
-        throw error;
+        next(error);
     }
 });
 
