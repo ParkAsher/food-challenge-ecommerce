@@ -13,8 +13,7 @@ module.exports = async (req, res, next) => {
 
         // accessToken 없음
         if (!accessToken) {
-            const error = new TokenNotFound();
-            throw error;
+            return next();
         }
 
         const { id, nickname } = jwt.verify(accessToken, process.env.COOKIE_SECRET);
