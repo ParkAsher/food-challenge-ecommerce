@@ -35,3 +35,19 @@
     </div>
 </div>
 <% } %>
+
+<script>
+    function logout() {
+        $.ajax({
+            type: 'GET',
+            url: '/api/users/logout',
+            success: function (response) {
+                window.location.reload();
+            },
+            error: function (response) {
+                alert(response.responseJSON);
+                window.location.reload();
+            },
+        });
+    }
+</script>
