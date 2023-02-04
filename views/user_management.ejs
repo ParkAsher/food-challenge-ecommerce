@@ -244,10 +244,12 @@
             url: '/api/admin/user',
             data: userInfo,
             success: function (response) {
-                console.log('성공');
+                alert(response.message);
+                window.location.reload();
             },
             error: function (response) {
-                console.log(response.responseJSON.error);
+                alert(response.responseJSON.message);
+                window.location.reload();
             },
         });
     }
