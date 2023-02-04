@@ -15,8 +15,16 @@ class CartRepository {
     };
 
     findItemInCart = async (user_id) => {
-        const inCartThatItem = await Basket.findAll({ where: { user_id } , include: [{model : Item,attributes: ["name", "price", "image"]}]});
-        return inCartThatItem
+        const inCartThatItem = await Basket.findAll({
+            where: { user_id },
+            include: [{ model: Item, attributes: ['id', 'name', 'price', 'image'] }],
+        });
+        return inCartThatItem;
+    };
+
+    deleteItemInCart = async (user_id, item_id) => {
+        const deleteItemInCart = await Basket.destroy({ where: { user_id, item_id } });
+        return deleteItemInCart;
     };
 }
 

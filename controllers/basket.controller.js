@@ -25,11 +25,20 @@ class CartController {
     };
 
     getInfoInMyCart = async (req, res, next) => {
-        const { id: user_id } = jwt.verify(req.cookies.accessToken, process.env.COOKIE_SECRET);
+        const { id: user_id } = res.locals.user;
 
         const MyCartInfo = await this.cartController.findItemInCart(user_id);
 
-        res.json({data: MyCartInfo})
+        res.json({ data: MyCartInfo });
+    };
+
+    deleteItemInCart = async (req, res, next) => {
+        const { id: user_id } = res.locals.user;
+        const { item_id } = req.body;
+
+        const deleteItem = await this.cartController.deleteItemInCart(user_id, item_id);
+
+        res.json({ data: deleteItem });
     };
 }
 
