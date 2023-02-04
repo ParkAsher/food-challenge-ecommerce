@@ -1,0 +1,34 @@
+.admin-manage-btn-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+
+    padding: 2rem 0;
+}
+
+.admin-manage-btn-wrap button {
+    font-size: 2rem;
+    padding: 2rem 3.5rem;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    cursor: pointer;
+}
+.admin-manage-btn-wrap button:active {
+    color: white;
+    box-shadow: 0 0.2rem #dfd9d9;
+    transform: translateY(0.2rem);
+}
+
+.admin-manage-btn-wrap button:hover:not(:disabled) {
+    background: lightcoral;
+    color: white;
+    text-shadow: 0 0.1rem #bcb4b4;
+}
+
+.admin-manage-btn-wrap button:disabled {
+    cursor: auto;
+    color: grey;
+}

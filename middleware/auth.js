@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const dotenv = require('dotenv');
-const { TokenNotFound, UserNotFound } = require('../lib/customerror');
+const { UserNotFound } = require('../lib/customerror');
 
 /* env */
 dotenv.config();

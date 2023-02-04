@@ -1,0 +1,254 @@
+<div class="user-management-background">
+    <div class="user-management-wrap">
+        <div class="user-management-title">
+            <p>회원목록</p>
+        </div>
+        <div class="user-management-items">
+            <div class="user-management-items-left">
+                <div class="user-management-items-left-btn-wrap">
+                    <button type="button" onclick="window.location.href = '/adm'">전체목록</button>
+                </div>
+                <div class="user-management-count-wrap" id="count"></div>
+            </div>
+            <div class="user-management-search-wrap">
+                <input type="text" id="email" placeholder="회원 이메일" />
+                <button type="button" onclick="userSearch()">
+                    <span class="material-icons"> search </span>
+                </button>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table id="table" class="table" border="1">
+                <thead>
+                    <tr>
+                        <th>회원번호</th>
+                        <th>이름</th>
+                        <th>닉네임</th>
+                        <th>이메일</th>
+                        <th>휴대폰</th>
+                        <th>포인트</th>
+                        <th>가입날짜</th>
+                        <th>상태</th>
+                    </tr>
+                </thead>
+                <tbody id="userList"></tbody>
+            </table>
+            <div id="error-message" class="error-message"></div>
+        </div>
+        <div id="pagination" class="pagination-btn-wrap"></div>
+
+        <div class="user-management-title">
+            <p>회원정보 수정</p>
+        </div>
+        <div class="user-management-update-form">
+            <input type="hidden" id="user-id" />
+            <div class="user-management-update-form-row">
+                <div class="update-item-title">
+                    <p>이름</p>
+                </div>
+                <div class="update-item-value">
+                    <input type="text" id="user-name" />
+                </div>
+                <div class="update-item-title">
+                    <p>닉네임</p>
+                </div>
+                <div class="update-item-value">
+                    <input type="text" id="user-nickname" />
+                </div>
+            </div>
+            <div class="user-management-update-form-row">
+                <div class="update-item-title">
+                    <p>이메일</p>
+                </div>
+                <div class="update-item-value">
+                    <input type="text" id="user-email" />
+                </div>
+                <div class="update-item-title">
+                    <p>휴대폰</p>
+                </div>
+                <div class="update-item-value">
+                    <input type="text" id="user-phone" />
+                </div>
+            </div>
+            <div class="user-management-update-form-row">
+                <div class="update-item-title">
+                    <p>포인트</p>
+                </div>
+                <div class="update-item-value">
+                    <input type="text" id="user-point" />
+                </div>
+            </div>
+        </div>
+        <div class="user-update-btn-wrap">
+            <button type="button" onclick="userUpdate()">수정</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const page = new URLSearchParams(location.search).get('page') || 1;
+
+    $.ajax({
+        type: 'GET',
+        url: `/api/admin/users?page=${page}`,
+        success: function (response) {
+            const { usersCount, userList, firstPage, lastPage, totalPage } = response;
+
+            const userCountHtml = `
+                <div class="user-management-count-title">
+                    <p>회원수</p>
+                </div>
+                <div class="user-management-count">
+                    <p>${usersCount}명</p>
+                </div>
+            `;
+
+            document.getElementById('count').innerHTML = userCountHtml;
+
+            // table 에 회원 리스트 붙이기 : 1페이지당 8명
+            const html = userList.map((user) => {
+                const stringifyUserObj = JSON.stringify(user);
+                return `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.nickname}</td>
+                        <td>${user.email}</td>
+                        <td>${user.phone}</td>
+                        <td>${user.point}</td>
+                        <td>${user.createdAt}</td>
+                        <td>
+                            <button type="button" class="user-update-btn" onclick='userUpdateFormOpen(${stringifyUserObj})'>수정</button>
+                            <button type="button" class="user-delete-btn" onclick="userDelete(${user.id}, '${user.email}')">삭제</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('userList').innerHTML = html.join('');
+
+            // pagination 버튼 생성
+            const pages = [];
+
+            // prev 버튼
+            if (page > 1) {
+                const prev = `
+                    <a href='?page=${Number(page) - 1}'><div class="pagination-btn">이전</div></a>
+                `;
+                pages.push(prev);
+            }
+
+            // pages 버튼
+            for (let i = firstPage; i <= lastPage; i++) {
+                const pageList =
+                    Number(page) === i
+                        ? `<a href='?page=${i}'><div class="pagination-btn active">${i}</div></a>`
+                        : `<a href='?page=${i}'><div class="pagination-btn">${i}</div></a>`;
+
+                pages.push(pageList);
+            }
+
+            // next 버튼
+            if (page < lastPage) {
+                const next = `
+                    <a href='?page=${Number(page) + 1}'><div class="pagination-btn">다음</div><li>
+                `;
+                pages.push(next);
+            }
+
+            document.getElementById('pagination').innerHTML = pages.join('');
+        },
+        error: function (response) {
+            alert(response.responseJSON.message);
+            window.location.href = '/';
+        },
+    });
+
+    function userSearch() {
+        const userEmail = document.getElementById('email').value;
+
+        $.ajax({
+            type: 'GET',
+            url: `/api/admin/user/${userEmail}`,
+            success: function (response) {
+                const { user } = response;
+
+                const html = `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.nickname}</td>
+                        <td>${user.email}</td>
+                        <td>${user.phone}</td>
+                        <td>${user.point}</td>
+                        <td>${user.createdAt}</td>
+                        <td>dfdf</td>
+                    </tr>
+                `;
+
+                document.getElementById('userList').innerHTML = html;
+            },
+            error: function (response) {
+                const { message } = response.responseJSON;
+
+                const html = `
+                    <p>${message}</p>
+                `;
+
+                document.getElementById('userList').innerHTML = '';
+                document.getElementById('error-message').innerHTML = html;
+            },
+        });
+    }
+
+    function userDelete(id, email) {
+        if (confirm('정말 삭제하시겠습니까?')) {
+            $.ajax({
+                type: 'DELETE',
+                url: `/api/admin/user?id=${id}&email=${email}`,
+                success: function (response) {
+                    alert(response.message);
+                    window.location.reload();
+                },
+                error: function (response) {
+                    alert(response.responseJSON.message);
+                    window.location.reload();
+                },
+            });
+        }
+
+        window.location.reload();
+    }
+
+    function userUpdateFormOpen(user) {
+        document.getElementById('user-id').value = user.id;
+        document.getElementById('user-name').value = user.name;
+        document.getElementById('user-nickname').value = user.nickname;
+        document.getElementById('user-email').value = user.email;
+        document.getElementById('user-phone').value = user.phone;
+        document.getElementById('user-point').value = user.point;
+    }
+
+    function userUpdate() {
+        const userInfo = {
+            id: document.getElementById('user-id').value,
+            name: document.getElementById('user-name').value,
+            nickname: document.getElementById('user-nickname').value,
+            email: document.getElementById('user-email').value,
+            phone: document.getElementById('user-phone').value,
+            point: document.getElementById('user-point').value,
+        };
+
+        $.ajax({
+            type: 'PUT',
+            url: '/api/admin/user',
+            data: userInfo,
+            success: function (response) {
+                console.log('성공');
+            },
+            error: function (response) {
+                console.log(response.responseJSON.error);
+            },
+        });
+    }
+</script>
