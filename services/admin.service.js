@@ -1,7 +1,7 @@
 const moment = require('moment/moment');
 const { User } = require('../models/index');
 const AdminRepository = require('../repositories/admin.repository');
-const { UserNotFound, UserNotDeleted } = require('../lib/customerror');
+const { UserNotFound, UserNotDeleted, UserNotUpdated } = require('../lib/customerror');
 
 class AdminService {
     adminRepository = new AdminRepository(User);
@@ -82,6 +82,22 @@ class AdminService {
             }
 
             return { status: 200, message: '삭제에 성공했습니다.' };
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    updateUser = async (userInfo) => {
+        try {
+            const [updateCount] = await this.adminRepository.updateUser(userInfo);
+
+            // 만약 해당 id를 가진 유저가 없어서 수정에 실패하였다면?
+            if (updateCount === 0) {
+                const error = new UserNotUpdated();
+                throw error;
+            }
+
+            return { status: 200, message: '수정에 성공했습니다.' };
         } catch (error) {
             throw error;
         }

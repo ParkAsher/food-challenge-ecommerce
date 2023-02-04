@@ -46,6 +46,25 @@ class AdminRepository {
             throw error;
         }
     };
+
+    updateUser = async (userInfo) => {
+        try {
+            return await this.userModel.update(
+                {
+                    name: userInfo.name,
+                    nickname: userInfo.nickname,
+                    email: userInfo.email,
+                    phone: userInfo.phone,
+                    point: userInfo.point,
+                },
+                {
+                    where: { id: userInfo.id },
+                }
+            );
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = AdminRepository;
