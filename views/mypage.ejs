@@ -1,9 +1,23 @@
-<div class="mypage-background">
-	<div class="mypage-user-info" id="user-info-box">
-	</div>
-	<div class="mypage-order-list" id="order-list-box">
+<div class="mypage-insert">마이페이지</div>
+
+<div class="user-section">
+	<div class="info-section" id="info-section">
 	</div>
 </div>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>주문번호</th>
+			<th>상품명</th>
+			<th>구매수량</th>
+			<th>총금액</th>
+			<th>적립포인트</th>
+			<th>구매시기</th>
+		</tr>
+	</thead>
+	<tbody id="order-list-tbody"></tbody>
+</table>
 
 <script>
 	$(document).ready(function () {
@@ -19,23 +33,28 @@
 			success: function (response) {
 				let {name, nickname, email, point} = response.user
 
-				console.log(response)
+				let temp_html = `
+					<table class="user-info">
+						<tr>
+							<th>이름</th>
+							<td>${name}</td>
+						</tr>
+						<tr>
+							<th>닉네임</th>
+							<td>${nickname}</td>
+						</tr>
+						<tr>
+							<th>이메일</th>
+							<td>${email}</td>
+						</tr>
+						<tr>
+							<th>잔여 포인트</th>
+							<td>${point}</td>
+						</tr>
 
-				let temp_html = `	
-						<div class="mypage-user-name">
-							<p class="name">이름 : ${name}</p>
-						</div>
-						<div class="mypage-user-nickname">
-							<p class="nickname">닉네임 : ${nickname}</p>
-						</div>
-						<div class="mypage-user-email">
-							<p class="email">이메일 : ${email}</p>
-						</div>
-						<div class="mypage-user-point">
-							<p class="point">포인트 : ${point}</p>
-						</div>
+					</table>
 					`
-				$('#user-info-box').append(temp_html)
+				$('#info-section').append(temp_html)
 			}
 		})
 
@@ -43,7 +62,6 @@
 			type: 'GET',
 			url: `/api/orders/mypage/${id}`,
 			success: function (response) {
-
 				let rows = response.orderList
 
 				for(i = 0; i < rows.length; i++) {
@@ -55,26 +73,16 @@
 					let createdAt = rows[i].createdAt
 
 					let temp_html = `
-							<div class="mypage-order-list-id">
-								<p class="id">주문번호 : ${id}</p>
-							</div>
-							<div class="mypage-order-list-item-name">
-								<p class="item-name">상품명 : ${itemName}</p>
-							</div>
-							<div class="mypage-order-list-count">
-								<p class="count">구매수량 : ${count}</p>
-							</div>
-							<div class="mypage-order-list-total_item_price">
-								<p class="total_item_price">총금액 : ${totalItemPrice}</p>
-							</div>
-							<div class="mypage-order-list-save_point">
-								<p class="save_point">적립포인트 : ${savePoint}</p>
-							</div>
-							<div class="mypage-order-list-createdAt">
-								<p class="createdAt">구매시기 : ${createdAt}</p>
-							</div>
+							<tr>
+								<td>${id}</td>
+								<td>${itemName}</td>
+								<td>${count}</td>
+								<td>${totalItemPrice}</td>
+								<td>${savePoint}</td>
+								<td>${createdAt}</td>
+							</tr>
 					`
-				$('#order-list-box').append(temp_html)
+				$('#order-list-tbody').append(temp_html)
 				}	
 			}
 		})

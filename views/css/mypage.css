@@ -1,6 +1,53 @@
-.mypage {
-	width: auto;
-	height: auto;
-	
-	background-color: darksalmon;
+.mypage-insert {
+    display: flex;
+    flex-basis: 100%;
+    align-items: center;
+    font-size: 32px;
+    margin: 8px 0px;
+    padding: 50px;
+}
+
+.mypage-insert::before,
+.mypage-insert::after {
+	content: "";
+	flex-grow: 1;
+	border-top: solid 5px #AAC63C;
+	margin: 0 50px;
+}
+
+.user-info {
+	margin: 0 auto 50px auto;
+    padding: 10px;
+    width: 25%;
+    text-align: center;
+}
+
+.user-info {
+	border: black;
+}
+
+.user-info td {
+	padding: 10px;
+}
+
+.table {
+    width: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+	background-color: #fff;
+}
+
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.table th {
+    background-color: #f2f2f2;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f2f2f2;
 }
