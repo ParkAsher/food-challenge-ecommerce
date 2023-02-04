@@ -14,8 +14,10 @@ router.get('/register', (req, res, next) => {
     res.render('index.ejs', { components: 'register' });
 });
 
-router.get('/itemDetail/:id', (req, res, next) => {
-    res.render('index.ejs', { components: 'itemDetail' });
+router.get('/itemDetail/:id', auth, (req, res, next) => {
+    const user = !res.locals.user ? null : res.locals.user; // 로그인 안한 상태면 user = null
+
+    res.render('index.ejs', { components: 'itemDetail', user: user });
 });
 
 router.get('/login', auth, (req, res, next) => {
@@ -32,7 +34,7 @@ router.get('/login', auth, (req, res, next) => {
     }
 });
 
-router.get('/basket', (req, res, next) => {
+router.get('/basket', auth, (req, res, next) => {
     const user = !res.locals.user ? null : res.locals.user; // 로그인 안한 상태면 user = null
 
     res.render('index.ejs', { components: 'myBasket', user: user });

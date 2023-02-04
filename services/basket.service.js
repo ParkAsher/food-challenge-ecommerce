@@ -17,7 +17,6 @@ class BasketService {
 
     findItemInBasket = async (user_id) => {
         const findAll = await this.basketRepository.findItemInBasket(user_id);
-
         if (findAll.length < 1) {
             return
         }
@@ -30,10 +29,14 @@ class BasketService {
                 price: item.Item.price,
                 totalPrice: item.Item.price * item.count,
                 point: item.Item.price * item.count * (5 / 100),
-                image: item.Item.image,
-            };
+                image: item.Item.image,};
         });
-        return myItem;
+
+        let totalPrice = 0
+        for (let i = 0; i < myItem.length; i++) {
+            totalPrice += myItem[i].totalPrice
+        }
+        return {myItem, totalPrice}
     };
 
     deleteItemInBasket = async (user_id, item_id) => {

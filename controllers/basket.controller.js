@@ -32,9 +32,9 @@ class BasketController {
     getInfoInMyBasket = async (req, res, next) => {
         const { id: user_id } = res.locals.user;
 
-        const MyBasketInfo = await this.basketController.findItemInBasket(user_id);
+        const {myItem, totalPrice} = await this.basketController.findItemInBasket(user_id);
 
-        res.json({ data: MyBasketInfo });
+        res.json({ data: myItem, price: totalPrice});
     };
 
     deleteItemInBasket = async (req, res, next) => {
