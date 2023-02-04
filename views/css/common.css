@@ -1,6 +1,10 @@
 body {
     min-height: 100vh;
 }
+
+body::-webkit-scrollbar {
+    display: none;
+}
 a {
     text-decoration: none !important;
 }
