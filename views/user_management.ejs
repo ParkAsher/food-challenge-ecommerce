@@ -4,7 +4,12 @@
             <p>회원목록</p>
         </div>
         <div class="user-management-items">
-            <div class="user-management-count-wrap" id="count"></div>
+            <div class="user-management-items-left">
+                <div class="user-management-items-left-btn-wrap">
+                    <button type="button" onclick="window.location.href = '/adm'">전체목록</button>
+                </div>
+                <div class="user-management-count-wrap" id="count"></div>
+            </div>
             <div class="user-management-search-wrap">
                 <input type="text" id="email" placeholder="회원 이메일" />
                 <button type="button" onclick="userSearch()">
@@ -28,6 +33,7 @@
                 </thead>
                 <tbody id="userList"></tbody>
             </table>
+            <div id="error-message" class="error-message"></div>
         </div>
         <div id="pagination" class="pagination-btn-wrap"></div>
     </div>
@@ -107,4 +113,41 @@
             window.location.href = '/';
         },
     });
+
+    function userSearch() {
+        const userEmail = document.getElementById('email').value;
+
+        $.ajax({
+            type: 'GET',
+            url: `/api/admin/user/${userEmail}`,
+            success: function (response) {
+                const { user } = response;
+
+                const html = `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.nickname}</td>
+                        <td>${user.email}</td>
+                        <td>${user.phone}</td>
+                        <td>${user.point}</td>
+                        <td>${user.createdAt}</td>
+                        <td>dfdf</td>
+                    </tr>
+                `;
+
+                document.getElementById('userList').innerHTML = html;
+            },
+            error: function (response) {
+                const { message } = response.responseJSON;
+
+                const html = `
+                    <p>${message}</p>
+                `;
+
+                document.getElementById('userList').innerHTML = '';
+                document.getElementById('error-message').innerHTML = html;
+            },
+        });
+    }
 </script>

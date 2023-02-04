@@ -27,9 +27,26 @@
     align-items: center;
 }
 
+.user-management-items-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .user-management-count-wrap {
     display: flex;
     align-items: center;
+}
+
+.user-management-items-left-btn-wrap {
+    height: 100%;
+}
+
+.user-management-items-left-btn-wrap button {
+    height: 3rem;
+    background: darkblue;
+    color: #ffffff;
+    border-radius: 5px;
 }
 
 .user-management-count-title,
@@ -113,4 +130,19 @@
     height: 3rem;
     background: none;
     border: none;
+}
+
+.error-message {
+    margin-top: 2rem;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.error-message p {
+    font-weight: bold;
+    color: red;
+    font-size: 2rem;
 }
