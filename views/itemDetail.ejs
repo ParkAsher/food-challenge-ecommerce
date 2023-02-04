@@ -85,8 +85,12 @@
                 alert(data.message)
                 return location.href = '/login';
             }
-                console.log(data);
+            
+            if (confirm("장바구니로 이동 하시겠습니다?")) {
+                location.href = '/basket';
+            } else {
                 location.href = '/';
+            }
             })
             .catch((err) => {
                 alert(err.message)

@@ -112,6 +112,9 @@ module.exports = (err, req, res, next) => {
         if (err.name === 'NotFoundItem') {
             return res.status(err.status).json({ message: err.message });
         }
+        if (err.name === 'UserNotFound') {
+            return res.status(err.status).json({ message: err.message });
+        }
         if (err.name === 'TokenNotFound') {
             return res.status(err.status).json({ message: err.message });
         }
