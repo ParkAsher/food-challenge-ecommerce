@@ -1,6 +1,7 @@
 module.exports = (err, req, res, next) => {
     console.log('Error Handling Middleware');
     console.log(err);
+    console.log(req.route.path);
 
     /* token error */
     if (err.name === 'TokenNotFound') {
@@ -127,6 +128,14 @@ module.exports = (err, req, res, next) => {
 
     /* 관리자페이지 회원관리 회원 리스트 불러오기 */
     if (req.path === '/api/admin/users') {
+        return res.status(400).json({ message: '데이터를 불러올 수 없습니다.' });
+    }
+
+    /* 관리자페이지 회원관리 회원 검색 */
+    if (req.route.path === '/user/:email') {
+        if (err.name === 'UserNotFound') {
+            return res.status(err.status).json({ message: err.message });
+        }
         return res.status(400).json({ message: '데이터를 불러올 수 없습니다.' });
     }
 };
