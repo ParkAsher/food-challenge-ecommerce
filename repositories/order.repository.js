@@ -1,5 +1,5 @@
 const { UserAlreadyExist } = require('../lib/customerror');
-const { User, Order, Orderitem } = require('../models');
+const { User, Order, Orderitem, Basket } = require('../models');
 
 class orderRepository {
     saveOrder = async (
@@ -47,6 +47,14 @@ class orderRepository {
         }
         return { orderTable, orderItemTable };
     };
+
+    basketList = async(user_id) => {
+        const basketItems = await Basket.findAll({
+            where: {id: user_id}
+        })
+
+        return basketItems
+    }
 }
 
 module.exports = orderRepository;

@@ -7,7 +7,7 @@ const auth = require('../middleware/auth');
 
 
 router.post('/', auth, orderController.saveOrder);
-router.post('/basket', auth, orderController.getBasketItems);
+router.get('/basketList', auth, orderController.getBasketList);
 
 
 

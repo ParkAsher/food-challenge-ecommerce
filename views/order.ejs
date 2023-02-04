@@ -86,9 +86,9 @@
       <h5 style="display: inline">사용포인트</h5>
       <input type="text" class="form-control"
         style="text-align:right; width:170px; height:30px; font-size:15px; margin-left:auto;" placeholder=0
-        id="order_point">
+        id="order_point"/>
       <button onclick=getTotalPrice() type="button" class="btn btn-success btn-block"
-        style="height:30px; display:flex; align-items:center">
+              id="useMyPoint" style="height:30px; display:flex; align-items:center">
         사용
       </button>
     </div>
@@ -102,7 +102,7 @@
       <button onclick=buyOrder() type="button" class="btn btn-order btn-block" style="float:right;">
         결제
       </button>
-      <button type="button" class="btn btn-cancel btn-block" style="float:right; margin-right:5px">
+      <button onclick="location.href='javascript:history.back()'" type="button" class="btn btn-cancel btn-block" style="float:right; margin-right:5px">
         취소
       </button>
     </div>
@@ -173,7 +173,6 @@
     let order_point = Number($('#order_point').val())
     let totalToPay = order_price - order_point
     const myPoint = $('#myPoint').text()
-    const updatePoint = myPoint - order_point
 
     $('#tooMuchPointUse').empty()
 
@@ -189,13 +188,19 @@
 
       return
 
+    } else {
+      const updatePoint = myPoint - order_point
+
+      $('#totalToPay').empty()
+      $('#totalToPay').append(totalToPay);
+
+      $('#myPoint').empty()
+      $('#myPoint').append(updatePoint);
+      $('#useMyPoint').hide()
+      $('input[type=text][id=order_point]').prop('readonly', true);
+      $('#order_point').readOnly = true
+
     }
-
-    $('#totalToPay').empty()
-    $('#totalToPay').append(totalToPay);
-
-    $('#myPoint').empty()
-    $('#myPoint').append(updatePoint);
 
     return
   }
