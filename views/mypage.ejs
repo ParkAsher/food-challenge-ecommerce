@@ -44,31 +44,38 @@
 			url: `/api/orders/mypage/${id}`,
 			success: function (response) {
 
-				console.log(response)
+				let rows = response.orderList
 
-				let {order_id, createdAt, name, count, total_item_price, save_point} = response.orderList
+				for(i = 0; i < rows.length; i++) {
+					let id = rows[i].order_id
+					let itemName = rows[i].name
+					let count = rows[i].count
+					let totalItemPrice = rows[i].total_item_price
+					let savePoint = rows[i].save_point
+					let createdAt = rows[i].createdAt
 
-				let temp_html = `
+					let temp_html = `
 							<div class="mypage-order-list-id">
-								<p class="id">주문번호 : ${order_id}</p>
+								<p class="id">주문번호 : ${id}</p>
 							</div>
 							<div class="mypage-order-list-item-name">
-								<p class="item-name">상품명 : ${name}</p>
+								<p class="item-name">상품명 : ${itemName}</p>
 							</div>
 							<div class="mypage-order-list-count">
 								<p class="count">구매수량 : ${count}</p>
 							</div>
 							<div class="mypage-order-list-total_item_price">
-								<p class="total_item_price">총금액 : ${total_item_price}</p>
+								<p class="total_item_price">총금액 : ${totalItemPrice}</p>
 							</div>
 							<div class="mypage-order-list-save_point">
-								<p class="save_point">적립포인트 : ${save_point}</p>
+								<p class="save_point">적립포인트 : ${savePoint}</p>
 							</div>
 							<div class="mypage-order-list-createdAt">
 								<p class="createdAt">구매시기 : ${createdAt}</p>
 							</div>
 					`
 				$('#order-list-box').append(temp_html)
+				}	
 			}
 		})
 	}
