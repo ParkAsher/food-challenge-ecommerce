@@ -2,7 +2,7 @@
 <script>
     const id = window.location.pathname.split('/')[2] || 1;
 
-    fetch(`http://localhost:3000/api/items/${id}`)
+    fetch(`http://localhost:4000/api/items/${id}`)
         .then((response) => response.json())
         .then(( data ) => {
             if (data.message) {
@@ -72,7 +72,7 @@
             count: document.getElementById('count').value,
         };
 
-        fetch(`http://localhost:3000/api/items/${id}`, {
+        fetch(`http://localhost:4000/api/items/${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

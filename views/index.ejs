@@ -46,11 +46,8 @@
         <% if (components === 'main') { %> <%- include('main.ejs') %> <% } %>
         <% if (components === 'itemDetail') { %> <%- include('itemDetail.ejs') %> <% } %>
         <% if (components === 'order') { %> <%- include('order.ejs') %> <% } %>
-
-        <% if (components === 'register') { %> <%- include('register.ejs') %> <% } %> <% if
-        (components === 'main') { %> <%- include('main.ejs') %> <% } %> <% if (components ===
-        'itemDetail') { %> <%- include('itemDetail.ejs') %> <% } %> <% if (components === 'login') {
-        %> <%- include('login.ejs') %> <% } %>
+        <% if (components === 'login') {%> <%- include('login.ejs') %> <% } %>
+        
     </body>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 </html>

@@ -13,7 +13,7 @@ class ItemRepository {
     findItemsByLevel = async (level) => {
         const itemsByLevel = await Item.findAll({
             where: { level },
-            attribues: ['id', 'name', 'price', 'image'],
+            attributes: ['id', 'name', 'price', 'image'],
             order: [['createdAt', 'desc']],
         });
 

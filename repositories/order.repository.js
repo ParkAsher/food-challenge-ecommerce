@@ -1,4 +1,5 @@
-const { Order, Orderitem } = require('../models');
+const { UserAlreadyExist } = require('../lib/customerror');
+const { User, Order, Orderitem } = require('../models');
 
 class orderRepository {
     saveOrder = async (
@@ -10,22 +11,41 @@ class orderRepository {
         order_point,
         receipt_price
     ) => {
+        const orderPoint = Number(order_point);
 
+        // Order 테이블 저장
         const orderTable = await Order.create({
             user_id,
             address,
             order_price,
-            order_point,
+            order_point: orderPoint,
             receipt_price,
         });
 
+        // OrderItem 테이블 저장
         const orderItemTable = await Orderitem.create({
             order_id: orderTable.id,
             item_id,
             count,
         });
-        
-        return { orderTable, orderItemTable }
+
+        // 사용한 포인트 업데이트
+        if (orderPoint > 0) {
+            const findUserPoint = await User.findOne({
+                attributes: ['point'],
+                where: { id: user_id },
+            });
+
+            await User.update(
+                {
+                    point: findUserPoint.point - orderPoint,
+                },
+                {
+                    where: { id: user_id },
+                }
+            );
+        }
+        return { orderTable, orderItemTable };
     };
 }
 
