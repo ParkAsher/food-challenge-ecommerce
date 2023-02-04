@@ -51,6 +51,7 @@
     border-radius: 5px;
     border: none;
     background: #1f2029;
+    color: #ffffff;
 }
 
 .login-form input:focus,
