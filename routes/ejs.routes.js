@@ -1,4 +1,6 @@
 const express = require('express');
+const { UserAlreadyLogined } = require('../lib/customerror');
+const auth = require('../middleware/auth');
 const router = express.Router();
 
 /* View Mapping */
@@ -14,8 +16,18 @@ router.get('/itemDetail/:id', (req, res, next) => {
     res.render('index.ejs', { components: 'itemDetail' });
 });
 
-router.get('/login', (req, res, next) => {
-    res.render('index.ejs', { components: 'login' });
+router.get('/login', auth, (req, res, next) => {
+    try {
+        // 이미 로그인 되어있다면?
+        if (res.locals.user) {
+            const error = new UserAlreadyLogined();
+            throw error;
+        }
+
+        res.render('index', { components: 'login' });
+    } catch (error) {
+        throw error;
+    }
 });
 
 module.exports = router;
