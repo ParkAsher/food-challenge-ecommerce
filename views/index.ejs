@@ -28,18 +28,19 @@
         <link rel="stylesheet" href="/css/header.css" />
         <link rel="stylesheet" href="/css/register.css" />
         <link rel="stylesheet" href="/css/main.css" />
-
+        <link rel="stylesheet" href="/css/login.css" />
 
         <title>푸드챌린지</title>
     </head>
     <body>
         <!-- header -->
         <%- include('header.ejs') %>
-    
+
         <!-- body -->
-        <% if (components === 'register') { %> <%- include('register.ejs') %> <% } %>
-        <% if (components === 'main') { %> <%- include('main.ejs') %> <% } %>
-        <% if (components === 'itemDetail') { %> <%- include('itemDetail.ejs') %> <% } %>
+        <% if (components === 'register') { %> <%- include('register.ejs') %> <% } %> <% if
+        (components === 'main') { %> <%- include('main.ejs') %> <% } %> <% if (components ===
+        'itemDetail') { %> <%- include('itemDetail.ejs') %> <% } %> <% if (components === 'login') {
+        %> <%- include('login.ejs') %> <% } %>
     </body>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 </html>
