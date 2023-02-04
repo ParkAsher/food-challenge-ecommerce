@@ -13,6 +13,11 @@ module.exports = (err, req, res, next) => {
         return res.render('alert.ejs', { message: err.message, href: '/' });
     }
 
+    /* 이미 로그인 된 회원 */
+    if (err.name === 'UserAlreadyLogined') {
+        return res.render('alert.ejs', { message: err.message, href: '/' });
+    }
+
     /* Joi Validation Error */
     if (err.isJoi) {
         const joiErredKey = err.details[0].context.key;
