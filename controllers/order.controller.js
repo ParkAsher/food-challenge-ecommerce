@@ -12,7 +12,7 @@ class OrderContorller {
             address, 
             order_price, 
             order_point, 
-            receipt_price } = req.query;            
+            receipt_price } = req.query;
 
         const saveOrder = await this.orderService.addToOrder(
             user_id,

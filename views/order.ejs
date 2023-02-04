@@ -22,12 +22,12 @@
 
         <div class="d-flex justify-content-between mb-3">
           <h5 style="display: inline">수량</h5>
-          <span class="card-price" id="itemQuantity"></span>
+          <span class="card-price" id="count"></span>
         </div>
 
         <div class="d-flex justify-content-between mb-3">
-          <h5 style="display: inline" >주문금액</h5>
-          <span class="card-price" id="orderPrice">4000</span>
+          <h5 style="display:inline; color:blue " >주문금액</h5>
+          <span class="card-price" style="color:blue" id="order_price"></span>
         </div>
         
         <hr/>
@@ -36,14 +36,17 @@
           <h5 style="display: inline">보유포인트</h5>
           <span class="card-price" id="myPoint">3000P</span>
         </div>
-        <div class="d-flex justify-content-between mb-3">
+        <div class="d-flex mb-4">
           <h5 style="display: inline">사용포인트</h5>
-          <input type="text" alt="mail_id" style="text-align:right" placeholder="0" id="usePoint">
+          <input type="text" class="form-control" style="text-align:right; width:170px; height:30px; font-size:15px; margin-left:auto;" placeholder=0 id="order_point">
+          <button onclick= getTotalPrice() type="button" class="btn btn-success btn-block" style="height:30px; display:flex; align-items:center">
+            사용
+          </button>
         </div>
-        
+
         <div class="d-flex justify-content-between mb-3">
-          <h2 style="display: inline"> 총 결제금액</h2>
-          <span class="card-price" id="receiptPrice">9000</span>
+          <h2 style="display:inline; color:red"> 총 결제금액</h2>
+          <span class="card-price" style="color:red" id="totalToPay"></span>
         </div>
           
         </div>
@@ -60,27 +63,63 @@
   <div>
     <div class="form-group mb-3">
       <label for="exampleInputName">받는 사람</label>
-      <input type="text" class="form-control" id="exampleInputName" placeholder="홍길동" />
+      <input type="text" class="form-control" id="recipient" placeholder="홍길동" />
     </div>
 
     <div class="form-group mb-3">
       <label for="exampleInputMobile">연락처</label>
-      <input type="text" class="form-control" id="exampleInputMobile" placeholder="010-xxx-xxxx" />
+      <input type="text" class="form-control" id="mobileNumber" placeholder="010-xxx-xxxx" />
     </div>
 
     <div class="form-group mb-3">
       <label for="exampleInputAddress1">주소</label>
-      <input type="text" class="form-control" id="exampleInputAddress1" placeholder="도로명, 건물명, 번지 검색" />
+      <input type="text" class="form-control" id="address" placeholder="도로명, 건물명, 번지 검색" />
       <button type="button" class="btn btn-warning btn-block" id="addressSearch" onclick="findAddr()">주소 검색</button>
-      <input type="text" class="form-control mt-2" id="exampleInputAddress2" placeholder="상세주소" />
+      <input type="text" class="form-control mt-2" id="addressDetail" placeholder="상세주소" />
     </div>
 
-    <button type="button" class="btn btn-order btn-block">
+    <button onclick=buyOrder() type="button" class="btn btn-order btn-block">
       결제
     </button>
     <button type="button" class="btn btn-cancel btn-block">
       취소
     </button>
+  </div>
+</div>
+
+  <!-- Modalalert-->
+  <div
+  class="modal text-left"
+  id="alertModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="alertModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="alertModalLabel">알림</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="alertText"></div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-sparta btn-confirm"
+          data-dismiss="modal"
+        >
+          확인
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -102,7 +141,7 @@
         }
 
         // 부모창의 주소칸에 받아온 주소를 넣는다.
-        $("#exampleInputAddress1").val(addr);
+        $("#address").val(addr);
       }
     }).open();
   }
@@ -111,11 +150,60 @@
     let param = new URLSearchParams(query);
     let name = param.get('name');
     let price = param.get('price');
-    let itemQuantity = param.get('count');
+
+    let count = param.get('count');
+    let order_price = param.get('totalPrice');
 
     $('#itemName').append(name);
     $('#itemPrice').append(price);
-    $('#itemQuantity').append(itemQuantity);
+    $('#count').append(count);
+    $('#order_price').append(order_price);
+    $('#totalToPay').append(order_price);
 
+    function getTotalPrice() {
+      let order_point = $('#order_point').val()
+      let totalToPay = order_price - order_point
+
+      $('#totalToPay').empty()
+
+    return $('#totalToPay').append(totalToPay);
+  }
+
+    function buyOrder() {
+      let id = param.get('id');
+      let count = $('#count').text()
+      let add1 = $('#address').val()
+      let add2 = $('#addressDetail').val()
+      let address = add1 + ' ' + add2
+      let order_price = $('#order_price').text()
+      let order_point = $('#order_point').val()
+      let receipt_price = $('#totalToPay').text()
+      
+      $.ajax({
+          type: 'POST',
+          url: `/api/orders?id=${id}&count=${count}&address=${address}&order_price=${order_price}&order_point=${order_point}&receipt_price=${receipt_price}`,
+          data: {},
+          headers: {
+          // authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+          success: function () {
+            customAlert('선택하신 상품을 성공적으로 구매하였습니다.', function () {
+              window.location.reload();
+            });
+          },
+          error: function (error) {
+            customAlert(error.responseJSON.errorMessage);
+          }
+        });
+      }
+
+    // 모달 알림창
+    function customAlert(text, confirmCallback) {
+      $('#alertText').text(text);
+      $('#alertModal').modal('show');
+      if (confirmCallback) {
+        $('#alertModal .btn-confirm').click(confirmCallback);
+      }
+    }
 
 </script>

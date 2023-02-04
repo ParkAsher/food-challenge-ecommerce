@@ -97,9 +97,10 @@
     function pass() {
         let count = document.getElementById('count').value;
         let name = document.getElementById('name').innerHTML;
-        let price = document.getElementById('total').innerText;
+        let price = document.getElementById('price').innerText;
+        let totalPrice = document.getElementById('total').innerText;
         console.log(document.getElementById('name'));
 
-        location.href = `/order?name=${name}&count=${count}&price=${price}`;
+        location.href = `/order?id=${id}&name=${name}&price=${price}&count=${count}&totalPrice=${totalPrice}`;
     }
 </script>
