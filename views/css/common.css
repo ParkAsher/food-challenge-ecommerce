@@ -1,6 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Noto+Sans+KR&display=swap');
+
 body {
+    font-family: 'Nanum Gothic', sans-serif;
     min-height: 100vh;
 }
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
 a {
     text-decoration: none !important;
 }

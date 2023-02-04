@@ -1,25 +1,25 @@
-const CartRepository = require('../repositories/basket.repository');
+const BasketRepository = require('../repositories/basket.repository');
 
-class CartService {
-    cartRepository = new CartRepository();
+class BasketService {
+    basketRepository = new BasketRepository();
 
-    findHaveItemInCart = async (user_id, item_id) => {
-        return await this.cartRepository.findHaveItemInCart(user_id, item_id);
+    findHaveItemInBasket = async (user_id, item_id) => {
+        return await this.basketRepository.findHaveItemInBasket(user_id, item_id);
     };
 
-    addMyCart = async (user_id, item_id, count) => {
-        return await this.cartRepository.addMyCart(user_id, item_id, count);
+    addMyBasket = async (user_id, item_id, count) => {
+        return await this.basketRepository.addMyBasket(user_id, item_id, count);
     };
 
     updateItemCount = async (user_id, item_id, count) => {
-        return await this.cartRepository.updateItemCount(user_id, item_id, count);
+        return await this.basketRepository.updateItemCount(user_id, item_id, count);
     };
 
-    findItemInCart = async (user_id) => {
-        const findAll = await this.cartRepository.findItemInCart(user_id);
+    findItemInBasket = async (user_id) => {
+        const findAll = await this.basketRepository.findItemInBasket(user_id);
 
         if (findAll.length < 1) {
-            return '텅텅 시스템';
+            return
         }
 
         const myItem = await findAll.map((item) => {
@@ -36,10 +36,10 @@ class CartService {
         return myItem;
     };
 
-    deleteItemInCart = async (user_id, item_id) => {
-        const deleteItem = await this.cartRepository.deleteItemInCart(user_id, item_id)
+    deleteItemInBasket = async (user_id, item_id) => {
+        const deleteItem = await this.basketRepository.deleteItemInBasket(user_id, item_id)
         return deleteItem
     }
 }
 
-module.exports = CartService;
+module.exports = BasketService;

@@ -1,12 +1,12 @@
 const { Basket, Item } = require('../models');
 
-class CartRepository {
-    findHaveItemInCart = async (user_id, item_id) => {
-        const inCartThatItem = await Basket.findAll({ where: { user_id, item_id } });
-        return inCartThatItem;
+class BasketRepository {
+    findHaveItemInBasket = async (user_id, item_id) => {
+        const inBasketThatItem = await Basket.findAll({ where: { user_id, item_id } });
+        return inBasketThatItem;
     };
 
-    addMyCart = async (user_id, item_id, count) => {
+    addMyBasket = async (user_id, item_id, count) => {
         return await Basket.create({ user_id, item_id, count });
     };
 
@@ -14,18 +14,18 @@ class CartRepository {
         return await Basket.update({ count }, { where: { user_id, item_id } });
     };
 
-    findItemInCart = async (user_id) => {
-        const inCartThatItem = await Basket.findAll({
+    findItemInBasket = async (user_id) => {
+        const inBasketThatItem = await Basket.findAll({
             where: { user_id },
             include: [{ model: Item, attributes: ['id', 'name', 'price', 'image'] }],
         });
-        return inCartThatItem;
+        return inBasketThatItem;
     };
 
-    deleteItemInCart = async (user_id, item_id) => {
-        const deleteItemInCart = await Basket.destroy({ where: { user_id, item_id } });
-        return deleteItemInCart;
+    deleteItemInBasket = async (user_id, item_id) => {
+        const deleteItemInBasket = await Basket.destroy({ where: { user_id, item_id } });
+        return deleteItemInBasket;
     };
 }
 
-module.exports = CartRepository;
+module.exports = BasketRepository;

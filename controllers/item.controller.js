@@ -1,5 +1,4 @@
 const ItemService = require('../services/item.service');
-const jwt = require("jsonwebtoken")
 
 class ItemContorller {
     itemService = new ItemService();
