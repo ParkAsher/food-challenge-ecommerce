@@ -44,11 +44,24 @@
     font-weight: bold;
 }
 
-.header .header-wrap .header-btn-wrap .header-btn-register {
+.header .header-wrap .header-btn-wrap .header-btn-register,
+.header .header-wrap .header-btn-wrap .header-btn-basket,
+.header .header-wrap .header-btn-wrap .header-btn-mypage {
     border-right: 1px solid #ffffff;
 }
 
 .header .header-wrap .header-btn-wrap .header-btn-register,
-.header .header-wrap .header-btn-wrap .header-btn-login {
+.header .header-wrap .header-btn-wrap .header-btn-login,
+.header .header-wrap .header-btn-wrap .header-btn-basket,
+.header .header-wrap .header-btn-wrap .header-btn-mypage,
+.header .header-wrap .header-btn-wrap .header-btn-logout {
     padding: 0 0.5rem;
+}
+
+.header-btn-logout button {
+    color: #ffffff !important;
+    font-size: 1.25rem;
+    font-weight: bold;
+    background: none;
+    border: none;
 }
