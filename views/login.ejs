@@ -5,12 +5,17 @@
                 <p>로그인</p>
             </div>
             <div class="login-email-wrap">
-                <input id="email" class="login-email-input" placeholder="Email" />
+                <input type="text" id="email" class="login-email-input" placeholder="Email" />
             </div>
             <div class="login-password-wrap">
-                <input id="password" class="login-password-input" placeholder="Password" />
+                <input
+                    type="password"
+                    id="password"
+                    class="login-password-input"
+                    placeholder="Password"
+                />
             </div>
-            <div class="error-message-wrap"></div>
+            <div id="error-message-wrap" class="error-message-wrap"></div>
             <div class="login-find-link-wrap">
                 <div class="login-find-link-email-wrap">
                     <a href="/">이메일 찾기</a>
@@ -28,3 +33,28 @@
         </div>
     </div>
 </div>
+
+<script>
+    function login() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        const userInfo = { email, password };
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/users/login',
+            data: userInfo,
+            success: function (response) {
+                window.location.href = '/';
+            },
+            error: function (response) {
+                const { message } = response.responseJSON;
+
+                const html = `<p>${message}</p>`;
+
+                document.getElementById('error-message-wrap').innerHTML = html;
+            },
+        });
+    }
+</script>
