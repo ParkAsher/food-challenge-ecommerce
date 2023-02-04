@@ -23,6 +23,14 @@ class CartController {
             res.json({ data: updateForIncrease });
         }
     };
+
+    getInfoInMyCart = async (req, res, next) => {
+        const { id: user_id } = jwt.verify(req.cookies.accessToken, process.env.COOKIE_SECRET);
+
+        const MyCartInfo = await this.cartController.findItemInCart(user_id);
+
+        res.json({data: MyCartInfo})
+    };
 }
 
 module.exports = CartController;

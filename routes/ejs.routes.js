@@ -14,10 +14,8 @@ router.get('/itemDetail/:id', (req, res, next) => {
     res.render('index.ejs', { components: 'itemDetail' });
 });
 
-// router.get('/itemDetail/*', (req, res, next) => {
-//     res.render('index.ejs', { components: 'itemDetail' });
-// });
-
-
+router.get('/cart', (req, res, next) => {
+    res.render('index.ejs', { components: 'myCart' });
+});
 
 module.exports = router;
