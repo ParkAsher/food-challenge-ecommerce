@@ -1,6 +1,7 @@
 const moment = require('moment/moment');
 const { User } = require('../models/index');
 const AdminRepository = require('../repositories/admin.repository');
+const { UserNotFound } = require('../lib/customerror');
 
 class AdminService {
     adminRepository = new AdminRepository(User);
@@ -45,6 +46,21 @@ class AdminService {
                 lastPage,
                 totalPage,
             };
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    searchUser = async (email) => {
+        try {
+            const user = await this.adminRepository.searchUser(email);
+            // 회원이 없다면?
+            if (!user) {
+                const error = new UserNotFound();
+                throw error;
+            }
+
+            return { status: 200, user };
         } catch (error) {
             throw error;
         }

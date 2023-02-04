@@ -23,6 +23,16 @@ class AdminRepository {
             throw error;
         }
     };
+
+    searchUser = async (email) => {
+        try {
+            return await this.userModel.findOne({
+                where: { email },
+            });
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = AdminRepository;
