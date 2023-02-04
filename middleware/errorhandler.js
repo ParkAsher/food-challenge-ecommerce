@@ -64,6 +64,11 @@ module.exports = (err, req, res, next) => {
                 .status(joiErrorStatus)
                 .json({ message: '페이지 번호의 형식이 올바르지 않습니다.' });
         }
+        if (joiErredKey === 'point') {
+            return res
+                .status(joiErrorStatus)
+                .json({ message: '포인트의 형식이 일치하지 않습니다.' });
+        }
     }
 
     /* 회원가입 */
@@ -146,10 +151,18 @@ module.exports = (err, req, res, next) => {
     }
 
     /* 관리자페이지 회원 삭제 */
-    if (req.path === '/api/admin/user') {
+    if (req.path === '/api/admin/user' && req.method === 'DELETE') {
         if (err.name === 'UserNotDeleted') {
-            return res.status(err.status.json({ message: err.message }));
+            return res.status(err.status).json({ message: err.message });
         }
         return res.status(400).json({ message: '삭제에 실패했습니다.' });
+    }
+
+    /* 관리자페이지 회원정보 수정 */
+    if (req.path === '/api/admin/user' && req.method === 'PUT') {
+        if (err.name === 'UserNotUpdated') {
+            return res.status(err.status).json({ message: err.message });
+        }
+        return res.status(400).json({ message: '수정에 실패했습니다.' });
     }
 };
