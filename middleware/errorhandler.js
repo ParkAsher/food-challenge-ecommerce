@@ -138,7 +138,7 @@ module.exports = (err, req, res, next) => {
         if (err.name === 'TokenNotFound') {
             return res.status(err.status).json({ message: err.message });
         }
-        if (err.name === "UserNotLogined") {
+        if (err.name === 'UserNotLogined') {
             return res.status(err.status).json({ message: err.message });
         }
     }
@@ -174,9 +174,13 @@ module.exports = (err, req, res, next) => {
 
     if (req.path === '/api/basket') {
         console.log(req.path);
-        if (err.name === "TokenNotFound") {
-            return res.status(err.status).json({message: err.message})
+        if (err.name === 'TokenNotFound') {
+            return res.status(err.status).json({ message: err.message });
         }
     }
-    
+
+    /* 이미지 업로드 */
+    if (req.path === '/api/admin/image') {
+        return res.status(400).json({ message: '이미지 업로드에 실패했습니다.' });
+    }
 };
