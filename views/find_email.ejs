@@ -1,0 +1,56 @@
+<div class="find-email-background">
+    <div class="find-email-wrap">
+        <div class="find-email-form">
+            <div class="find-email-title-wrap">
+                <p>이메일 찾기</p>
+            </div>
+            <div class="find-email-input-name-wrap">
+                <input type="text" id="name" class="find-email-input" placeholder="이름" />
+            </div>
+            <div class="find-email-input-phone-wrap">
+                <input type="text" id="phone" class="find-email-input" placeholder="휴대폰 번호" />
+            </div>
+            <div id="error-message-wrap" class="error-message-wrap"></div>
+            <div class="find-email-btn-wrap">
+                <button type="button" onclick="findEmail()">이메일 찾기</button>
+            </div>
+            <div id="find-email-result-wrap" class="find-email-result-wrap"></div>
+            <div class="find-email-login-link-wrap">
+                <a href="/login">로그인하러 가기</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function findEmail() {
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+
+        const userInfo = { name, phone };
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/users/email',
+            data: userInfo,
+            success: function (response) {
+                const { email } = response;
+
+                const html = `   
+                    <p class="user-email">회원의 이메일은 <span>${email}</span> 입니다.</p>
+                `;
+
+                document.getElementById('error-message-wrap').innerHTML = '';
+                document.getElementById('find-email-result-wrap').innerHTML = html;
+            },
+            error: function (response) {
+                const { message } = response.responseJSON;
+
+                const html = `<p>${message}</p>`;
+
+                document.getElementById('find-email-result-wrap').innerHTML = '';
+                document.getElementById('error-message-wrap').innerHTML = html;
+            },
+        });
+    }
+</script>

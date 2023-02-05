@@ -19,7 +19,22 @@ router.get('/login', auth, (req, res, next) => {
             throw error;
         }
 
-        res.render('index', { components: 'login' });
+        res.render('index.ejs', { components: 'login' });
+    } catch (error) {
+        next(error);
+    }
+});
+
+/* 이메일 찾기 */
+router.get('/find_email', auth, (req, res, next) => {
+    try {
+        // 이미 로그인 되어있다면?
+        if (res.locals.user) {
+            const error = new UserAlreadyLogined();
+            throw error;
+        }
+
+        res.render('index.ejs', { components: 'findEmail' });
     } catch (error) {
         next(error);
     }
