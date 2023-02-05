@@ -23,13 +23,9 @@ class OrderService {
             );
 
             const order_id = saveOrder.id;
-            await this.orderRepository.saveOrderItem(
-                order_id,
-                item_id,
-                count
-            );
+            await this.orderRepository.saveOrderItem(order_id, item_id, count);
 
-            return saveOrder
+            return saveOrder;
         } else {
             // 장바구니에서 구매한 케이스
             const saveOrder = await this.orderRepository.saveOrder(
@@ -46,14 +42,9 @@ class OrderService {
                 let item_id = basketItems[i]['item_id'];
                 let count = basketItems[i]['count'];
 
-                await this.orderRepository.saveOrderItem(
-                    order_id,
-                    item_id,
-                    count
-
-                );
+                await this.orderRepository.saveOrderItem(order_id, item_id, count);
             }
-            return saveOrder
+            return saveOrder;
         }
     };
 
@@ -71,25 +62,63 @@ class OrderService {
         });
     };
 
-    getAllOrder = async () => {
-        const list = await this.orderRepository.allOrderList()
-        const nacheonjae = list.map(one => {
-            one.User = !one.User ? {
-                "name": "오영환",
-                "nickname": "영환",
-                "phone": "01012341234"
-              } : one.User
+    getAllOrder = async (page) => {
+        const { count, rows } = await this.orderRepository.allOrderList(page);
+
+        let totalPage = Math.ceil(count / 8);
+
+        // 화면에 보여줄 그룹 : 한 그룹당 5개 페이지 띄우기
+        let pageGroup = Math.ceil(page / 5);
+
+        // 한 그룹의 마지막 페이지 번호
+        let lastPage = pageGroup * 5;
+
+        // 한 그룹의 첫 페이지 번호
+        let firstPage = lastPage - 5 + 1 <= 0 ? 1 : lastPage - 5 + 1;
+
+        // 만약 마지막 페이지 번호가 총 페이지 수 보다 크다면?
+        if (lastPage > totalPage) {
+            lastPage = totalPage;
+        }
+
+        const list = rows.map((one) => {
+            one.User = !one.User
+                ? {
+                      name: '공란',
+                      nickname: '공란',
+                      phone: '공란',
+                  }
+                : one.User;
             return {
-                orderId : one.id,
-                address : one.address,
-                name: one.User.name || "asd",
-                nickname: one.User.nickname || "asd",
-                phone: one.User.phone || "asd",
-                itemName: one.Orderitems
-            }
-        })
-        return nacheonjae
-    }
+                orderId: one.id,
+                name: one.User.name,
+                phone: one.User.phone,
+                address: one.address,
+                order_price: one.order_price,
+                order_point: one.order_point,
+                receipt_price: one.receipt_price,
+                createdAt: one.createdAt,
+            };
+        });
+        return { count, list, firstPage, lastPage, totalPage };
+    };
+
+    findOneOrder = async (id) => {
+        const order = await this.orderRepository.findOneOrder(id);
+        if (!order) {
+            return;
+        }
+        const orderItemList = order.map((item) => {
+            return {
+                order_id: item.order_id,
+                name: item.Item.name,
+                price: item.Item.price,
+                count: item.count,
+                totalPrice: item.count * item.Item.price,
+            };
+        });
+        return orderItemList;
+    };
 }
 
 module.exports = OrderService;

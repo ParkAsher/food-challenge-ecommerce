@@ -53,13 +53,37 @@ class orderRepository {
         return basketItems;
     };
 
-    allOrderList = async () => {
-        const allList = await Order.findAll({
-            attributes: ['id', 'address'],
-            include: [{model:User, attributes: ['name', 'nickname', 'phone']},{model:Orderitem, attributes: ['item_id'], include: [{model:Item,attributes: ['name']}]}]
-        })
-        return allList
-    }
+    allOrderList = async (page) => {
+        const { count, rows } = await Order.findAndCountAll({
+            attributes: [
+                'id',
+                'address',
+                'order_price',
+                'order_point',
+                'receipt_price',
+                'createdAt',
+            ],
+            include: [{ model: User, attributes: ['name', 'phone'] }],
+            offset: (page - 1) * 8,
+            limit: 8,
+            order: [['id', 'DESC']],
+        });
+        return { count, rows };
+    };
+
+    findOneOrder = async (id) => {
+        const order = await Orderitem.findAll({
+            where: { order_id: id },
+            attributes: ['order_id', 'count'],
+            include: [
+                {
+                    model: Item,
+                    attributes: ['name', 'price'],
+                },
+            ],
+        });
+        return order;
+    };
 }
 
 module.exports = orderRepository;

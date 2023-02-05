@@ -11,5 +11,6 @@ router.get('/user/:email', adminController.searchUser);
 router.delete('/user', adminController.deleteUser);
 router.put('/user', adminController.updateUser);
 router.get('/order',  orderController.orderList);
+router.get('/order/:id',  orderController.findOneOrder);
 
 module.exports = router;
