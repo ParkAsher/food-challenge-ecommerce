@@ -218,4 +218,12 @@ module.exports = (err, req, res, next) => {
     if (req.path === '/api/admin/item' && req.method === 'DELETE') {
         return res.status(400).json({ message: '삭제에 실패했습니다.' });
     }
+
+    /* 상품 수정 */
+    if (req.path === '/api/admin/item' && req.method === 'PUT') {
+        if (err.name === 'ItemNotUpdated') {
+            return res.status(err.status).json({ message: err.message });
+        }
+        return res.status(400).json({ message: '수정에 실패했습니다.' });
+    }
 };
