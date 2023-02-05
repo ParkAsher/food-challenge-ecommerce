@@ -1,51 +1,70 @@
-<div class="con">
-        <img src="https://cdn.travelview.co.kr/travelview/2020/05/21045113/2-30.jpg" alt="">
-    
+<!-- Swiper -->
+<div class="swiper mySwiper">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide"><img src="./image/banner001.png" alt="banner" /></div>
+        <div class="swiper-slide"><img src="./image/banner002.png" alt="banner" /></div>
+        <div class="swiper-slide"><img src="./image/banner003.png" alt="banner" /></div>
+    </div>
+    <div class="swiper-pagination"></div>
 </div>
+
 <div class="con">
     <div class="menu-box">
-        <ul class="row" >
-            <li onclick= getItems(0) class="cell"><a href="#">전체보기</a></li>
-            <li onclick= getItems(1) class="cell"><a href="#">1단계 음식</a></li>
-            <li onclick= getItems(2) class="cell"><a href="#">2단계 음식</a></li>
-            <li onclick= getItems(3) class="cell"><a href="#">3단계 음식</a></li>
+        <ul class="row">
+            <li onclick="getItems(0)" class="cell"><a href="#">전체보기</a></li>
+            <li onclick="getItems(1)" class="cell"><a href="#">1단계 음식</a></li>
+            <li onclick="getItems(2)" class="cell"><a href="#">2단계 음식</a></li>
+            <li onclick="getItems(3)" class="cell"><a href="#">3단계 음식</a></li>
         </ul>
     </div>
 </div>
 
 <div class="mycards">
-    <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box">
-    </div>
+    <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box"></div>
 </div>
 
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 <script>
-        $(document).ready(function () {
-            getItems(0)
-        });
+    // swiper library config
+    let swiper = new Swiper('.mySwiper', {
+        loop: true,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickalbe: false,
+        },
+    });
 
-        // 아이템 전체조회
-        function getItems(level) {
-        $('#cards-box').empty()
+    $(document).ready(function () {
+        getItems(0);
+    });
+
+    // 아이템 전체조회
+    function getItems(level) {
+        $('#cards-box').empty();
 
         if (level === 0) {
-    
-        $.ajax({
-          type: 'GET',
-          url: `/api/items`,
-          data: {},
-          headers: {
-        //   authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-          success: function (response) {
-            let rows = response['items'];
-            
-            for (let i = 0; i < rows.length; i++) {
-              let item_id = rows[i]['item_id'];
-              let name = rows[i]['name'];
-              let price = rows[i]['price'];
-              let image = rows[i]['image'];
+            $.ajax({
+                type: 'GET',
+                url: `/api/items`,
+                data: {},
+                headers: {
+                    //   authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+                success: function (response) {
+                    let rows = response['items'];
 
-              let temp_html = `<div class="col">
+                    for (let i = 0; i < rows.length; i++) {
+                        let item_id = rows[i]['item_id'];
+                        let name = rows[i]['name'];
+                        let price = rows[i]['price'];
+                        let image = rows[i]['image'];
+
+                        let temp_html = `<div class="col">
                                 <div class="card h-100">
                                     <img onclick="location.href='/itemDetail/${item_id}'"; src="./극혐.avif"/class="card-img-top">
                                     <div class="card-body">
@@ -54,30 +73,29 @@
                                 </div>
                             </div>
                         </div>`;
-              $('#cards-box').append(temp_html);
-            }
-          },
-        });
-        }
-        else {   
-        $.ajax({
-          type: 'GET',
-          url: `/api/items/level?level=${level}`,
-          data: {},
-          headers: {
-        //   authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-          success: function (response) {
-            let rows = response['itemsByLevel'];
-            console.log(rows)
-            
-            for (let i = 0; i < rows.length; i++) {
-              let item_id = rows[i]['item_id'];
-              let name = rows[i]['name'];
-              let price = rows[i]['price'];
-              let image = rows[i]['image'];
+                        $('#cards-box').append(temp_html);
+                    }
+                },
+            });
+        } else {
+            $.ajax({
+                type: 'GET',
+                url: `/api/items/level?level=${level}`,
+                data: {},
+                headers: {
+                    //   authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+                success: function (response) {
+                    let rows = response['itemsByLevel'];
+                    console.log(rows);
 
-              let temp_html = `<div class="col">
+                    for (let i = 0; i < rows.length; i++) {
+                        let item_id = rows[i]['item_id'];
+                        let name = rows[i]['name'];
+                        let price = rows[i]['price'];
+                        let image = rows[i]['image'];
+
+                        let temp_html = `<div class="col">
                                 <div class="card h-100">
                                     <img onclick="location.href='/itemDetail/${item_id}'"; src="./별난음식.jpeg"/class="card-img-top">
                                     <div class="card-body">
@@ -86,11 +104,10 @@
                                 </div>
                             </div>
                         </div>`;
-              $('#cards-box').append(temp_html);
-            }
-          },
-        });
-        };
+                        $('#cards-box').append(temp_html);
+                    }
+                },
+            });
+        }
     }
-
 </script>
