@@ -132,7 +132,13 @@ module.exports = (err, req, res, next) => {
         if (err.name === 'NotFoundItem') {
             return res.status(err.status).json({ message: err.message });
         }
+        if (err.name === 'UserNotFound') {
+            return res.status(err.status).json({ message: err.message });
+        }
         if (err.name === 'TokenNotFound') {
+            return res.status(err.status).json({ message: err.message });
+        }
+        if (err.name === "UserNotLogined") {
             return res.status(err.status).json({ message: err.message });
         }
     }
@@ -165,4 +171,12 @@ module.exports = (err, req, res, next) => {
         }
         return res.status(400).json({ message: '수정에 실패했습니다.' });
     }
+
+    if (req.path === '/api/basket') {
+        console.log(req.path);
+        if (err.name === "TokenNotFound") {
+            return res.status(err.status).json({message: err.message})
+        }
+    }
+    
 };
