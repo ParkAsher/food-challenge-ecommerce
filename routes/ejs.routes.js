@@ -130,8 +130,7 @@ router.get('/adm/user-management', auth, (req, res, next) => {
 
 router.get('/mypage', auth, (req, res, next) => {
     try {
-        // const user = !res.locals.user ? null : res.locals.user; // 로그인 안한 상태면 user = null
-
+        // 만약 로그인이 되어있지 않다면
         if (!res.locals.user) {
             const error = new UserNotFound();
             throw error;
