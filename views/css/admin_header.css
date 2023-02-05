@@ -1,0 +1,28 @@
+.header {
+    width: 100%;
+    height: 100px;
+    background: darkblue;
+}
+
+.header-wrap {
+    width: 1600px;
+    height: 100%;
+    background: transparent;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo a {
+    color: #ffffff !important;
+    font-size: 2.25rem;
+    font-weight: bold;
+}
+
+.header-btn-wrap button {
+    background: none;
+    border: none;
+    color: #ffffff !important;
+}
