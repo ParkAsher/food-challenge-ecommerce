@@ -1,1 +1,100 @@
-dfdfd
+<div class="item-management-background">
+    <div class="item-management-wrap">
+        <div class="item-management-title">
+            <p>상품 등록</p>
+        </div>
+        <div class="item-management-create-form">
+            <div class="item-management-create-form-row">
+                <div class="create-item-title">
+                    <p>상품 이름</p>
+                </div>
+                <div class="create-item-value">
+                    <input type="text" id="item-name" />
+                </div>
+                <div class="create-item-title">
+                    <p>상품 갸격</p>
+                </div>
+                <div class="create-item-value"><input type="text" id="item-price" />&nbsp;원</div>
+            </div>
+            <div class="item-management-create-form-row">
+                <div class="create-item-title">
+                    <p>난이도</p>
+                </div>
+                <div class="create-item-value">
+                    <select name="level" id="item-level">
+                        <option value="1">1단계</option>
+                        <option value="2">2단계</option>
+                        <option value="3">3단계</option>
+                    </select>
+                </div>
+                <div class="create-item-title">
+                    <p>상품 수량</p>
+                </div>
+                <div class="create-item-value">
+                    <input type="text" id="item-stock" value="1000" />&nbsp;개
+                </div>
+            </div>
+            <div class="item-management-create-form-row">
+                <div class="create-item-title">
+                    <p>상품 이미지</p>
+                </div>
+                <div class="create-item-value">
+                    <input type="file" id="item-image" accept="image/*" />
+                    <input type="hidden" id="item-image-url" />
+                </div>
+            </div>
+        </div>
+        <div class="item-create-btn-wrap">
+            <button type="button" onclick="createItem()">등록</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('item-image').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/admin/image',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function (response) {
+                document.getElementById('item-image-url').value = response.filePath;
+            },
+            error: function (response) {
+                alert(response.responseJSON.message);
+                window.location.reload();
+            },
+        });
+    });
+
+    function createItem() {
+        const itemInfo = {
+            name: document.getElementById('item-name').value,
+            price: document.getElementById('item-price').value,
+            level: document.getElementById('item-level').value,
+            stock: document.getElementById('item-stock').value,
+            image: document.getElementById('item-image-url').value,
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/admin/item',
+            data: itemInfo,
+            success: function (response) {
+                alert(response.message);
+                window.location.reload();
+            },
+            error: function (response) {
+                alert(response.responseJSON.message);
+                window.location.reload();
+            },
+        });
+    }
+</script>
