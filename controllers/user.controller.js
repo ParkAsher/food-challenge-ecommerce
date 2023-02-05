@@ -86,7 +86,6 @@ class UserController {
     getUserInfoById = async (req, res, next) => {
         try {
             const { id } = req.params;
-            console.log('params를 제대로 가져오는가?', id);
 
             const user = await this.userService.getUserInfoById(id);
 

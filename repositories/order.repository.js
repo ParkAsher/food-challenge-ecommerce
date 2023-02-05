@@ -1,5 +1,7 @@
 const { sequelize } = require('../models');
 
+/* custom error */
+const { NotFoundOrderList } = require('../lib/customerror');
 class OrderRepository {
     constructor(OrderModel) {
         this.orderModel = OrderModel;
@@ -11,6 +13,11 @@ class OrderRepository {
                 where: { user_id },
                 attributes: ['id'],
             });
+
+            if (order.length === 0) {
+                const error = new NotFoundOrderList();
+                throw error;
+            }
 
             const orderIds = order.map((o) => o.id);
 

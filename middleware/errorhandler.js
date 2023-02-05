@@ -116,4 +116,12 @@ module.exports = (err, req, res, next) => {
             return res.status(err.status).json({ message: err.message });
         }
     }
+
+    /* 마이페이지 주문내역 */
+    if (req.route.path === '/mypage/:id') {
+        /* 주문내역이 없음 */
+        if (err.name === 'NotFoundOrderList') {
+            return res.status(err.status).json({ message: err.message });
+        }
+    }
 };

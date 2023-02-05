@@ -7,6 +7,7 @@ class OrderService {
 
     getOrderInfoByUserId = async (user_id) => {
         try {
+            // user_id로 넘긴 데이터를 받아옴
             const orderList = await this.orderRepository.getOrderInfoByUserId(user_id);
 
             return orderList.map((o) => {

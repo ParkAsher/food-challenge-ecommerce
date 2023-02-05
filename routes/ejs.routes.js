@@ -31,8 +31,11 @@ router.get('/login', auth, (req, res, next) => {
         next(error);
     }
 });
-router.get('/mypage', (req, res, next) => {
-    res.render('index.ejs', { components: 'mypage' });
+
+router.get('/mypage', auth, (req, res, next) => {
+    const user = !res.locals.user ? null : res.locals.user; // 로그인 안한 상태면 user = null
+
+    res.render('index.ejs', { components: 'mypage', user: user });
 });
 
 module.exports = router;
