@@ -4,6 +4,11 @@ module.exports = (err, req, res, next) => {
     console.log(req.path);
     console.log(req.route.path);
 
+    /* User Not Found */
+    if (err.name === 'UserNotFound') {
+        return res.render('alert.ejs', { message: err.message, href: '/login' });
+    }
+
     /* token error */
     if (err.name === 'TokenNotFound') {
         return res.render('alert.ejs', { message: err.message, href: '/login' });

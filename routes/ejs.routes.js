@@ -120,9 +120,18 @@ router.get('/adm/user-management', auth, (req, res, next) => {
 });
 
 router.get('/mypage', auth, (req, res, next) => {
-    const user = !res.locals.user ? null : res.locals.user; // 로그인 안한 상태면 user = null
+    try {
+        // const user = !res.locals.user ? null : res.locals.user; // 로그인 안한 상태면 user = null
 
-    res.render('index.ejs', { components: 'mypage', user: user });
+        if (!res.locals.user) {
+            const error = new UserNotFound();
+            throw error;
+        }
+
+        res.render('index.ejs', { components: 'mypage', user: res.locals.user });
+    } catch (error) {
+        next(error);
+    }
 });
 
 module.exports = router;
