@@ -80,25 +80,6 @@ router.get('/itemDetail/:id', auth, (req, res, next) => {
     res.render('index.ejs', { components: 'itemDetail', user: user });
 });
 
-router.get('/login', auth, (req, res, next) => {
-    try {
-        // 로그인을 하지 않았는 경우
-        if (!res.locals.user) {
-            const error = new UserNotFound();
-            throw error;
-        }
-        // 로그인을 했지만 관리자가 아닌 경우
-        if (res.locals.user.id !== 1) {
-            const error = new NotAdmin();
-            throw error;
-        }
-
-        res.render('index.ejs', { components: 'login' });
-    } catch (error) {
-        next(error);
-    }
-});
-
 /* 이메일 찾기 */
 router.get('/find_email', auth, (req, res, next) => {
     try {
