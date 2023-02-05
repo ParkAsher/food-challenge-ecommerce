@@ -89,6 +89,11 @@ module.exports = (err, req, res, next) => {
                 .status(joiErrorStatus)
                 .json({ message: '이미지 주소의 형식이 일치하지 않습니다. ' });
         }
+        if (joiErredKey === 'itemId') {
+            return res
+                .status(joiErrorStatus)
+                .json({ message: '상품 아이디의 형식이 일치하지 않습니다.' });
+        }
     }
 
     /* 회원가입 */
@@ -207,5 +212,10 @@ module.exports = (err, req, res, next) => {
     /* 관리자페이지 상품관리 상품 리스트 불러오기 */
     if (req.path === '/api/admin/items') {
         return res.status(400).json({ message: '데이터를 불러올 수 없습니다.' });
+    }
+
+    /* 상품 삭제 */
+    if (req.path === '/api/admin/item' && req.method === 'DELETE') {
+        return res.status(400).json({ message: '삭제에 실패했습니다.' });
     }
 };
