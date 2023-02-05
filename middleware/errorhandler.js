@@ -203,4 +203,9 @@ module.exports = (err, req, res, next) => {
     if (req.path === '/api/admin/image') {
         return res.status(400).json({ message: '이미지 업로드에 실패했습니다.' });
     }
+
+    /* 관리자페이지 상품관리 상품 리스트 불러오기 */
+    if (req.path === '/api/admin/items') {
+        return res.status(400).json({ message: '데이터를 불러올 수 없습니다.' });
+    }
 };
