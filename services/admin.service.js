@@ -6,6 +6,7 @@ const {
     UserNotDeleted,
     UserNotUpdated,
     ItemNotDeleted,
+    ItemNotUpdated,
 } = require('../lib/customerror');
 
 class AdminService {
@@ -173,6 +174,22 @@ class AdminService {
             }
 
             return { status: 200, message: '삭제에 성공했습니다.' };
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    updateItem = async (itemInfo) => {
+        try {
+            const [updateCount] = await this.adminRepository.updateItem(itemInfo);
+
+            // 만약 해당 id를 가진 유저가 없어서 수정에 실패하였다면?
+            if (updateCount === 0) {
+                const error = new ItemNotUpdated();
+                throw error;
+            }
+
+            return { status: 200, message: '수정에 성공했습니다.' };
         } catch (error) {
             throw error;
         }

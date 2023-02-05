@@ -108,6 +108,25 @@ class AdminRepository {
             throw error;
         }
     };
+
+    updateItem = async (itemInfo) => {
+        try {
+            return await this.itemModel.update(
+                {
+                    name: itemInfo.name,
+                    price: itemInfo.price,
+                    level: itemInfo.level,
+                    stock: itemInfo.stock,
+                    image: itemInfo.image,
+                },
+                {
+                    where: { id: itemInfo.itemId },
+                }
+            );
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = AdminRepository;

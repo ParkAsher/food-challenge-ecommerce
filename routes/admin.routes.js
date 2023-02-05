@@ -16,5 +16,6 @@ router.post('/image', setUpload('food-challenge-ecommerce/item'), adminControlle
 router.post('/item', adminController.createItem);
 router.get('/items', adminController.getAllItems);
 router.delete('/item', adminController.deleteItem);
+router.put('/item', adminController.updateItem);
 
 module.exports = router;
