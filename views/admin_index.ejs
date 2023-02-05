@@ -31,6 +31,7 @@
         <link rel="stylesheet" href="/css/admin_index.css" />
         <link rel="stylesheet" href="/css/admin_header.css" />
         <link rel="stylesheet" href="/css/user_management.css" />
+        <link rel="stylesheet" href="/css/item_management.css" />
 
         <title>푸드챌린지 관리자페이지</title>
     </head>
@@ -58,6 +59,7 @@
 
         <!-- components -->
         <% if (components === 'userManagement') { %> <%- include('user_management.ejs') %> <% } %>
+        <% if (components === 'itemManagement') { %> <%- include('item_management.ejs') %> <% } %>
     </body>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 </html>
