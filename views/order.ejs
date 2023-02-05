@@ -306,6 +306,7 @@ $(document).ready(() => {
     } else {
         const storageBasketItems = localStorage.getItem('basketItems')
         const basketItems = JSON.parse(storageBasketItems)
+
       $.ajax({
           type: 'POST',
           url: `/api/orders/`,
