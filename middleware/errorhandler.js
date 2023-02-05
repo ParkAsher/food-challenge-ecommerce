@@ -169,8 +169,9 @@ module.exports = (err, req, res, next) => {
             return res.status(err.status).json({ message: err.message });
         }
         if (err.name === 'UserNotLogined') {
-        if (err.name === 'UserNotLogined') {
-            return res.status(err.status).json({ message: err.message });
+            if (err.name === 'UserNotLogined') {
+                return res.status(err.status).json({ message: err.message });
+            }
         }
     }
 
@@ -215,6 +216,7 @@ module.exports = (err, req, res, next) => {
         console.log(req.path);
         if (err.name === 'TokenNotFound') {
             return res.status(err.status).json({ message: err.message });
+        }
         if (err.name === 'TokenNotFound') {
             return res.status(err.status).json({ message: err.message });
         }

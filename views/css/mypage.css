@@ -61,3 +61,27 @@
     margin-top: 50px;
 
 }
+
+.pagination-btn-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+
+    margin-bottom: 4rem;
+}
+
+.pagination-btn {
+    border: 1px solid #9eacc6;
+    box-sizing: border-box;
+    padding: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pagination-btn.active {
+    border: none;
+    background-color: #AAC63C;
+    color: #ffffff;
+}

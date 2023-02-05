@@ -1,9 +1,9 @@
-const { UserAlreadyExist } = require('../lib/customerror');
 const { User, Order, Orderitem, Basket, Item } = require('../models');
 const { sequelize } = require('../models');
 
 /* custom error */
 const { NotFoundOrderList } = require('../lib/customerror');
+const { UserAlreadyExist } = require('../lib/customerror');
 
 class orderRepository {
     constructor(OrderModel) {
@@ -77,12 +77,29 @@ class orderRepository {
         return basketItems;
     };
 
-    //
-    getOrderInfoByUserId = async (user_id) => {
+    // 해당 유저의 주문내역 수
+    getOrderListCountByUserId = async (user_id) => {
+        try {
+            const orderList = await this.orderModel.findAll({
+                where: { user_id },
+                attributes: ['id'],
+            });
+            const orderCount = orderList.length;
+            return orderCount;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    // 해당 유저의 주문내역을 가져오기
+    getOrderInfoByUserId = async (user_id, page) => {
         try {
             const order = await this.orderModel.findAll({
                 where: { user_id },
                 attributes: ['id'],
+                offset: (page - 1) * 8,
+                limit: 8,
+                order: [['id', 'DESC']],
             });
 
             if (order.length === 0) {

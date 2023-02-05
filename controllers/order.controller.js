@@ -1,6 +1,7 @@
 const OrderService = require('../services/order.service');
+const { pageValidate } = require('../lib/joischema');
 
-class OrderContorller {
+class OrderController {
     orderService = new OrderService();
 
     saveOrder = async (req, res, next) => {
@@ -35,21 +36,16 @@ class OrderContorller {
 
         res.status(200).json({ getAllBasketItems });
     };
-}
-
-module.exports = OrderContorller;
-const OrderService = require('../services/order.service');
-
-class OrderController {
-    orderService = new OrderService();
 
     getOrderInfoByUserId = async (req, res, next) => {
         try {
             const { id: user_id } = req.params;
+            const { page } = await pageValidate.validateAsync(req.query);
 
-            const orderList = await this.orderService.getOrderInfoByUserId(user_id);
+            const { status, orderList, firstPage, lastPage, totalPage } =
+                await this.orderService.getOrderInfoByUserId(user_id, page);
 
-            return res.status(200).json({ orderList });
+            return res.status(status).json({ orderList, firstPage, lastPage, totalPage });
         } catch (error) {
             next(error);
         }

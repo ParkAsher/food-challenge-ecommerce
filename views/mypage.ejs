@@ -17,9 +17,10 @@
 				<th>구매시기</th>
 			</tr>
 		</thead>
-		<tbody id="order-list-tbody"></tbody>
+		<tbody id="order-list"></tbody>
 	</table>
 	<div class="empty-list" id="empty-list"></div>
+	<div id="pagination" class="pagination-btn-wrap"></div>
 </body>
 
 <script>
@@ -59,36 +60,66 @@
 			}
 		})
 
+		const page = new URLSearchParams(location.search).get('page') || 1;
+
 		$.ajax({
 			type: 'GET',
-			url: `/api/orders/mypage/${id}`,
+			url: `/api/orders/mypage/${id}?page=${page}`,
 			error: function (error) {
 				$('#empty-list').append('<p>주문 내역이 없습니다.</p>');
 			},
 			success: function (response) {
+				const { status, orderList, firstPage, lastPage, totalPage } = response
 				let rows = response.orderList
 
-				for(i = 0; i < rows.length; i++) {
-					let id = rows[i].order_id
-					let itemName = rows[i].name
-					let count = rows[i].count
-					let totalItemPrice = rows[i].total_item_price
-					let savePoint = rows[i].save_point
-					let createdAt = rows[i].createdAt
-
-					let temp_html = `
-							<tr>
-								<td>${id}</td>
-								<td>${itemName}</td>
-								<td>${count}</td>
-								<td>${totalItemPrice}</td>
-								<td>${savePoint}</td>
-								<td>${createdAt}</td>
-							</tr>
+				// 테이블에 주문목록 붙이기 : 페이지당 8개
+				const html = orderList.map((order) => {
+					const orderObj = JSON.stringify(order);
+					return `
+						<tr>
+							<td>${order.order_id}</td>
+							<td>${order.name}</td>
+							<td>${order.count}</td>
+							<td>${order.total_item_price}</td>
+							<td>${order.save_point}</td>
+							<td>${order.createdAt}</td>
+						</tr>
 					`
-				$('#order-list-tbody').append(temp_html)
+				})
+				$('#order-list').append(html)
+
+				// pagination 버튼 생성
+				const pages = [];
+
+				// prev 버튼
+				if (page > 1) {
+					const prev = `
+						<a href='?page=${Number(page) - 1}'><div class="pagination-btn"><</div></a>
+					`;
+					pages.push(prev);
 				}
+
+				// pages 버튼
+				for (let i = firstPage; i <= lastPage; i++) {
+					const pageList =
+						Number(page) === i
+							? `<a href='?page=${i}'><div class="pagination-btn active">${i}</div></a>`
+							: `<a href='?page=${i}'><div class="pagination-btn">${i}</div></a>`;
+
+					pages.push(pageList);
+				}
+
+				// next 버튼
+				if (page < lastPage) {
+					const next = `
+						<a href='?page=${Number(page) + 1}'><div class="pagination-btn">></div>
+					`;
+					pages.push(next);
+				}
+
+				document.getElementById('pagination').innerHTML = pages.join('');
 			}
 		})
 	}
+	
 </script>
