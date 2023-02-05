@@ -87,29 +87,6 @@ router.get('/itemDetail/:id', auth, (req, res, next) => {
     res.render('index.ejs', { components: 'itemDetail', user: user });
 });
 
-/* 이메일 찾기 */
-router.get('/find_email', auth, (req, res, next) => {
-    try {
-        // 이미 로그인 되어있다면?
-        if (res.locals.user) {
-            const error = new UserAlreadyLogined();
-            throw error;
-        }
-
-        res.render('index.ejs', { components: 'findEmail' });
-    } catch (error) {
-        next(error);
-    }
-});
-
-router.get('/register', (req, res, next) => {
-    res.render('index.ejs', { components: 'register' });
-});
-
-router.get('/itemDetail/:id', (req, res, next) => {
-    res.render('index.ejs', { components: 'itemDetail' });
-});
-
 /* 관리자 */
 router.get('/adm', auth, (req, res, next) => {
     try {
