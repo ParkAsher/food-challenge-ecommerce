@@ -79,6 +79,56 @@
             <div id="error-message" class="error-message"></div>
         </div>
         <div id="pagination" class="pagination-btn-wrap"></div>
+
+        <div class="item-management-title">
+            <p>상품정보 수정</p>
+        </div>
+        <div class="item-management-update-form">
+            <div class="item-management-update-form-row">
+                <div class="update-item-title">
+                    <p>상품 이름</p>
+                </div>
+                <div class="update-item-value">
+                    <input type="text" id="update-item-name" />
+                </div>
+                <div class="update-item-title">
+                    <p>상품 갸격</p>
+                </div>
+                <div class="update-item-value">
+                    <input type="text" id="update-item-price" />&nbsp;원
+                </div>
+            </div>
+            <div class="item-management-update-form-row">
+                <div class="update-item-title">
+                    <p>난이도</p>
+                </div>
+                <div class="update-item-value">
+                    <select name="level" id="update-item-level">
+                        <option value="1">1단계</option>
+                        <option value="2">2단계</option>
+                        <option value="3">3단계</option>
+                    </select>
+                </div>
+                <div class="update-item-title">
+                    <p>상품 수량</p>
+                </div>
+                <div class="update-item-value">
+                    <input type="text" id="update-item-stock" value="1000" />&nbsp;개
+                </div>
+            </div>
+            <div class="item-management-update-form-row">
+                <div class="update-item-title">
+                    <p>상품 이미지</p>
+                </div>
+                <div class="update-item-value">
+                    <input type="file" id="update-item-image" accept="image/*" />
+                    <input type="hidden" id="update-item-image-url" />
+                </div>
+            </div>
+        </div>
+        <div class="item-update-btn-wrap">
+            <button type="button" onclick="itemUpdate()">수정</button>
+        </div>
     </div>
 </div>
 
@@ -117,7 +167,10 @@
                         <td>${item.price}</td>
                         <td>${item.stock}</td>
                         <td>${item.createdAt}</td>
-                        <td></td>
+                        <td>
+                            <button type="button" class="item-update-btn" onclick="itemUpdateFormOpen(${stringifyItemObj})">수정</button>
+                            <button type="button" class="item-delete-btn" onclick="itemDelete(${item.id})">삭제</button>
+                        </td>
                     </tr>    
                 `;
             });
@@ -206,5 +259,22 @@
                 window.location.reload();
             },
         });
+    }
+
+    function itemDelete(id) {
+        if (confirm('정말 삭제하시겠습니까?')) {
+            $.ajax({
+                type: 'DELETE',
+                url: `/api/admin/item?itemId=${id}`,
+                success: function (response) {
+                    alert(response.message);
+                    window.location.reload();
+                },
+                error: function (response) {
+                    alert(response.responseJSON.message);
+                    window.location.reload();
+                },
+            });
+        }
     }
 </script>

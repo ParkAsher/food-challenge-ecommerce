@@ -96,6 +96,18 @@ class AdminRepository {
             throw error;
         }
     };
+
+    deleteItem = async (id) => {
+        try {
+            return await this.itemModel.destroy({
+                where: {
+                    id,
+                },
+            });
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = AdminRepository;

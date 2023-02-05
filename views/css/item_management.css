@@ -17,12 +17,14 @@
     font-weight: bold;
 }
 
-.item-management-create-form {
+.item-management-create-form,
+.item-management-update-form {
     width: 100%;
     margin-bottom: 2rem;
 }
 
-.item-management-create-form-row {
+.item-management-create-form-row,
+.item-management-update-form-row {
     width: 100%;
 
     display: flex;
@@ -31,11 +33,13 @@
     border-top: 0.5px solid lightgray;
 }
 
-.item-management-create-form-row:last-child {
+.item-management-create-form-row:last-child,
+.item-management-update-form-row:last-child {
     border-bottom: 0.5px solid lightgray;
 }
 
-.create-item-title {
+.create-item-title,
+.update-item-title {
     background-color: beige;
     height: 3rem;
     width: 20%;
@@ -45,7 +49,8 @@
     align-items: center;
 }
 
-.create-item-value {
+.create-item-value,
+.update-item-value {
     height: 3rem;
     width: 30%;
     padding-left: 1.5rem;
@@ -55,12 +60,15 @@
 }
 
 .create-item-value input,
-.create-item-value select {
+.update-item-value input,
+.create-item-value select,
+.update-item-value select {
     border: 0.5px solid lightgray;
     padding: 0.5rem 0.25rem;
 }
 
-.create-item-value input:focus {
+.create-item-value input:focus,
+.update-item-value input:focus {
     outline: none;
 }
 
@@ -137,4 +145,36 @@
 
 .table-wrap td {
     vertical-align: middle;
+}
+
+.item-update-btn,
+.item-delete-btn {
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 5px;
+}
+
+.item-update-btn {
+    background: #3f51b5;
+}
+
+.item-delete-btn {
+    background: #ff4081;
+}
+
+.item-update-btn-wrap {
+    width: 100%;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.item-update-btn-wrap button {
+    padding: 0.75rem 1.25rem;
+    border: none;
+    background: #3f51b5;
+    color: #ffffff;
+    border-radius: 5px;
 }

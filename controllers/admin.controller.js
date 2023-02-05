@@ -4,6 +4,7 @@ const {
     deleteByIdEmailValidate,
     userUpdateDataValidate,
     createItemDataValidate,
+    deleteItemDataValidate,
 } = require('../lib/joischema');
 const AdminService = require('../services/admin.service');
 
@@ -91,6 +92,18 @@ class AdminController {
             return res
                 .status(status)
                 .json({ itemsCount, itemList, firstPage, lastPage, totalPage });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    deleteItem = async (req, res, next) => {
+        try {
+            const { itemId } = await deleteItemDataValidate.validateAsync(req.query);
+
+            const { status, message } = await this.adminService.deleteItem(itemId);
+
+            return res.status(status).json({ message });
         } catch (error) {
             next(error);
         }

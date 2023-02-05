@@ -1,7 +1,12 @@
 const moment = require('moment/moment');
 const { User, Item } = require('../models/index');
 const AdminRepository = require('../repositories/admin.repository');
-const { UserNotFound, UserNotDeleted, UserNotUpdated } = require('../lib/customerror');
+const {
+    UserNotFound,
+    UserNotDeleted,
+    UserNotUpdated,
+    ItemNotDeleted,
+} = require('../lib/customerror');
 
 class AdminService {
     adminRepository = new AdminRepository(User, Item);
@@ -151,6 +156,23 @@ class AdminService {
                 lastPage,
                 totalPage,
             };
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    deleteItem = async (id) => {
+        try {
+            const deleteCount = await this.adminRepository.deleteItem(id);
+
+            // sequelize destroy는 삭제한 행 수를 반환한다.
+            if (deleteCount === 0) {
+                // 조건에 맞지않아 삭제한 것이 없다
+                const error = new ItemNotDeleted();
+                throw error;
+            }
+
+            return { status: 200, message: '삭제에 성공했습니다.' };
         } catch (error) {
             throw error;
         }
