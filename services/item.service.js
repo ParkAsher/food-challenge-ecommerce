@@ -9,7 +9,7 @@ class ItemService {
 
         return allItems.map((item) => {
             return {
-                itemId: item.id,
+                item_id: item.id,
                 name: item.name,
                 price: item.price,
                 image: item.image,
@@ -23,7 +23,7 @@ class ItemService {
 
         return itemsByLevel.map((item) => {
             return {
-                itemId: item.id,
+                item_id: item.id,
                 name: item.name,
                 price: item.price,
                 image: item.image,

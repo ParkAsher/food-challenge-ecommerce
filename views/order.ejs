@@ -1,0 +1,319 @@
+<div class="wrap">
+  <div class="mb-3">
+    <h4><i class="fa fa-bars" aria-hidden="true"></i> 상품 정보</h4>
+    <hr />
+  </div>
+
+  <div id="itemList">
+
+  </div>
+</div>
+
+<div class="wrapa">
+  <div class="mb-3">
+    <h4><i class="fa fa-truck mr-1" aria-hidden="true"></i> 배송지 입력<h4>
+        <hr />
+  </div>
+  <div>
+    <div class="form-group mb-3">
+      <label for="exampleInputName">받는 사람</label>
+      <input type="text" class="form-control mt-2" id="recipient" placeholder=<%=user.name %> />
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="exampleInputMobile">연락처</label>
+      <input type="text" class="form-control mt-2" id="mobileNumber" placeholder="010-xxx-xxxx" />
+    </div>
+
+    <div class="form-group mb-4">
+      <label for="exampleInputAddress1">주소</label>
+      <input type="text" class="form-control mt-2" id="address" placeholder="도로명, 건물명, 번지 검색" />
+      <button type="button" class="btn btn-warning btn-block mb-2 mt-2" id="addressSearch" onclick="findAddr()">주소
+        검색</button>
+      <input type="text" class="form-control" id="addressDetail" placeholder="상세주소" />
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="mb-3">
+    <h4><i class="fa fa-money	" aria-hidden="true"></i> 결제 정보</h4>
+    <hr />
+  </div>
+
+  <div class="mb-2">
+    <div class="d-flex justify-content-between mb-3">
+      <h5 style="display:inline; color:blue ">주문금액</h5>
+      <span class="card-price" style="color:blue" id="order_price"></span>
+    </div>
+
+    <div class="d-flex justify-content-between mb-3">
+      <h5 style="display:inline; color:green">보유포인트</h5>
+      <span class="card-price" id="myPoint" style="color:green">
+        <%= user.point %>
+      </span>
+    </div>
+
+    <div class="d-flex mb-2">
+      <h5 style="display: inline">사용포인트</h5>
+      <input type="text" class="form-control"
+        style="text-align:right; width:170px; height:30px; font-size:15px; margin-left:auto;" placeholder=0
+        id="order_point"/>
+      <button onclick=getTotalPrice() type="button" class="btn btn-success btn-block"
+              id="useMyPoint" style="height:30px; display:flex; align-items:center">
+        사용
+      </button>
+    </div>
+    <div class="card-price mb-4" style="color:red; text-align:right;" id="tooMuchPointUse"></div>
+
+    <div class="d-flex justify-content-between mb-3">
+      <h2 style="display:inline; color:red"> 총 결제금액</h2>
+      <span class="card-price" style="color:red" id="totalToPay"></span>
+    </div>
+    <div>
+      <button onclick=buyOrder() type="button" class="btn btn-order btn-block" style="float:right;">
+        결제
+      </button>
+      <button onclick="location.href='javascript:history.back()'" type="button" class="btn btn-cancel btn-block" style="float:right; margin-right:5px">
+        취소
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modalalert-->
+<div class="modal text-left" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="alertModalLabel">알림</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="alertText"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-sparta btn-confirm" data-dismiss="modal">
+          확인
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+  let query = window.location.search;
+  let param = new URLSearchParams(query);
+
+$(document).ready(() => {
+  let itemName = param.get('name');
+  let itemPrice = param.get('price');
+  let count = param.get('count');
+  let item_id = param.get('item_id');
+
+  if (itemName) {
+
+  let order_price = param.get('totalPrice');
+
+  $('#order_price').append(order_price);
+  $('#totalToPay').append(order_price);
+
+  let temp_html = `<div class="card mb-4">
+                  <div class="row no-gutters">
+                    <div class="col-4" style="background: #ffffff;" onclick="location.href='/detail?goodsId=1'">
+                      <img src="/극혐.avif" class="card-img-top h-100" alt="...">
+                    </div>
+                    <div class="col-sm-7 card-body px-3">
+                      <div class="flex-fill mt-3">
+                        <div class="d-flex justify-content-between mb-3">
+                          <h5 style="display:inline">상품</h5>
+                          <span class="card-price" id="itemName">${itemName}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                          <h5 style="display: inline">가격</h5>
+                          <span class="card-price" id="itemPrice">${itemPrice}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                          <h5 style="display: inline">수량</h5>
+                          <span class="card-price" id="count">${count}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>`
+    $('#itemList').append(temp_html)
+
+  } else {
+    // 장바구니 리스트 가져오기 & 결제금액 계산
+    getBasketItems()
+
+    function getBasketItems() {
+    $.ajax({
+      type: 'GET',
+      url: `/api/orders/basketList`,
+      data: {},
+      success: function (response) {
+        let rows = response['getAllBasketItems'];
+        localStorage.setItem('basketItems', JSON.stringify(rows))
+
+        let itemPriceArray = []
+
+        for (let i = 0; i < rows.length; i++) {
+          let basket_id = rows[i]['basket_id'];
+          let item_id = rows[i]['item_id']
+          let itemPrice = rows[i]['itemPrice']
+          let itemName = rows[i]['itemName']
+          let count = rows[i]['count'];
+          let eachItemTotal = itemPrice * count
+          
+          itemPriceArray.push(eachItemTotal)
+
+          let temp_html = `<div class="card mb-4">
+                            <div class="row no-gutters">
+                              <div class="col-4" style="background: #ffffff;" onclick="location.href='/detail?goodsId=1'">
+                                <img src="/극혐.avif" class="card-img-top h-100" alt="...">
+                              </div>
+                              <div class="col-sm-7 card-body px-3">
+                                <div class="flex-fill mt-3">
+                                  <div class="d-flex justify-content-between mb-3">
+                                    <h5 style="display:inline">상품</h5>
+                                    <span class="card-price" id="itemName">${itemName}</span>
+                                  </div>
+                                  <div class="d-flex justify-content-between mb-3">
+                                    <h5 style="display: inline">가격</h5>
+                                    <span class="card-price" id="itemPrice">${itemPrice}</span>
+                                  </div>
+                                  <div class="d-flex justify-content-between mb-3">
+                                    <h5 style="display: inline">수량</h5>
+                                    <span class="card-price" id="count">${count}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>`
+          $('#itemList').append(temp_html);
+        }
+
+          let total = itemPriceArray.reduce((acc, cur) => acc + cur)
+          $('#order_price').append(total);
+          $('#totalToPay').append(total);
+      },
+    });
+    }
+  }  
+})
+
+  // findAddr() 함수 정의
+  function findAddr() {
+    new daum.Postcode({
+      oncomplete: function (data) {
+        // 사용자 주소를 받아올 변수를 정의한다.
+        var addr = '';
+
+        //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+        if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우(R)
+          addr = data.roadAddress;
+        } else { // 사용자가 지번 주소를 선택했을 경우(J)
+          addr = data.jibunAddress;
+        }
+
+        // 부모창의 주소칸에 받아온 주소를 넣는다.
+        $("#address").val(addr);
+      }
+    }).open();
+  }
+
+  // 결제금액 계산 함수
+  function getTotalPrice() {
+
+    let order_point = Number($('#order_point').val())
+    let order_price = Number($('#order_price').text())
+    let totalToPay = order_price - order_point
+    const myPoint = $('#myPoint').text()
+
+    $('#tooMuchPointUse').empty()
+
+    if (myPoint < order_point) {
+      $('#tooMuchPointUse').append('⚠ 보유포인트가 부족합니다')
+      $('#order_point').val('')
+
+      return
+
+    } else if (totalToPay < 0) {
+      $('#tooMuchPointUse').append('⚠ 주문금액보다 사용포인트가 많습니다')
+      $('#order_point').val('')
+
+      return
+
+    } else {
+      const updatePoint = myPoint - order_point
+
+      $('#totalToPay').empty()
+      $('#totalToPay').append(totalToPay);
+
+      $('#myPoint').empty()
+      $('#myPoint').append(updatePoint);
+      $('#useMyPoint').hide()
+      $('input[type=text][id=order_point]').prop('readonly', true);
+    }
+
+    return
+  }
+
+  function buyOrder() {
+
+    let id = param.get('item_id');
+    let count = $('#count').text()
+    let add1 = $('#address').val()
+    let add2 = $('#addressDetail').val()
+    let address = add1 + ' ' + add2
+    let order_price = $('#order_price').text()
+    let order_point = $('#order_point').val()
+    let receipt_price = $('#totalToPay').text()
+
+      if ( id ) {
+        $.ajax({
+          type: 'POST',
+          url: `/api/orders/`,
+          data: {id, count, address, order_price, order_point, receipt_price},
+          success: function () {
+            customAlert('선택하신 상품을 성공적으로 구매하였습니다.', function () {
+              window.location.reload();
+            });
+          },
+          error: function (error) {
+            customAlert(error.responseJSON.errorMessage);
+          }
+        });
+    } else {
+        const storageBasketItems = localStorage.getItem('basketItems')
+        const basketItems = JSON.parse(storageBasketItems)
+      $.ajax({
+          type: 'POST',
+          url: `/api/orders/`,
+          data: {basketItems, address, order_price, order_point, receipt_price },
+          success: function () {
+            customAlert('선택하신 상품을 성공적으로 구매하였습니다.', function () {
+              window.location.reload();
+            });
+          },
+          error: function (error) {
+            customAlert(error.responseJSON.errorMessage);
+          }
+        });
+    }
+  }
+
+  // 모달 알림창
+  function customAlert(text, confirmCallback) {
+    $('#alertText').text(text);
+    $('#alertModal').modal('show');
+    if (confirmCallback) {
+      $('#alertModal .btn-confirm').click(confirmCallback);
+    }
+  }
+
+</script>
