@@ -80,6 +80,21 @@ class AdminController {
             next(error);
         }
     };
+
+    getAllItems = async (req, res, next) => {
+        try {
+            const { page } = await pageValidate.validateAsync(req.query);
+
+            const { status, itemsCount, itemList, firstPage, lastPage, totalPage } =
+                await this.adminService.getAllItems(page);
+
+            return res
+                .status(status)
+                .json({ itemsCount, itemList, firstPage, lastPage, totalPage });
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 
 module.exports = AdminController;

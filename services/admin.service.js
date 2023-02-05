@@ -110,6 +110,51 @@ class AdminService {
             throw error;
         }
     };
+
+    getAllItems = async (page) => {
+        try {
+            // 전체 상품 수 가져오기
+            const itemsCount = await this.adminRepository.allItemsCount();
+
+            // 총 페이지 수 : 한 페이지당 5개씩
+            let totalPage = Math.ceil(itemsCount / 5);
+
+            // 화면에 보여줄 그룹 : 한 그룹당 5개 페이지 띄우기
+            let pageGroup = Math.ceil(page / 5);
+
+            // 한 그룹의 마지막 페이지 번호
+            let lastPage = pageGroup * 5;
+
+            // 한 그룹의 첫 페이지 번호
+            let firstPage = lastPage - 5 + 1 <= 0 ? 1 : lastPage - 5 + 1;
+
+            // 만약 마지막 페이지 번호가 총 페이지 수 보다 크다면?
+            if (lastPage > totalPage) {
+                lastPage = totalPage;
+            }
+
+            // 회원 리스트 가져오기
+            const itemList = await this.adminRepository.getAllItems(page);
+
+            const customItemList = itemList.map((item) => {
+                return {
+                    ...item.dataValues,
+                    createdAt: moment(item.createdAt).format('YYYY-MM-DD HH:mm:ss'),
+                };
+            });
+
+            return {
+                status: 200,
+                itemsCount,
+                itemList: customItemList,
+                firstPage,
+                lastPage,
+                totalPage,
+            };
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = AdminService;

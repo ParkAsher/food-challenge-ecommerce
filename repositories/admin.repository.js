@@ -76,6 +76,26 @@ class AdminRepository {
             throw error;
         }
     };
+
+    allItemsCount = async () => {
+        try {
+            return await this.userModel.count();
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    getAllItems = async (page) => {
+        try {
+            return await this.itemModel.findAll({
+                offset: (page - 1) * 5,
+                limit: 5,
+                order: [['id', 'DESC']],
+            });
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = AdminRepository;
