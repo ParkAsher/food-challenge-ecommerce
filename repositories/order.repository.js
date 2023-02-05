@@ -3,26 +3,43 @@ const { User, Order, Orderitem, Basket, Item } = require('../models');
 
 class orderRepository {
     // Order 테이블 저장
-    saveOrder = async (user_id, address, order_price, order_point, receipt_price) => {
-        const orderPoint = Number(order_point);
+    saveOrder = async (
+        user_id,
+        address,
+        order_price,
+        orderPoint,
+        receipt_price,
+        accumulatePoint
+    ) => {
+
         const orderTable = await Order.create({
             user_id,
             address,
             order_price,
-            order_point: orderPoint,
+            orderPoint,
             receipt_price,
         });
 
-        // 사용한 포인트 업데이트
-        if (orderPoint > 0) {
-            const findUserPoint = await User.findOne({
-                attributes: ['point'],
-                where: { id: user_id },
-            });
+        const findUserPoint = await User.findOne({
+            attributes: ['point'],
+            where: { id: user_id },
+        });
 
+        // User table point 적립 업데이트
+        await User.update(
+            {
+                point: Math.round(findUserPoint.point + accumulatePoint),
+            },
+            {
+                where: { id: user_id },
+            }
+        );
+
+        // User table point 사용 차감 업데이트
+        if (orderPoint > 0) {
             await User.update(
                 {
-                    point: findUserPoint.point - orderPoint,
+                    point: Math.round(findUserPoint.point - orderPoint),
                 },
                 {
                     where: { id: user_id },
