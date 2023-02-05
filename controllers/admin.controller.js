@@ -59,6 +59,14 @@ class AdminController {
             next(error);
         }
     };
+
+    imageUpload = async (req, res, next) => {
+        try {
+            return res.status(200).json({ filePath: res.req.file.location });
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 
 module.exports = AdminController;
