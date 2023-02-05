@@ -70,7 +70,14 @@ router.get('/update_password', auth, (req, res, next) => {
     }
 });
 
-router.get('/register', (req, res, next) => {
+/* 회원가입 */
+router.get('/register', auth, (req, res, next) => {
+    // 이미 로그인 되어있다면?
+    if (res.locals.user) {
+        const error = new UserAlreadyLogined();
+        throw error;
+    }
+
     res.render('index.ejs', { components: 'register' });
 });
 
