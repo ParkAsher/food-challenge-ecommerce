@@ -69,6 +69,26 @@ module.exports = (err, req, res, next) => {
                 .status(joiErrorStatus)
                 .json({ message: '포인트의 형식이 일치하지 않습니다.' });
         }
+        if (joiErredKey === 'price') {
+            return res
+                .status(joiErrorStatus)
+                .json({ message: '가격의 형식이 일치하지 않습니다. ' });
+        }
+        if (joiErredKey === 'level') {
+            return res
+                .status(joiErrorStatus)
+                .json({ message: '난이도의 형식이 일치하지 않습니다. ' });
+        }
+        if (joiErredKey === 'stock') {
+            return res
+                .status(joiErrorStatus)
+                .json({ message: '수량의 형식이 일치하지 않습니다. ' });
+        }
+        if (joiErredKey === 'image') {
+            return res
+                .status(joiErrorStatus)
+                .json({ message: '이미지 주소의 형식이 일치하지 않습니다. ' });
+        }
     }
 
     /* 회원가입 */
