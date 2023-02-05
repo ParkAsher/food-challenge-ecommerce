@@ -16,7 +16,7 @@ class orderRepository {
             user_id,
             address,
             order_price,
-            orderPoint,
+            order_point: orderPoint,
             receipt_price,
         });
 
