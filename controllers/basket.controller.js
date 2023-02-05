@@ -1,28 +1,45 @@
-const CartService = require('../services/basket.service');
-const jwt = require('jsonwebtoken');
+const BasketService = require('../services/basket.service');
+const { UserNotLogined } = require('../lib/customerror');
+const userNotLogined = new UserNotLogined();
 
-class CartController {
-    cartController = new CartService();
+class BasketController {
+    basketController = new BasketService();
 
-    addMyCart = async (req, res, next) => {
+    addMyBasket = async (req, res, next) => {
         const { id: item_id } = req.params;
         let { count } = req.body;
-        const { id: user_id } = jwt.verify(req.cookies.accessToken, process.env.COOKIE_SECRET);
         count = Number(count);
 
-        const rummageThroughACart = await this.cartController.findHaveItemInCart(user_id, item_id);
-        if (rummageThroughACart.length < 1) {
-            const add = await this.cartController.addMyCart(user_id, item_id, count);
-            res.json({ data: add });
-        } else if (rummageThroughACart) {
-            const updateForIncrease = await this.cartController.updateItemCount(
-                user_id,
-                item_id,
-                rummageThroughACart[0].count + count
-            );
-            res.json({ data: updateForIncrease });
+        if (!res.locals.user) {
+            return next(userNotLogined);
         }
+        const { id: user_id } = res.locals.user;
+
+        const rummageThroughABasket = await this.basketController.addToBasket(
+            user_id,
+            item_id,
+            count
+        );
+
+        return res.json({ data: rummageThroughABasket });
+    };
+
+    getInfoInMyBasket = async (req, res, next) => {
+        const { id: user_id } = res.locals.user;
+
+        const { myItem, totalPrice } = await this.basketController.findItemInBasket(user_id);
+
+        res.json({ data: myItem, price: totalPrice });
+    };
+
+    deleteItemInBasket = async (req, res, next) => {
+        const { id: user_id } = res.locals.user;
+        const { item_id } = req.body;
+
+        const deleteItem = await this.basketController.deleteItemInBasket(user_id, item_id);
+
+        res.json({ data: deleteItem });
     };
 }
 
-module.exports = CartController;
+module.exports = BasketController;

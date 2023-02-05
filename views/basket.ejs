@@ -1,0 +1,101 @@
+<div id="cart_wrap">
+    <div style="display: flex; justify-content: space-around; margin-top: 20px">
+        <span style="font-size: 20px">장바구니</span>
+        <span style="font-size: 20px">상품명</span>
+        <span style="font-size: 20px">수량</span>
+        <span style="font-size: 20px">적립포인트</span>
+        <span style="font-size: 20px">금액</span>
+    </div>
+</div>
+<div id="price_wrap"></div>
+<div id="total_wrap"></div>
+<div id="button_wrap"></div>
+<script>
+    fetch('http://localhost:5000/api/basket')
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.message) {
+                const row = `
+                <p style="font-size:50px;display: flex;justify-content: space-around;margin-top:20px">고객님 정말 죄송합니다... 다시 로그인 부탁 드려욧!</p>
+              `;
+
+                const div = document.createElement('div');
+                div.innerHTML = row;
+                document.getElementById('cart_wrap').appendChild(div);
+            }
+            if (!data.data[0]) {
+                const row = `
+                <p style="font-size:50px;display: flex;justify-content: space-around;margin-top:20px">텅텅 비었잖아욧! 얼른 담으러 가셔욧!</p>
+              `;
+
+                const div = document.createElement('div');
+                div.innerHTML = row;
+                document.getElementById('cart_wrap').appendChild(div);
+
+                const button = `
+                <div style="margin-top:30px;display: flex;justify-content: space-around;margin-top:20px">
+                  <button onclick="location.href='/'">구매하러 가기</button>
+                    </div>
+                    
+                `;
+                const buttonDiv = document.createElement('div');
+                buttonDiv.innerHTML = button;
+                document.getElementById('button_wrap').appendChild(buttonDiv);
+            } else if (data.data[0]) {
+                for (let i = 0; i < data.data.length; i++) {
+                    const row = `
+                  <div style="margin-top:30px;display: flex;justify-content: space-around;margin-top:20px">
+                    <img src="${data.data[i].image}" alt="상품이미지">
+                    <span class="name">${data.data[i].name}</span>
+                    <span class="count">${data.data[i].count}</span>
+                    <span>${data.data[i].point}P</span>
+                    <span><span>(${data.data[i].price})</span><span class="price" >${data.data[i].totalPrice}</span>원<button id="${data.data[i].id}" onclick="del(this)">X</button></span>
+                  </div>
+                  `;
+                    const tr = document.createElement('div');
+                    tr.innerHTML = row;
+                    document.getElementById('cart_wrap').appendChild(tr);
+                }
+                const totalPrice = `<span style="display: flex;justify-content: flex-end;margin-top:30px;font-weight: bold;">총합 ${data.price}원</span>`;
+                const money = document.createElement('div');
+                money.innerHTML = totalPrice;
+                document.getElementById('total_wrap').appendChild(money);
+
+                const button = `
+                <div style="margin-top:30px;display: flex;justify-content: space-around;margin-top:20px">
+                  <button onclick="location.href='/'">더 담으러 가기</button>
+                    <button onclick="location.href='/order'">구매하기</button>
+                    </div>
+                    
+                `;
+                const div = document.createElement('div');
+                div.innerHTML = button;
+                document.getElementById('button_wrap').appendChild(div);
+            }
+        });
+
+    function del(button) {
+        let item_id = document.getElementById(button.getAttribute('id')).getAttribute('id');
+        const data = { item_id };
+
+        fetch('http://localhost:5000/api/basket', {
+            credentials: 'include',
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                alert('삭완!');
+                window.location.reload();
+            })
+            .catch((err) => {
+                alert(err.message);
+                window.location.reload();
+            });
+    }
+    
+
+</script>

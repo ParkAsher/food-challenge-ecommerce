@@ -1,19 +1,45 @@
-const CartRepository = require('../repositories/basket.repository');
+const BasketRepository = require('../repositories/basket.repository');
 
-class CartService {
-    cartRepository = new CartRepository();
+class BasketService {
+    basketRepository = new BasketRepository();
 
-    findHaveItemInCart = async (user_id, item_id) => {
-        return await this.cartRepository.findHaveItemInCart(user_id, item_id);
+    addToBasket = async (user_id, item_id, count) => {
+        const myItems =  await this.basketRepository.findHaveItemInBasket(user_id, item_id);
+        if (myItems.length < 1) {
+            return await this.basketRepository.addMyBasket(user_id, item_id, count)
+        }
+
+        return await this.basketRepository.updateItemCount(user_id, item_id, count)
     };
 
-    addMyCart = async (user_id, item_id, count) => {
-        return await this.cartRepository.addMyCart(user_id, item_id, count);
+    findItemInBasket = async (user_id) => {
+        const findAll = await this.basketRepository.findItemInBasket(user_id);
+        if (!findAll[0]) {
+            return {myItem : [], totalPrice : 0}
+        }
+
+        const myItem = await findAll.map((item) => {
+            return {
+                id: item.Item.id,
+                name: item.Item.name,
+                count: item.count,
+                price: item.Item.price,
+                totalPrice: item.Item.price * item.count,
+                point: item.Item.price * item.count * (5 / 100),
+                image: item.Item.image,};
+        })
+
+        let totalPrice = 0
+        for (let i = 0; i < myItem.length; i++) {
+            totalPrice += myItem[i].totalPrice
+        }
+        return {myItem, totalPrice}
     };
 
-    updateItemCount = async (user_id, item_id, count) => {
-        return await this.cartRepository.updateItemCount(user_id, item_id, count);
-    };
+    deleteItemInBasket = async (user_id, item_id) => {
+        const deleteItem = await this.basketRepository.deleteItemInBasket(user_id, item_id)
+        return deleteItem
+    }
 }
 
-module.exports = CartService;
+module.exports = BasketService;
