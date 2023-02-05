@@ -13,5 +13,6 @@ router.put('/user', adminController.updateUser);
 
 /* 이미지 업로드 */
 router.post('/image', setUpload('food-challenge-ecommerce/item'), adminController.imageUpload);
+router.post('/item', adminController.createItem);
 
 module.exports = router;

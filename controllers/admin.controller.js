@@ -3,6 +3,7 @@ const {
     searchByEmailValidate,
     deleteByIdEmailValidate,
     userUpdateDataValidate,
+    createItemDataValidate,
 } = require('../lib/joischema');
 const AdminService = require('../services/admin.service');
 
@@ -63,6 +64,18 @@ class AdminController {
     imageUpload = async (req, res, next) => {
         try {
             return res.status(200).json({ filePath: res.req.file.location });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    createItem = async (req, res, next) => {
+        try {
+            const itemInfo = await createItemDataValidate.validateAsync(req.body);
+
+            const { status, message } = await this.adminService.createItem(itemInfo);
+
+            return res.status(status).json({ message });
         } catch (error) {
             next(error);
         }

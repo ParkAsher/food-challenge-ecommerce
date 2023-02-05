@@ -1,10 +1,10 @@
 const moment = require('moment/moment');
-const { User } = require('../models/index');
+const { User, Item } = require('../models/index');
 const AdminRepository = require('../repositories/admin.repository');
 const { UserNotFound, UserNotDeleted, UserNotUpdated } = require('../lib/customerror');
 
 class AdminService {
-    adminRepository = new AdminRepository(User);
+    adminRepository = new AdminRepository(User, Item);
 
     getAllUsers = async (page) => {
         try {
@@ -98,6 +98,14 @@ class AdminService {
             }
 
             return { status: 200, message: '수정에 성공했습니다.' };
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    createItem = async (itemInfo) => {
+        try {
+            return await this.adminRepository.createItem(itemInfo);
         } catch (error) {
             throw error;
         }
