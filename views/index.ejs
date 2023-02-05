@@ -22,9 +22,12 @@
             href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css"
         />
         <link
-        href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-        rel="stylesheet"
+            href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+            rel="stylesheet"
         />
+
+        <!-- Link Swiper's CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
 
         <!-- css -->
         <link rel="stylesheet" href="/css/reset.css" />
@@ -45,15 +48,15 @@
         <%- include('header.ejs') %>
 
         <!-- body -->
-        <% if (components === 'register') { %> <%- include('register.ejs') %> <% } %> 
-        <% if (components === 'main') { %> <%- include('main.ejs') %> <% } %> 
-        <% if (components ==='itemDetail') { %> <%- include('itemDetail.ejs') %> <% } %>
-        <% if (components === 'order') { %> <%- include('order.ejs') %> <% } %>
-        <% if (components === 'login') {%> <%- include('login.ejs') %> <% } %> 
-        <% if (components === 'findEmail') { %> <%-include('find_email.ejs') %> <% } %>
-        <% if (components === 'myBasket') { %> <%- include('basket.ejs') %> <% } %>
-        <% if (components === 'findPassword') { %> <%-include('find_password.ejs') %> <% } %> 
-        <% if (components === 'updatePassword') { %> <%-include('update_password.ejs') %> <% } %>
+        <% if (components === 'register') { %> <%- include('register.ejs') %> <% } %> <% if
+        (components === 'main') { %> <%- include('main.ejs') %> <% } %> <% if (components
+        ==='itemDetail') { %> <%- include('itemDetail.ejs') %> <% } %> <% if (components ===
+        'order') { %> <%- include('order.ejs') %> <% } %> <% if (components === 'login') {%> <%-
+        include('login.ejs') %> <% } %> <% if (components === 'findEmail') { %>
+        <%-include('find_email.ejs') %> <% } %> <% if (components === 'myBasket') { %> <%-
+        include('basket.ejs') %> <% } %> <% if (components === 'findPassword') { %>
+        <%-include('find_password.ejs') %> <% } %> <% if (components === 'updatePassword') { %>
+        <%-include('update_password.ejs') %> <% } %>
     </body>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 </html>
