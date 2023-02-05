@@ -137,7 +137,13 @@ module.exports = (err, req, res, next) => {
         if (err.name === 'NotFoundItem') {
             return res.status(err.status).json({ message: err.message });
         }
+        if (err.name === 'UserNotFound') {
+            return res.status(err.status).json({ message: err.message });
+        }
         if (err.name === 'TokenNotFound') {
+            return res.status(err.status).json({ message: err.message });
+        }
+        if (err.name === 'UserNotLogined') {
             return res.status(err.status).json({ message: err.message });
         }
     }
@@ -175,6 +181,13 @@ module.exports = (err, req, res, next) => {
     if (req.route.path === '/mypage/:id') {
         /* 주문내역이 없음 */
         if (err.name === 'NotFoundOrderList') {
+            return res.status(err.status).json({ message: err.message });
+        }
+    }
+
+    if (req.path === '/api/basket') {
+        console.log(req.path);
+        if (err.name === 'TokenNotFound') {
             return res.status(err.status).json({ message: err.message });
         }
     }
