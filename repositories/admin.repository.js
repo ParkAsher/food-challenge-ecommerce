@@ -79,7 +79,7 @@ class AdminRepository {
 
     allItemsCount = async () => {
         try {
-            return await this.userModel.count();
+            return await this.itemModel.count();
         } catch (error) {
             throw error;
         }
