@@ -70,7 +70,14 @@ router.get('/update_password', auth, (req, res, next) => {
     }
 });
 
-router.get('/register', (req, res, next) => {
+/* 회원가입 */
+router.get('/register', auth, (req, res, next) => {
+    // 이미 로그인 되어있다면?
+    if (res.locals.user) {
+        const error = new UserAlreadyLogined();
+        throw error;
+    }
+
     res.render('index.ejs', { components: 'register' });
 });
 
@@ -78,29 +85,6 @@ router.get('/itemDetail/:id', auth, (req, res, next) => {
     const user = !res.locals.user ? null : res.locals.user; // 로그인 안한 상태면 user = null
 
     res.render('index.ejs', { components: 'itemDetail', user: user });
-});
-
-/* 이메일 찾기 */
-router.get('/find_email', auth, (req, res, next) => {
-    try {
-        // 이미 로그인 되어있다면?
-        if (res.locals.user) {
-            const error = new UserAlreadyLogined();
-            throw error;
-        }
-
-        res.render('index.ejs', { components: 'findEmail' });
-    } catch (error) {
-        next(error);
-    }
-});
-
-router.get('/register', (req, res, next) => {
-    res.render('index.ejs', { components: 'register' });
-});
-
-router.get('/itemDetail/:id', (req, res, next) => {
-    res.render('index.ejs', { components: 'itemDetail' });
 });
 
 /* 관리자 */
