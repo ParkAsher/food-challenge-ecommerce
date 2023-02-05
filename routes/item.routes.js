@@ -6,8 +6,10 @@ const BasketController = require('../controllers/basket.controller');
 const itemController = new ItemController();
 const basketController = new BasketController();
 
-router.get('/list', itemController.getAllItems);
-router.get('/list/:level', itemController.getItemsByLevel);
+
+router.get('/', itemController.getAllItems);
+router.get('/level', itemController.getItemsByLevel);
+
 router.get('/:id', itemController.findOneItem);
 router.post('/:id', auth, basketController.addMyBasket);
 

@@ -5,7 +5,7 @@ const auth = require('../middleware/auth');
 const router = express.Router();
 
 /* View Mapping */
-router.get('/', auth, (req, res, next) => {
+router.get('/', auth, (req, res) => {
     const user = !res.locals.user ? null : res.locals.user; // 로그인 안한 상태면 user = null
 
     res.render('index.ejs', { components: 'main', user: user });
@@ -81,10 +81,16 @@ router.get('/register', auth, (req, res, next) => {
     res.render('index.ejs', { components: 'register' });
 });
 
-router.get('/itemDetail/:id', auth, (req, res, next) => {
+router.get('/itemDetail/:id', auth, (req, res) => {
     const user = !res.locals.user ? null : res.locals.user; // 로그인 안한 상태면 user = null
 
     res.render('index.ejs', { components: 'itemDetail', user: user });
+});
+
+router.get('/order', auth, (req, res) => {
+    const user = !res.locals.user ? null : res.locals.user; // 로그인 안한 상태면 user = null
+    
+    res.render('index.ejs', { components: 'order', user: user });
 });
 
 /* 관리자 */
