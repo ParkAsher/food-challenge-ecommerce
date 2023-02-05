@@ -1,0 +1,27 @@
+<div class="header">
+    <div class="header-wrap">
+        <div class="logo">
+            <a href="/adm">푸드챌린지 관리자페이지</a>
+        </div>
+        <div class="header-btn-wrap">
+            <button type="button" onclick="logout()">로그아웃</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function logout() {
+        $.ajax({
+            type: 'GET',
+            url: '/api/users/logout',
+            success: function (response) {
+                alert(response.message);
+                window.location.href = '/';
+            },
+            error: function (response) {
+                alert(response.responseJSON.message);
+                window.location.reload();
+            },
+        });
+    }
+</script>

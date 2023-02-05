@@ -1,0 +1,233 @@
+.user-menagement-background {
+    width: 100%;
+}
+
+.user-management-wrap {
+    width: 1600px;
+    margin: 0 auto;
+    margin-top: 4rem;
+}
+
+.user-management-title {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.user-management-title p {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.user-management-items {
+    width: 100%;
+    margin-bottom: 2rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-management-items-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.user-management-count-wrap {
+    display: flex;
+    align-items: center;
+}
+
+.user-management-items-left-btn-wrap {
+    height: 100%;
+}
+
+.user-management-items-left-btn-wrap button {
+    height: 3rem;
+    background: darkblue;
+    color: #ffffff;
+    border-radius: 5px;
+}
+
+.user-management-count-title,
+.user-management-count {
+    padding: 1rem;
+}
+
+.user-management-count-title {
+    border-radius: 5px 0 0 5px;
+    background-color: #9eacc6;
+    color: #ffffff;
+}
+
+.user-management-count {
+    border-radius: 0 5px 5px 0;
+    background-color: lightgray;
+}
+
+.table-wrap {
+    margin-bottom: 2rem;
+}
+
+.table-wrap table {
+    border-collapse: collapse;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.table-wrap table thead {
+    width: 100%;
+    font-size: 2rem;
+    font-weight: bold;
+    background-color: #9eacc6;
+    color: #ffffff;
+}
+
+.table-wrap table th,
+.table-wrap table td {
+    padding: 1.5rem 1.25rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.pagination-btn-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-bottom: 4rem;
+}
+
+.pagination-btn {
+    border: 1px solid #9eacc6;
+    box-sizing: border-box;
+    padding: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pagination-btn.active {
+    border: none;
+    background-color: lightcoral;
+    color: #ffffff;
+}
+
+.user-management-search-wrap {
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+}
+
+.user-management-search-wrap input {
+    height: 3rem;
+    padding-left: 1rem;
+}
+
+.user-management-search-wrap input:focus {
+    outline: none;
+}
+
+.user-management-search-wrap button {
+    height: 3rem;
+    background: none;
+    border: none;
+}
+
+.error-message {
+    margin-top: 2rem;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.error-message p {
+    font-weight: bold;
+    color: red;
+    font-size: 2rem;
+}
+
+.user-update-btn,
+.user-delete-btn {
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 5px;
+}
+
+.user-update-btn {
+    background: #3f51b5;
+}
+
+.user-delete-btn {
+    background: #ff4081;
+}
+
+.user-management-update-form {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.user-management-update-form-row {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    border-top: 0.5px solid lightgray;
+}
+
+.user-management-update-form-row:last-child {
+    border-bottom: 0.5px solid lightgray;
+}
+
+.update-item-title {
+    background-color: beige;
+    height: 3rem;
+    width: 20%;
+    padding-left: 1.5rem;
+
+    display: flex;
+    align-items: center;
+}
+
+.update-item-title p {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.update-item-value {
+    height: 3rem;
+    width: 30%;
+    padding-left: 1.5rem;
+
+    display: flex;
+    align-items: center;
+}
+
+.update-item-value input {
+    border: 0.5px solid lightgray;
+    padding: 0.5rem 0.25rem;
+}
+
+.update-item-value input:focus {
+    outline: none;
+}
+
+.user-update-btn-wrap {
+    width: 100%;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.user-update-btn-wrap button {
+    padding: 0.75rem 1.25rem;
+    border: none;
+    background: #3f51b5;
+    color: #ffffff;
+    border-radius: 5px;
+}
