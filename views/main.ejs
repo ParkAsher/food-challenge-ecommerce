@@ -9,6 +9,7 @@
             <li onclick= getItems(1) class="cell"><a href="#">1단계 음식</a></li>
             <li onclick= getItems(2) class="cell"><a href="#">2단계 음식</a></li>
             <li onclick= getItems(3) class="cell"><a href="#">3단계 음식</a></li>
+            <li onclick="locatioin.href='/customerChat'" class="cell"><a href="#">대화방</a></li>
         </ul>
     </div>
 </div>
@@ -20,7 +21,12 @@
 
 <script>
         $(document).ready(function () {
-            getItems(0)
+          const socket = io.connect("/");
+          localStorage.removeItem('basketItems')
+          getItems(0)
+
+        // 이 ejs 연결될때 customerRoom 소켓으로 연결
+        socket.emit("customerRoom")
         });
 
         // 아이템 전체조회
@@ -92,5 +98,4 @@
         });
         };
     }
-
 </script>

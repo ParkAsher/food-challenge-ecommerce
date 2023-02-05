@@ -141,4 +141,10 @@ router.get('/basket', auth, (req, res, next) => {
     res.render('index.ejs', { components: 'myBasket', user: user });
 });
 
+router.get('/customerChat', auth, (req, res, next) => {
+    const user = !res.locals.user ? null : res.locals.user; // 로그인 안한 상태면 user = null
+
+    res.render('index.ejs', { components: 'customerChat', user: user });
+});
+
 module.exports = router;

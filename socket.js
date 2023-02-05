@@ -10,12 +10,12 @@ io.on('connection', (socket) => {
     // 손님은 이 방으로 들어가게 하기
     socket.on('customerRoom', () => {
       socket.join('customerRoom');
-      console.log(socket.rooms);
+      console.log(socket.rooms, '손님 방으로 들어왔어요!');
     });
   
-    // 사장은 이 방으로 들어가게 하기
+    // admin 은 이 방으로 들어가게 하기
     socket.on('adminRoom', () => {
-      socket.join('ownerRoom');
+      socket.join('adminRoom');
       console.log(socket.rooms);
   
       // 입장했을 때 클라이언트로부터 메세지를 전달 받음
