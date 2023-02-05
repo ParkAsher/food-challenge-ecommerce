@@ -14,38 +14,46 @@ class OrderService {
         receipt_price
     ) => {
         if (item_id) {
-            let order = await this.orderRepository.saveOrder(
+            const saveOrder = await this.orderRepository.saveOrder(
                 user_id,
-                item_id,
-                count,
                 address,
                 order_price,
                 order_point,
                 receipt_price
             );
 
-            return order;
+            const order_id = saveOrder.id;
+            await this.orderRepository.saveOrderItem(
+                order_id,
+                item_id,
+                count
+            );
 
+            return saveOrder
         } else {
-            const basketItemList = basketItems;
-            console.log(basketItemList.length)
+            // 장바구니에서 구매한 케이스
+            const saveOrder = await this.orderRepository.saveOrder(
+                user_id,
+                address,
+                order_price,
+                order_point,
+                receipt_price
+            );
 
-            for (let i = 0; i < basketItemList.length; i++) {
-                let item_id = basketItemList[i]['item_id'];
-                let count = basketItemList[i]['count'];
+            const order_id = saveOrder.id;
+            // localStorage에 담은 {[]} 을 반복문으로 변수를 뽑아온다
+            for (let i = 0; i < basketItems.length; i++) {
+                let item_id = basketItems[i]['item_id'];
+                let count = basketItems[i]['count'];
 
-                let order = await this.orderRepository.saveOrder(
-                    user_id,
+                await this.orderRepository.saveOrderItem(
+                    order_id,
                     item_id,
-                    count,
-                    address,
-                    order_price,
-                    order_point,
-                    receipt_price
-                );
+                    count
 
-                return order;
+                );
             }
+            return saveOrder
         }
     };
 
