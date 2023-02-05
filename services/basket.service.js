@@ -3,16 +3,13 @@ const BasketRepository = require('../repositories/basket.repository');
 class BasketService {
     basketRepository = new BasketRepository();
 
-    findHaveItemInBasket = async (user_id, item_id) => {
-        return await this.basketRepository.findHaveItemInBasket(user_id, item_id);
-    };
+    addToBasket = async (user_id, item_id, count) => {
+        const myItems =  await this.basketRepository.findHaveItemInBasket(user_id, item_id);
+        if (myItems.length < 1) {
+            return await this.basketRepository.addMyBasket(user_id, item_id, count)
+        }
 
-    addMyBasket = async (user_id, item_id, count) => {
-        return await this.basketRepository.addMyBasket(user_id, item_id, count);
-    };
-
-    updateItemCount = async (user_id, item_id, count) => {
-        return await this.basketRepository.updateItemCount(user_id, item_id, count);
+        return await this.basketRepository.updateItemCount(user_id, item_id, count)
     };
 
     findItemInBasket = async (user_id) => {

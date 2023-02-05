@@ -1,5 +1,6 @@
 const BasketService = require('../services/basket.service');
-const {UserNotFound} = require("../lib/customerror")
+const { UserNotLogined } = require('../lib/customerror');
+const userNotLogined = new UserNotLogined();
 
 class BasketController {
     basketController = new BasketService();
@@ -7,28 +8,20 @@ class BasketController {
     addMyBasket = async (req, res, next) => {
         const { id: item_id } = req.params;
         let { count } = req.body;
-        
-        const { id: user_id } = !res.locals.user;
         count = Number(count);
 
-        const rummageThroughABasket = await this.basketController.findHaveItemInBasket(
+        if (!res.locals.user) {
+            return next(userNotLogined);
+        }
+        const { id: user_id } = res.locals.user;
+
+        const rummageThroughABasket = await this.basketController.addToBasket(
             user_id,
-            item_id
+            item_id,
+            count
         );
 
-        if (rummageThroughABasket.length < 1) {
-            const add = await this.basketController.addMyBasket(user_id, item_id, count);
-
-            res.json({ data: add });
-        } else if (rummageThroughABasket) {
-            const updateForIncrease = await this.basketController.updateItemCount(
-                user_id,
-                item_id,
-                rummageThroughABasket[0].count + count
-            );
-
-            res.json({ data: updateForIncrease });
-        }
+        return res.json({ data: rummageThroughABasket });
     };
 
     getInfoInMyBasket = async (req, res, next) => {

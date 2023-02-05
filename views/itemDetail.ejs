@@ -27,7 +27,7 @@
     <form action="" style="margin-left:50px;margin-top:10px">
       <span>구매수량</span>
       <input style="HEIGHT: 20px" onclick="javascript:this.form.count.value--;mul('minus')" type="button" value="-">
-      <input type="number" name="count" value="1" id="count" min="1">
+      <input type="text" name="count" value="1" id="count" min="1">
       <input style="HEIGHT: 20px" onclick="javascript:this.form.count.value++;mul('plus')" type="button" value="+">
     </form>
     <div style="margin-left:50px;margin-top:10px"><p id="total" style="display:inline-block">100</p><span>원</span></div>
@@ -86,7 +86,7 @@
                 return location.href = '/login';
             }
             
-            if (confirm("장바구니로 이동 하시겠습니다?")) {
+            if (confirm("장바구니로 이동 하시겠습니까?")) {
                 location.href = '/basket';
             } else {
                 location.href = '/';
