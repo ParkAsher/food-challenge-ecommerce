@@ -13,13 +13,18 @@ class OrderService {
         order_point,
         receipt_price
     ) => {
+
+        const orderPoint = Number(order_point);
+        const accumulatePoint = order_price * 0.05
+
         if (item_id) {
             const saveOrder = await this.orderRepository.saveOrder(
                 user_id,
                 address,
                 order_price,
-                order_point,
-                receipt_price
+                orderPoint,
+                receipt_price,
+                accumulatePoint
             );
 
             const order_id = saveOrder.id;
@@ -37,7 +42,8 @@ class OrderService {
                 address,
                 order_price,
                 order_point,
-                receipt_price
+                receipt_price,
+                accumulatePoint
             );
 
             const order_id = saveOrder.id;

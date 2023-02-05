@@ -6,6 +6,7 @@ const router = express.Router();
 
 /* View Mapping */
 router.get('/', auth, (req, res) => {
+
     const user = !res.locals.user ? null : res.locals.user; // 로그인 안한 상태면 user = null
 
     res.render('index.ejs', { components: 'main', user: user });
