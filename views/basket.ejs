@@ -11,7 +11,7 @@
 <div id="total_wrap"></div>
 <div id="button_wrap"></div>
 <script>
-    fetch('http://localhost:5000/api/basket')
+    fetch('http://localhost:4000/api/basket')
         .then((response) => response.json())
         .then((data) => {
             if (data.message) {
@@ -78,7 +78,7 @@
         let item_id = document.getElementById(button.getAttribute('id')).getAttribute('id');
         const data = { item_id };
 
-        fetch('http://localhost:5000/api/basket', {
+        fetch('http://localhost:4000/api/basket', {
             credentials: 'include',
             method: 'DELETE',
             headers: {
