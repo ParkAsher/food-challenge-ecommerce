@@ -52,6 +52,14 @@ class orderRepository {
 
         return basketItems;
     };
+
+    allOrderList = async () => {
+        const allList = await Order.findAll({
+            attributes: ['id', 'address'],
+            include: [{model:User, attributes: ['name', 'nickname', 'phone']},{model:Orderitem, attributes: ['item_id'], include: [{model:Item,attributes: ['name']}]}]
+        })
+        return allList
+    }
 }
 
 module.exports = orderRepository;

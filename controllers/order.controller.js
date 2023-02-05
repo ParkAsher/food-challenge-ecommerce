@@ -28,6 +28,11 @@ class OrderContorller {
         res.status(200).json({getAllBasketItems});
 
     };
+
+    orderList = async (req,res,next) => {
+        const list = await this.orderService.getAllOrder()
+        res.json(list)
+    }
 }
 
 module.exports = OrderContorller;

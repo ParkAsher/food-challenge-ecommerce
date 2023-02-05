@@ -70,6 +70,26 @@ class OrderService {
             };
         });
     };
+
+    getAllOrder = async () => {
+        const list = await this.orderRepository.allOrderList()
+        const nacheonjae = list.map(one => {
+            one.User = !one.User ? {
+                "name": "오영환",
+                "nickname": "영환",
+                "phone": "01012341234"
+              } : one.User
+            return {
+                orderId : one.id,
+                address : one.address,
+                name: one.User.name || "asd",
+                nickname: one.User.nickname || "asd",
+                phone: one.User.phone || "asd",
+                itemName: one.Orderitems
+            }
+        })
+        return nacheonjae
+    }
 }
 
 module.exports = OrderService;
