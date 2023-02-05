@@ -29,7 +29,7 @@ router.get('/register', (req, res, next) => {
     res.render('index.ejs', { components: 'register' });
 });
 
-router.get('/itemDetail/:id', auth, (req, res) => {
+router.get('/itemDetail/:item_id', auth, (req, res) => {
     const user = !res.locals.user ? null : res.locals.user; // 로그인 안한 상태면 user = null
 
     res.render('index.ejs', { components: 'itemDetail', user: user });

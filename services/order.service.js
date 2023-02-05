@@ -31,8 +31,10 @@ class OrderService {
         return basketList.map((item) => {
             return {
                 basket_id: item.id,
-                itemId: item.item_id,
+                item_id: item.item_id,
+                itemName: item.Item.name,
                 count: item.count,
+                itemPrice: item.Item.price
             };
         });
     };

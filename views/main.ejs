@@ -69,16 +69,17 @@
           },
           success: function (response) {
             let rows = response['itemsByLevel'];
+            console.log(rows)
             
             for (let i = 0; i < rows.length; i++) {
-              let itemId = rows[i]['itemId'];
+              let item_id = rows[i]['item_id'];
               let name = rows[i]['name'];
               let price = rows[i]['price'];
               let image = rows[i]['image'];
 
               let temp_html = `<div class="col">
                                 <div class="card h-100">
-                                    <img onclick="location.href='/itemDetail/${itemId}'"; src="./별난음식.jpeg"/class="card-img-top">
+                                    <img onclick="location.href='/itemDetail/${item_id}'"; src="./별난음식.jpeg"/class="card-img-top">
                                     <div class="card-body">
                                     <h5 class="card-title" style="text-align: center;">${name}</h5>
                                     <p class="card-text" style="text-align: center;">${price}원</p>

@@ -21,7 +21,8 @@ class OrderContorller {
     };
 
     getBasketList = async(req, res, next) => {
-        const { id: user_id } = res.locals.user;
+        // const { id: user_id } = res.locals.user;
+        const user_id = 5
         const getAllBasketItems = await this.orderService.getBasket(user_id)
 
         res.status(200).json({getAllBasketItems});

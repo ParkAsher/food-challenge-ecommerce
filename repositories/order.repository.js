@@ -1,5 +1,5 @@
 const { UserAlreadyExist } = require('../lib/customerror');
-const { User, Order, Orderitem, Basket } = require('../models');
+const { User, Order, Orderitem, Basket, Item } = require('../models');
 
 class orderRepository {
     saveOrder = async (
@@ -48,13 +48,16 @@ class orderRepository {
         return { orderTable, orderItemTable };
     };
 
-    basketList = async(user_id) => {
+    // 장바구니 구매
+    // 장바구니 리스트 가져오기
+    basketList = async (user_id) => {
         const basketItems = await Basket.findAll({
-            where: {id: user_id}
-        })
+            where: { user_id },
+            include: [{ model: Item, attributes: ['price', 'name'] }],
+        });
 
-        return basketItems
-    }
+        return basketItems;
+    };
 }
 
 module.exports = orderRepository;

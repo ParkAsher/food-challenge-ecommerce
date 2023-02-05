@@ -7,8 +7,8 @@ class CartController {
     addMyCart = async (req, res, next) => {
         const { id: item_id } = req.params;
         let { count } = req.body;
-        // const { id: user_id } = jwt.verify(req.cookies.accessToken, process.env.COOKIE_SECRET);
-        const user_id = 2
+        // const { id: user_id } = res.locals.user;
+        const user_id = 5
         count = Number(count);
 
         const rummageThroughACart = await this.cartController.findHaveItemInCart(user_id, item_id);
