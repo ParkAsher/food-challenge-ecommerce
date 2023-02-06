@@ -147,11 +147,11 @@ class orderRepository {
     };
 
     searchEmail = async (email) => {
-        return await User.findOne({where: {email}})
-    }
+        return await User.findOne({ where: { email } });
+    };
     searchOrder = async (id) => {
-        const  rows  = await Order.findAll({
-            where: {user_id: id},
+        const rows = await Order.findAll({
+            where: { user_id: id },
             attributes: [
                 'id',
                 'address',
@@ -163,9 +163,8 @@ class orderRepository {
             include: [{ model: User, attributes: ['name', 'phone', 'nickname', 'email'] }],
             order: [['id', 'DESC']],
         });
-        return { rows }
-    }
-
+        return { rows };
+    };
 
     findOneOrder = async (id) => {
         const order = await Orderitem.findAll({

@@ -136,9 +136,10 @@ class OrderService {
         const list = rows.map((one) => {
             one.User = !one.User
                 ? {
-                      name: '공란',
-                      nickname: '공란',
-                      phone: '공란',
+                      name: '탈퇴 계정',
+                      nickname: '탈퇴 계정',
+                      phone: '탈퇴 계정',
+                      email: '탈퇴 계정',
                   }
                 : one.User;
             return {
@@ -181,28 +182,30 @@ class OrderService {
     };
 
     searchOrder = async (email) => {
-        const {id} = !await this.orderRepository.searchEmail(email)? false : await this.orderRepository.searchEmail(email)
-        if(!id) {
-            return {list: {}}
+        const { id } = !(await this.orderRepository.searchEmail(email))
+            ? false
+            : await this.orderRepository.searchEmail(email);
+        if (!id) {
+            return { list: {} };
         }
-        const { rows } = await this.orderRepository.searchOrder(id)
+        const { rows } = await this.orderRepository.searchOrder(id);
 
         const list = rows.map((one) => {
-                return {
-                    orderId: one.id,
-                    name: one.User.name,
-                    phone: one.User.phone,
-                    email: one.User.email,
-                    nickname: one.User.nickname,
-                    address: one.address,
-                    order_price: one.order_price,
-                    order_point: one.order_point,
-                    receipt_price: one.receipt_price,
-                    createdAt: one.createdAt,
-                };
+            return {
+                orderId: one.id,
+                name: one.User.name,
+                phone: one.User.phone,
+                email: one.User.email,
+                nickname: one.User.nickname,
+                address: one.address,
+                order_price: one.order_price,
+                order_point: one.order_point,
+                receipt_price: one.receipt_price,
+                createdAt: one.createdAt,
+            };
         });
         return { list };
-    }
+    };
 }
 
 module.exports = OrderService;

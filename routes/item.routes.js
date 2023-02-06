@@ -6,7 +6,6 @@ const BasketController = require('../controllers/basket.controller');
 const itemController = new ItemController();
 const basketController = new BasketController();
 
-
 router.get('/', itemController.getAllItems);
 router.get('/level', itemController.getItemsByLevel);
 

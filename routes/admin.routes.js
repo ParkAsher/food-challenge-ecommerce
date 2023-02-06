@@ -12,9 +12,9 @@ router.get('/users', adminController.getAllUsers);
 router.get('/user/:email', adminController.searchUser);
 router.delete('/user', adminController.deleteUser);
 router.put('/user', adminController.updateUser);
-router.get('/order',  orderController.orderList);
-router.get('/order/:id',  orderController.findOneOrder);
-router.get('/order/search/:email',  orderController.searchOrder);
+router.get('/order', orderController.orderList);
+router.get('/order/:id', orderController.findOneOrder);
+router.get('/order/search/:email', orderController.searchOrder);
 
 /* 이미지 업로드 */
 router.post('/image', setUpload('food-challenge-ecommerce/item'), adminController.imageUpload);
