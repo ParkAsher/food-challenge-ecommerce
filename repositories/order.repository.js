@@ -128,6 +128,58 @@ class orderRepository {
             throw error;
         }
     };
+
+    allOrderList = async (page) => {
+        const { count, rows } = await Order.findAndCountAll({
+            attributes: [
+                'id',
+                'address',
+                'order_price',
+                'order_point',
+                'receipt_price',
+                'createdAt',
+            ],
+            include: [{ model: User, attributes: ['name', 'phone', 'nickname', 'email'] }],
+            offset: (page - 1) * 8,
+            limit: 8,
+            order: [['id', 'DESC']],
+        });
+        return { count, rows };
+    };
+
+    searchEmail = async (email) => {
+        return await User.findOne({ where: { email } });
+    };
+    searchOrder = async (id) => {
+        const rows = await Order.findAll({
+            where: { user_id: id },
+            attributes: [
+                'id',
+                'address',
+                'order_price',
+                'order_point',
+                'receipt_price',
+                'createdAt',
+            ],
+            include: [{ model: User, attributes: ['name', 'phone', 'nickname', 'email'] }],
+            order: [['id', 'DESC']],
+        });
+        return { rows };
+    };
+
+    findOneOrder = async (id) => {
+        const order = await Orderitem.findAll({
+            where: { order_id: id },
+            attributes: ['order_id', 'count'],
+            include: [
+                {
+                    model: Item,
+                    attributes: ['name', 'price'],
+                },
+            ],
+        });
+        return order;
+    };
 }
 
 module.exports = orderRepository;

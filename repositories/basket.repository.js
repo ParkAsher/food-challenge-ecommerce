@@ -17,7 +17,7 @@ class BasketRepository {
     findItemInBasket = async (user_id) => {
         const inBasketThatItem = await Basket.findAll({
             where: { user_id },
-            order: [["id", "desc"]],
+            order: [['id', 'desc']],
             include: [{ model: Item, attributes: ['id', 'name', 'price', 'image'] }],
         });
         return inBasketThatItem;
