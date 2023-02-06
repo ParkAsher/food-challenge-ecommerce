@@ -12,5 +12,6 @@ router.post('/userid', userController.getUserId);
 router.patch('/password', userController.updatePassword);
 
 router.post('/email', userController.getUserEmail);
+router.get('/mypage/:id', userController.getUserInfoById);
 
 module.exports = router;

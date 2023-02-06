@@ -1,12 +1,21 @@
 const OrderService = require('../services/order.service');
+const { pageValidate } = require('../lib/joischema');
 
-class OrderContorller {
+class OrderController {
     orderService = new OrderService();
 
     saveOrder = async (req, res, next) => {
         const { id: user_id } = res.locals.user;
-        const { id: item_id, basketItems, count, address, order_price, order_point, receipt_price } = req.body;
-        
+        const {
+            id: item_id,
+            basketItems,
+            count,
+            address,
+            order_price,
+            order_point,
+            receipt_price,
+        } = req.body;
+
         const saveOrder = await this.orderService.addToOrder(
             user_id,
             item_id,
@@ -23,11 +32,24 @@ class OrderContorller {
 
     getBasketList = async (req, res, next) => {
         const { id: user_id } = res.locals.user;
-        const getAllBasketItems = await this.orderService.getBasket(user_id)
+        const getAllBasketItems = await this.orderService.getBasket(user_id);
 
-        res.status(200).json({getAllBasketItems});
+        res.status(200).json({ getAllBasketItems });
+    };
 
+    getOrderInfoByUserId = async (req, res, next) => {
+        try {
+            const { id: user_id } = req.params;
+            const { page } = await pageValidate.validateAsync(req.query);
+
+            const { status, orderList, firstPage, lastPage, totalPage } =
+                await this.orderService.getOrderInfoByUserId(user_id, page);
+
+            return res.status(status).json({ orderList, firstPage, lastPage, totalPage });
+        } catch (error) {
+            next(error);
+        }
     };
 }
 
-module.exports = OrderContorller;
+module.exports = OrderController;
