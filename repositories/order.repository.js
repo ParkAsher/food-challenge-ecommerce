@@ -109,7 +109,7 @@ class orderRepository {
 
             const orderIds = order.map((o) => o.id);
 
-            const sql = `select a.order_id, c.createdAt, b.name, a.count, (b.price * a.count) as total_item_price, (b.price * a.count * 0.01) as save_point
+            const sql = `select a.order_id, c.createdAt, b.name, a.count, (b.price * a.count) as total_item_price, (b.price * a.count * 0.05) as save_point
             from Orderitems as a
             inner join Items as b
             on a.item_id = b.id
