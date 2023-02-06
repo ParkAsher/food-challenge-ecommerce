@@ -1,0 +1,180 @@
+.item-management-background {
+    width: 100%;
+}
+
+.item-management-wrap {
+    width: 1600px;
+    margin: 4rem auto;
+}
+
+.item-management-title {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.item-management-title p {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.item-management-create-form,
+.item-management-update-form {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.item-management-create-form-row,
+.item-management-update-form-row {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    border-top: 0.5px solid lightgray;
+}
+
+.item-management-create-form-row:last-child,
+.item-management-update-form-row:last-child {
+    border-bottom: 0.5px solid lightgray;
+}
+
+.create-item-title,
+.update-item-title {
+    background-color: beige;
+    height: 3rem;
+    width: 20%;
+    padding-left: 1.5rem;
+
+    display: flex;
+    align-items: center;
+}
+
+.create-item-value,
+.update-item-value {
+    height: 3rem;
+    width: 30%;
+    padding-left: 1.5rem;
+
+    display: flex;
+    align-items: center;
+}
+
+.create-item-value input,
+.update-item-value input,
+.create-item-value select,
+.update-item-value select {
+    border: 0.5px solid lightgray;
+    padding: 0.5rem 0.25rem;
+}
+
+.create-item-value input:focus,
+.update-item-value input:focus {
+    outline: none;
+}
+
+.item-create-btn-wrap {
+    width: 100%;
+    margin-bottom: 2rem;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.item-create-btn-wrap button {
+    padding: 0.75rem 1.25rem;
+    border: none;
+    background: #3f51b5;
+    color: #ffffff;
+    border-radius: 5px;
+}
+
+.item-management-items {
+    width: 100%;
+    margin-bottom: 2rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item-management-items-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.item-management-items-left-btn-wrap {
+    height: 100%;
+}
+
+.item-management-items-left-btn-wrap button {
+    height: 3rem;
+    background: darkblue;
+    color: #ffffff;
+    border-radius: 5px;
+}
+
+.item-management-count-wrap {
+    display: flex;
+    align-items: center;
+}
+
+.item-management-count-title,
+.item-management-count {
+    padding: 1rem;
+}
+
+.item-management-count-title {
+    border-radius: 5px 0 0 5px;
+    background-color: #9eacc6;
+    color: #ffffff;
+}
+
+.item-management-count {
+    border-radius: 0 5px 5px 0;
+    background-color: lightgray;
+}
+
+.table-wrap img {
+    width: 12rem;
+    height: 12rem;
+
+    object-fit: cover;
+}
+
+.table-wrap td {
+    vertical-align: middle;
+}
+
+.item-update-btn,
+.item-delete-btn {
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 5px;
+}
+
+.item-update-btn {
+    background: #3f51b5;
+}
+
+.item-delete-btn {
+    background: #ff4081;
+}
+
+.item-update-btn-wrap {
+    width: 100%;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.item-update-btn-wrap button {
+    padding: 0.75rem 1.25rem;
+    border: none;
+    background: #3f51b5;
+    color: #ffffff;
+    border-radius: 5px;
+}
