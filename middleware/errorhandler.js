@@ -4,6 +4,11 @@ module.exports = (err, req, res, next) => {
     console.log(req.path);
     console.log(req.route.path);
 
+    /* token expired */
+    if (err.name === 'TokenExpiredError') {
+        return res.render('index.ejs', { components: 'main', user: null });
+    }
+
     /* User Not Found */
     if (err.name === 'UserNotFound') {
         return res.render('alert.ejs', { message: err.message, href: '/login' });
