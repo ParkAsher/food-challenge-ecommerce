@@ -5,26 +5,37 @@
             <button class= "reverse" id="logoutBtn">뒤로가기</button>
         </nav>
             <div id="chatWrap">
-                <div id="chatHeader">Everyone</div>
-                <div id="chatLog" style="overflow: auto; display:flex; flex-direction:column-reverse;">
+                <div id="chatHeader">그룹 채팅</div>
+                <div id="chatLog" style="overflow:auto; display:flex; flex-direction:column-reverse;">
                 </div>
-                <div class="enter" id="enter"></div>
                 <form id="chatForm" name="publish">
                     <input type="text" autocomplete="off" size="30" id="message" placeholder="메시지를 입력하세요">
                     <input type="submit" value="보내기">
+
                 </form>
             </div>
             <div id="memberWrap">
                 <div id="memberList">
-                    <div id="memberHeader">사람</div>
-                    <div id="memberSelect">ㅇㅇ</div>
+                    <div id="numberOfMembers"></div>
+                    <div id="memberSelect"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>        
+    <script>     
         const nickname = $('#nickname').text()
+
+        // let listOfPeople = []
+        // listOfPeople.push(nickname)
+
+        // for (i = 0; i < listOfPeople.length; i++) {
+        //     let messageElem = document.createElement('div');
+        //     let nickname = listOfPeople[i]
+        //     messageElem.textContent = nickname
+
+        //     $('#memberSelect').append(messageElem)
+        // }
 
         $(document).ready(function () {  
             // 이 html로 연결될때 chatRoom 소켓으로 연결
@@ -32,7 +43,12 @@
 
             // 입장 메시지
             const enter = {message: `${nickname} 님이 입장했습니다.`}
+
             socket.emit('enterMessage', JSON.stringify(enter));
+            socket.on(('usercount'), (num) => {
+
+                $('#numberOfMembers').append(num)
+            })
             socket.on('enterMessage', (msg) => {
         
                 enterMessage(msg);
@@ -40,16 +56,19 @@
         });
 
         function enterMessage(message) {
-            let messageElem = document.createElement('div');
             const enter = JSON.parse(message);
-            messageElem.textContent = enter.message
-            document.getElementById('enter').append(messageElem);
+            let html = `<div class="enter" id="enter">${enter.message}</div>`
+            console.log(html)
+            $('#chatLog').prepend(html);
         };
 
 
         document.forms.publish.onsubmit = function() {
 
-            let outgoingMessage = this.message.value;      
+            let outgoingMessage = this.message.value;
+            
+            if (outgoingMessage === '') return false
+
             const obj = {"newMessage": { "nickname": nickname, "value": outgoingMessage }} 
             socket.emit('message', JSON.stringify(obj));
             return false;
@@ -61,7 +80,6 @@
         });
 
         function showMessage(message) {
-            let messageElem = document.createElement('div');
             const obj = JSON.parse(message);
 
             if (nickname === obj.newMessage.nickname){
@@ -70,12 +88,15 @@
                         <span class="msg" id="myMsg">${obj.newMessage.value}</span>
                     </div>`
                 $('#chatLog').prepend(html)
+                $('#message').val('')
+
             } else {
                 let html = `<div class="anotherMsg">
                         <span class="anotherName">Jo</span>
                         <span class="msg" id="receiveMsg">${obj.newMessage.value}</span>
                     </div>`
                 $('#chatLog').prepend(html)
+                $('#message').val('')
             }
         }
 

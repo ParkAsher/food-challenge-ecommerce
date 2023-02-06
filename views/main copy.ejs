@@ -37,7 +37,7 @@
 </div>      
 
 
-<div class="chat" id="chat">
+<div class="modal text-left" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -47,21 +47,25 @@
           </button>
         </div>
         <div class="modal-body" id="alertText">
-            <div id="chatLog" style="overflow:auto; display:flex; flex-direction:column-reverse;"></div>
-            <form id="chatForm" name="publish">
-                <input type="text" autocomplete="off" size="30" id="message" placeholder="메시지를 입력하세요">
-                <input type="submit" value="보내기">
-            </form>
-            <div id="memberWrap">
-                <div id="memberList">
-                    <div id="numberOfMembers"></div>
-                    <div id="memberSelect"></div>
-                </div>
-            </div>
+  
+  
+                          <div id="chatLog" style="overflow:auto; display:flex; flex-direction:column-reverse;">
+                          </div>
+                          <form id="chatForm" name="publish">
+                              <input type="text" autocomplete="off" size="30" id="message" placeholder="메시지를 입력하세요">
+                              <input type="submit" value="보내기">
+          
+                          </form>
+                      <div id="memberWrap">
+                          <div id="memberList">
+                              <div id="numberOfMembers"></div>
+                              <div id="memberSelect"></div>
+                          </div>
+                      </div>
+                  </div>
         </div>
-        </div>
+      </div>
     </div>
-</div>
 
 <!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
@@ -152,6 +156,7 @@
     }
 
     function customAlert() {
-    $('#chat').css('display','block')
+    $('#alertModal').modal('show');
+
   }
 </script>
