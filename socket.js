@@ -35,14 +35,14 @@ io.on('connection', (socket) => {
       io.emit('message', msg);
     });
   
-    socket.on('GET', (data) => {
-      console.log('GET', data);
+    socket.on('PURCHASE', (data) => {
+      console.log('PURCHASE', data);
       const emitData = {
         ...data,
         date: new Date().toISOString(),
       };
   
-      io.emit('eventName havent set yet hererereererrer', emitData);
+      io.emit('PURCHASE_ALERT', emitData);
     });
   
     socket.on('disconnect', () => {

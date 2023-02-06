@@ -110,6 +110,7 @@
 </div>
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 <script src="/socket.js"></script>
 <script>
   let query = window.location.search;
@@ -297,9 +298,10 @@ $(document).ready(() => {
           data: {id, count, address, order_price, order_point, receipt_price},
           success: function (response) {
             let order_id = response['saveOrder'].id
-            purchaseAlert(order_id, receipt_price)
+            socketOrderAlert(order_id, receipt_price)
             customAlert('선택하신 상품을 성공적으로 구매하였습니다.', function () {
               window.location.href='/'
+              
             });
           },
           error: function (error) {
