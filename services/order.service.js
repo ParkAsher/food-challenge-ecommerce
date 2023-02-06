@@ -145,6 +145,8 @@ class OrderService {
                 orderId: one.id,
                 name: one.User.name,
                 phone: one.User.phone,
+                email: one.User.email,
+                nickname: one.User.nickname,
                 address: one.address,
                 order_price: one.order_price,
                 order_point: one.order_point,
@@ -161,6 +163,12 @@ class OrderService {
             return;
         }
         const orderItemList = order.map((item) => {
+            item.Item = !item.Item
+                ? {
+                      name: '',
+                      price: 0,
+                  }
+                : item.Item;
             return {
                 order_id: item.order_id,
                 name: item.Item.name,
@@ -171,6 +179,30 @@ class OrderService {
         });
         return orderItemList;
     };
+
+    searchOrder = async (email) => {
+        const {id} = !await this.orderRepository.searchEmail(email)? false : await this.orderRepository.searchEmail(email)
+        if(!id) {
+            return {list: {}}
+        }
+        const { rows } = await this.orderRepository.searchOrder(id)
+
+        const list = rows.map((one) => {
+                return {
+                    orderId: one.id,
+                    name: one.User.name,
+                    phone: one.User.phone,
+                    email: one.User.email,
+                    nickname: one.User.nickname,
+                    address: one.address,
+                    order_price: one.order_price,
+                    order_point: one.order_point,
+                    receipt_price: one.receipt_price,
+                    createdAt: one.createdAt,
+                };
+        });
+        return { list };
+    }
 }
 
 module.exports = OrderService;

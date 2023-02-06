@@ -44,24 +44,31 @@ class OrderController {
 
             const { status, orderList, firstPage, lastPage, totalPage } =
                 await this.orderService.getOrderInfoByUserId(user_id, page);
-            res.json({ count, firstPage, lastPage, totalPage, list });
-        } catch (error) {
-            next(error);
-        }
-
-    };
-    orderList = async (req, res, next) => {
-        const page = req.query.page || 1;
-        const { count, list, firstPage, lastPage, totalPage } =
+                return res.status(status).json({ orderList, firstPage, lastPage, totalPage });
+            } catch (error) {
+                next(error);
+            }
+            
+        };
+        orderList = async (req, res, next) => {
+            const page = req.query.page || 1;
+            const { count, list, firstPage, lastPage, totalPage } =
             await this.orderService.getAllOrder(page);
-
-        return res.status(status).json({ orderList, firstPage, lastPage, totalPage });
+            res.json({ count, firstPage, lastPage, totalPage, list });
+            
     };
     findOneOrder = async (req, res, next) => {
         const { id } = req.params;
         const order = await this.orderService.findOneOrder(id);
         res.json(order);
     };
+
+    searchOrder = async (req,res,next) => {
+        const {email} = req.params;
+
+        const { list} = await this.orderService.searchOrder(email)
+        res.json({ list })
+    } 
 }
 
 module.exports = OrderController;

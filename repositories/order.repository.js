@@ -138,13 +138,34 @@ class orderRepository {
                 'receipt_price',
                 'createdAt',
             ],
-            include: [{ model: User, attributes: ['name', 'phone'] }],
+            include: [{ model: User, attributes: ['name', 'phone', 'nickname', 'email'] }],
             offset: (page - 1) * 8,
             limit: 8,
             order: [['id', 'DESC']],
         });
         return { count, rows };
     };
+
+    searchEmail = async (email) => {
+        return await User.findOne({where: {email}})
+    }
+    searchOrder = async (id) => {
+        const  rows  = await Order.findAll({
+            where: {user_id: id},
+            attributes: [
+                'id',
+                'address',
+                'order_price',
+                'order_point',
+                'receipt_price',
+                'createdAt',
+            ],
+            include: [{ model: User, attributes: ['name', 'phone', 'nickname', 'email'] }],
+            order: [['id', 'DESC']],
+        });
+        return { rows }
+    }
+
 
     findOneOrder = async (id) => {
         const order = await Orderitem.findAll({
