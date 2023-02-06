@@ -7,6 +7,7 @@ const {
     UserNotUpdated,
     ItemNotDeleted,
     ItemNotUpdated,
+    NotFoundItem,
 } = require('../lib/customerror');
 
 class AdminService {
@@ -190,6 +191,23 @@ class AdminService {
             }
 
             return { status: 200, message: '수정에 성공했습니다.' };
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    searchItem = async (name) => {
+        try {
+            const itemList = await this.adminRepository.searchItem(name);
+
+            const customItemList = itemList.map((item) => {
+                return {
+                    ...item.dataValues,
+                    createdAt: moment(item.createdAt).format('YYYY-MM-DD HH:mm:ss'),
+                };
+            });
+
+            return { status: 200, itemList: customItemList };
         } catch (error) {
             throw error;
         }
