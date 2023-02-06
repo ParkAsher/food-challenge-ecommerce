@@ -27,6 +27,11 @@ class BasketRepository {
         const deleteItemInBasket = await Basket.destroy({ where: { user_id, item_id } });
         return deleteItemInBasket;
     };
+
+    afterOrderdeleteItemInBasket = async (user_id) => {
+        const deleteItemInBasket = await Basket.destroy({ where: { user_id } });
+        return deleteItemInBasket;
+    };
 }
 
 module.exports = BasketRepository;
