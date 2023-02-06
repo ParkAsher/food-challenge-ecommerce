@@ -1,9 +1,11 @@
 const OrderRepository = require('../repositories/order.repository');
+const BasketRepository = require('../repositories/basket.repository');
 const { Order } = require('../models/index');
 const moment = require('moment');
 
 class OrderService {
     orderRepository = new OrderRepository(Order);
+    basketRepository = new BasketRepository(Order);
 
     addToOrder = async (
         user_id,
@@ -51,6 +53,8 @@ class OrderService {
 
                 await this.orderRepository.saveOrderItem(order_id, item_id, count);
             }
+
+            await this.basketRepository.afterOrderdeleteItemInBasket(user_id)
             return saveOrder;
         }
     };
