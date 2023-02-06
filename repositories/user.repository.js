@@ -96,7 +96,6 @@ class UserRepository {
     getUserInfoById = async (id) => {
         try {
             const user = await this.userModel.findOne({
-                attributes: ['name', 'nickname', 'email', 'point'],
                 where: { id },
             });
 
