@@ -17,7 +17,7 @@ class BasketRepository {
     findItemInBasket = async (user_id) => {
         const inBasketThatItem = await Basket.findAll({
             where: { user_id },
-            order: [["id", "desc"]],
+            order: [['id', 'desc']],
             include: [{ model: Item, attributes: ['id', 'name', 'price', 'image'] }],
         });
         return inBasketThatItem;
@@ -25,6 +25,11 @@ class BasketRepository {
 
     deleteItemInBasket = async (user_id, item_id) => {
         const deleteItemInBasket = await Basket.destroy({ where: { user_id, item_id } });
+        return deleteItemInBasket;
+    };
+
+    afterOrderdeleteItemInBasket = async (user_id) => {
+        const deleteItemInBasket = await Basket.destroy({ where: { user_id } });
         return deleteItemInBasket;
     };
 }

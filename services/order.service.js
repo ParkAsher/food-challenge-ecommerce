@@ -1,9 +1,11 @@
 const OrderRepository = require('../repositories/order.repository');
+const BasketRepository = require('../repositories/basket.repository');
 const { Order } = require('../models/index');
 const moment = require('moment');
 
 class OrderService {
     orderRepository = new OrderRepository(Order);
+    basketRepository = new BasketRepository(Order);
 
     addToOrder = async (
         user_id,
@@ -51,6 +53,8 @@ class OrderService {
 
                 await this.orderRepository.saveOrderItem(order_id, item_id, count);
             }
+
+            await this.basketRepository.afterOrderdeleteItemInBasket(user_id)
             return saveOrder;
         }
     };
@@ -112,6 +116,99 @@ class OrderService {
         } catch (error) {
             throw error;
         }
+    };
+
+    getAllOrder = async (page) => {
+        const { count, rows } = await this.orderRepository.allOrderList(page);
+
+        let totalPage = Math.ceil(count / 8);
+
+        // 화면에 보여줄 그룹 : 한 그룹당 5개 페이지 띄우기
+        let pageGroup = Math.ceil(page / 5);
+
+        // 한 그룹의 마지막 페이지 번호
+        let lastPage = pageGroup * 5;
+
+        // 한 그룹의 첫 페이지 번호
+        let firstPage = lastPage - 5 + 1 <= 0 ? 1 : lastPage - 5 + 1;
+
+        // 만약 마지막 페이지 번호가 총 페이지 수 보다 크다면?
+        if (lastPage > totalPage) {
+            lastPage = totalPage;
+        }
+
+        const list = rows.map((one) => {
+            one.User = !one.User
+                ? {
+                      name: '탈퇴 계정',
+                      nickname: '탈퇴 계정',
+                      phone: '탈퇴 계정',
+                      email: '탈퇴 계정',
+                  }
+                : one.User;
+            return {
+                orderId: one.id,
+                name: one.User.name,
+                phone: one.User.phone,
+                email: one.User.email,
+                nickname: one.User.nickname,
+                address: one.address,
+                order_price: one.order_price,
+                order_point: one.order_point,
+                receipt_price: one.receipt_price,
+                createdAt: one.createdAt,
+            };
+        });
+        return { count, list, firstPage, lastPage, totalPage };
+    };
+
+    findOneOrder = async (id) => {
+        const order = await this.orderRepository.findOneOrder(id);
+        if (!order) {
+            return;
+        }
+        const orderItemList = order.map((item) => {
+            item.Item = !item.Item
+                ? {
+                      name: '',
+                      price: 0,
+                  }
+                : item.Item;
+            return {
+                order_id: item.order_id,
+                name: item.Item.name,
+                price: item.Item.price,
+                count: item.count,
+                totalPrice: item.count * item.Item.price,
+            };
+        });
+        return orderItemList;
+    };
+
+    searchOrder = async (email) => {
+        const { id } = !(await this.orderRepository.searchEmail(email))
+            ? false
+            : await this.orderRepository.searchEmail(email);
+        if (!id) {
+            return { list: {} };
+        }
+        const { rows } = await this.orderRepository.searchOrder(id);
+
+        const list = rows.map((one) => {
+            return {
+                orderId: one.id,
+                name: one.User.name,
+                phone: one.User.phone,
+                email: one.User.email,
+                nickname: one.User.nickname,
+                address: one.address,
+                order_price: one.order_price,
+                order_point: one.order_point,
+                receipt_price: one.receipt_price,
+                createdAt: one.createdAt,
+            };
+        });
+        return { list };
     };
 }
 

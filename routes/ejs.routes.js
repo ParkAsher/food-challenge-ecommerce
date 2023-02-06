@@ -174,4 +174,24 @@ router.get('/adm/item-management', auth, (req, res, next) => {
     }
 });
 
+router.get('/adm/order-management', auth, (req, res, next) => {
+    try {
+        // 로그인을 하지 않았는 경우
+        if (!res.locals.user) {
+            const error = new UserNotFound();
+            throw error;
+        }
+        // 로그인을 했지만 관리자가 아닌 경우
+        if (res.locals.user.id !== 1) {
+            const error = new NotAdmin();
+            throw error;
+        }
+
+        // 관리자인 경우
+        res.render('admin_index.ejs', { components: 'orderManagement' });
+    } catch (error) {
+        next(error);
+    }
+});
+
 module.exports = router;

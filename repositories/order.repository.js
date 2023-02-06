@@ -109,7 +109,7 @@ class orderRepository {
 
             const orderIds = order.map((o) => o.id);
 
-            const sql = `select a.order_id, c.createdAt, b.name, a.count, (b.price * a.count) as total_item_price, (b.price * a.count * 0.01) as save_point
+            const sql = `select a.order_id, c.createdAt, b.name, a.count, (b.price * a.count) as total_item_price, (b.price * a.count * 0.05) as save_point
             from Orderitems as a
             inner join Items as b
             on a.item_id = b.id
@@ -127,6 +127,58 @@ class orderRepository {
         } catch (error) {
             throw error;
         }
+    };
+
+    allOrderList = async (page) => {
+        const { count, rows } = await Order.findAndCountAll({
+            attributes: [
+                'id',
+                'address',
+                'order_price',
+                'order_point',
+                'receipt_price',
+                'createdAt',
+            ],
+            include: [{ model: User, attributes: ['name', 'phone', 'nickname', 'email'] }],
+            offset: (page - 1) * 8,
+            limit: 8,
+            order: [['id', 'DESC']],
+        });
+        return { count, rows };
+    };
+
+    searchEmail = async (email) => {
+        return await User.findOne({ where: { email } });
+    };
+    searchOrder = async (id) => {
+        const rows = await Order.findAll({
+            where: { user_id: id },
+            attributes: [
+                'id',
+                'address',
+                'order_price',
+                'order_point',
+                'receipt_price',
+                'createdAt',
+            ],
+            include: [{ model: User, attributes: ['name', 'phone', 'nickname', 'email'] }],
+            order: [['id', 'DESC']],
+        });
+        return { rows };
+    };
+
+    findOneOrder = async (id) => {
+        const order = await Orderitem.findAll({
+            where: { order_id: id },
+            attributes: ['order_id', 'count'],
+            include: [
+                {
+                    model: Item,
+                    attributes: ['name', 'price'],
+                },
+            ],
+        });
+        return order;
     };
 }
 

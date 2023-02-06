@@ -25,9 +25,9 @@ io.on('connection', (socket) => {
 
     // 메시지 핸들
     socket.on('message', (msg) => {
-      console.log('Message received: ' + msg);
-  
-      io.emit('message', msg);
+        console.log('Message received: ' + msg);
+
+        io.emit('message', msg);
     });
 
     
@@ -41,9 +41,8 @@ io.on('connection', (socket) => {
   
       io.emit('PURCHASE_ALERT', emitData);
     });
-  
+
     socket.on('disconnect', () => {
-      console.log(socket.id, '연결이 끊어졌어요!');
+        console.log(socket.id, '연결이 끊어졌어요!');
     });
-  });
-  
+});

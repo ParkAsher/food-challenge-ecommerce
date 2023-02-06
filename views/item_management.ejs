@@ -146,7 +146,7 @@
         type: 'GET',
         url: `/api/admin/items?page=${page}`,
         success: function (response) {
-            const { itemsCount, itemList, firstPage, lastPage, totalPate } = response;
+            const { itemsCount, itemList, firstPage, lastPage, totalPage } = response;
 
             const itemCountHtml = `
                 <div class="item-management-count-title">
@@ -206,7 +206,7 @@
             }
 
             // next 버튼
-            if (page < lastPage) {
+            if (page < totalPage) {
                 const next = `
                     <a href='?page=${Number(page) + 1}'><div class="pagination-btn">다음</div>
                 `;

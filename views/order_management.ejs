@@ -1,0 +1,186 @@
+<div class="user-management-background">
+  <div class="user-management-wrap">
+      <div class="user-management-title">
+          <p>주문목록</p>
+      </div>
+      <div class="user-management-items">
+          <div class="user-management-items-left">
+              <div class="user-management-items-left-btn-wrap">
+                  <button type="button" onclick="window.location.href = '/adm/order-management'">전체목록</button>
+              </div>
+              <div class="user-management-count-wrap" id="count"></div>
+          </div>
+          <div class="user-management-search-wrap">
+              <input type="text" id="email" placeholder="회원 이메일" />
+              <button type="button" onclick="orderSearch()">
+                  <span class="material-icons"> search </span>
+              </button>
+          </div>
+      </div>
+      <div class="table-wrap">
+          <table id="table" class="table" border="1">
+              <thead>
+                  <tr>
+                    <th>주문번호</th>
+                    <th>주문자</th>
+                    <th>전화번호</th>
+                    <th>이메일</th>
+                    <th>닉네임</th>
+                    <th>주소</th>
+                    <th>상품가격</th>
+                    <th>사용 포인트</th>
+                    <th>결제 금액</th>
+                    <th>주문일</th>
+                    <th>조회</th>
+                  </tr>
+              </thead>
+              <tbody id="userList"></tbody>
+          </table>
+          <div id="error-message" class="error-message"></div>
+      </div>
+      <div id="pagination" class="pagination-btn-wrap"></div>
+
+      <div class="user-management-title">
+          <p>주문정보</p>
+      </div>
+      <div class="table-wrap">
+        <table id="table" class="table" border="1">
+            <thead>
+                <tr>
+                  <th>주문번호</th>
+                  <th>상품명</th>
+                  <th>가격</th>
+                  <th>개수</th>
+                  <th>총 가격</th>
+                </tr>
+            </thead>
+            <tbody id="orderList"></tbody>
+        </table>
+        <div id="error-message" class="error-message"></div>
+    </div>
+  </div>
+</div>
+<script>
+
+let query = window.location.search;
+let param = new URLSearchParams(query);
+let page = Number(param.get('page') || 1);
+
+fetch(`http://localhost:5000/api/admin/order?page=${page}`)
+        .then((response) => response.json())
+        .then((data) => {
+          const userCountHtml = `
+                <div class="user-management-count-title">
+                    <p>주문수</p>
+                </div>
+                <div class="user-management-count">
+                    <p>${data.count}</p>
+                </div>
+            `;
+            document.getElementById('count').innerHTML = userCountHtml;
+          for (let i = 0; i < data.list.length; i++) {
+                const row = `
+                  <td>${data.list[i].orderId}</td>
+                  <td>${data.list[i].name}</td>
+                  <td>${data.list[i].phone}</td>
+                  <td>${data.list[i].email}</td>
+                  <td>${data.list[i].nickname}</td>
+                  <td>${data.list[i].address}</td>
+                  <td>${data.list[i].order_price}</td>
+                  <td>${data.list[i].order_point}</td>
+                  <td>${data.list[i].receipt_price}</td>
+                  <td>${data.list[i].createdAt}</td>
+                  <td>
+                      <button type="button" class="user-update-btn" id="${data.list[i].orderId}" onclick="detailInfo(this)")'>조회</button>
+                  </td>
+                `;
+                const tr = document.createElement("tr")
+                tr.innerHTML = row
+                document.getElementById("userList").appendChild(tr)
+              }
+              // pagination 버튼 생성
+            const pages = [];
+
+            // prev 버튼
+            if (page > 1) {
+                const prev = `
+                    <a href='?page=${Number(page) - 1}'><div class="pagination-btn">이전</div></a>
+                `;
+                pages.push(prev);
+            }
+
+            // pages 버튼
+            for (let i = data.firstPage; i <= data.lastPage; i++) {
+                const pageList =
+                    Number(page) === i
+                        ? `<a href='?page=${i}'><div class="pagination-btn active">${i}</div></a>`
+                        : `<a href='?page=${i}'><div class="pagination-btn">${i}</div></a>`;
+
+                pages.push(pageList);
+            }
+
+            // next 버튼
+            if (page < data.totalPage) {
+                const next = `
+                    <a href='?page=${Number(page) + 1}'><div class="pagination-btn">다음</div>
+                `;
+                pages.push(next);
+            }
+
+            document.getElementById('pagination').innerHTML = pages.join('');
+        });   
+
+        function orderSearch() {
+        const userEmail = document.getElementById('email').value;
+        fetch(`http://localhost:5000/api/admin/order/search/${userEmail}`)
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById('userList').innerHTML = ``;
+          for (let i = 0; i < data.list.length; i++) {
+                const row = `
+                  <td>${data.list[i].orderId}</td>
+                  <td>${data.list[i].name}</td>
+                  <td>${data.list[i].phone}</td>
+                  <td>${data.list[i].email}</td>
+                  <td>${data.list[i].nickname}</td>
+                  <td>${data.list[i].address}</td>
+                  <td>${data.list[i].order_price}</td>
+                  <td>${data.list[i].order_point}</td>
+                  <td>${data.list[i].receipt_price}</td>
+                  <td>${data.list[i].createdAt}</td>
+                  <td>
+                      <button type="button" class="user-update-btn" id="${data.list[i].orderId}" onclick="detailInfo(this)")'>조회</button>
+                  </td>
+                `;
+                const tr = document.createElement("tr")
+                tr.innerHTML = row
+                document.getElementById("userList").appendChild(tr)
+              }
+              document.getElementById('pagination').innerHTML = ``
+          
+        });
+        }
+
+        function detailInfo(id) {
+          const item_id = document.getElementById(id.getAttribute('id')).getAttribute('id')
+          fetch(`http://localhost:5000/api/admin/order/${item_id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById('orderList').innerHTML = ``;
+          for (let i = 0; i < data.length; i++) {
+                const row = `
+                  <td>${data[i].order_id}</td>
+                  <td>${data[i].name}</td>
+                  <td>${data[i].price}</td>
+                  <td>${data[i].count}</td>
+                  <td>${data[i].totalPrice}</td>
+                `;
+                const tr = document.createElement("tr")
+                tr.innerHTML = row
+                document.getElementById("orderList").appendChild(tr)
+              }
+          
+        });
+          
+        }
+</script>

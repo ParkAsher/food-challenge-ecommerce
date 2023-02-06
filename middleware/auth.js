@@ -34,6 +34,7 @@ module.exports = async (req, res, next) => {
         res.locals.user = user;
         next();
     } catch (error) {
+        res.clearCookie('accessToken');
         next(error);
     }
 };
