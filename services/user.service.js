@@ -8,7 +8,12 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 /* custom error */
-const { UserAlreadyExist, UserNotFound, IncorrectPassword } = require('../lib/customerror');
+const {
+    UserAlreadyExist,
+    UserNotFound,
+    IncorrectPassword,
+    UserNotDeleted,
+} = require('../lib/customerror');
 
 class UserService {
     userRepository = new UserRepository(User);
@@ -131,6 +136,22 @@ class UserService {
             };
 
             return userInfo;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    deleteUser = async (userInfo) => {
+        try {
+            const deleteCount = await this.userRepository.deleteUser(userInfo);
+
+            // sequelize destroy는 삭제한 행 수를 반환한다.
+            if (deleteCount === 0) {
+                // 조건에 맞지않아 삭제한 것이 없다 = 에러 발생
+                const error = new UserNotDeleted();
+                throw error;
+            }
+            return { status: 200, message: '삭제 완료' };
         } catch (error) {
             throw error;
         }

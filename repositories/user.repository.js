@@ -105,6 +105,18 @@ class UserRepository {
             throw error;
         }
     };
+
+    deleteUser = async (userInfo) => {
+        try {
+            return await this.userModel.destroy({
+                where: {
+                    id: userInfo.id,
+                },
+            });
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = UserRepository;
