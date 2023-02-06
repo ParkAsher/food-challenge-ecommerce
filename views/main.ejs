@@ -1,3 +1,5 @@
+<div style="display:none" id="nickname"><%=user.nickname %></div>
+
 <!-- Swiper -->
 <div class="swiper mySwiper">
     <div class="swiper-wrapper">
@@ -19,13 +21,41 @@
     </div>
 </div>
 
+
+
 <div class="mycards">
     <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box"></div>
 </div>
 <div id="pagination" class="pagination-btn-wrap"></div>
 
+<div class="container">
+    <!-- <img onclick="location.href='/chatRoom'" src="./image/icon.png" height="90px" width="100px" radius="50%" class="chatIcon"> -->
+    <img onclick=customAlert() src="./image/icon.png" height="90px" width="100px" radius="50%" class="chatIcon">
+    <div class="overlay">
+      <div class="imgText">실시간 채팅하기</div>
+    </div>
+</div>      
+
+
+<div class="chat" id="chat">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header" id="chatHeader"></div>
+        <button onclick=location.reload() class="modal-title" style=" background-color: red; color: white; border:none; font-size: 9px; width:auto;">채팅방 나가기</button>
+        <div class="modal-body" id="alertText">
+            <div id="chatLog" style="overflow:auto; display:flex; flex-direction:column-reverse;"></div>
+            <form id="chatForm" name="publish">
+                <input type="text" autocomplete="off" size="20" id="message" placeholder="메시지를 입력하세요">
+                <input type="submit" value="보내기">
+            </form>
+         </div>
+        </div>
+    </div>
+</div>
+
 <!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+<script src="/socket.js"></script>
 <script>
     // swiper library config
     let swiper = new Swiper('.mySwiper', {
@@ -111,4 +141,8 @@
             error: function (response) {},
         });
     }
+
+    function customAlert() {
+    $('#chat').css('display','block')
+  }
 </script>
