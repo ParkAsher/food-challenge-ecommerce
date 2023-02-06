@@ -124,20 +124,19 @@
 
 		// 계정 삭제버튼
 		document.getElementById("delete-btn").addEventListener("click", function() {
-			const inputMessage = prompt('계정의 완전한 삭제를 원하신다면 입력란에 "지금삭제"를 입력해주세요.','입력란')
-			console.log(inputMessage)
+			const inputMessage = prompt('회원 탈퇴를 원하신다면 입력란에 "회원탈퇴"를 입력해주세요.','')
 			
-			if(inputMessage === '지금삭제'){
+			if(inputMessage === '회원탈퇴'){
 				$.ajax({
 					type: 'DELETE',
 					url: `/api/users/mypage/${id}`,
 					success: function (response) {
-						alert('회원 정보가 삭제되었습니다.');
+						alert('회원 탈퇴 처리되었습니다.');
 						window.location.reload();
 					},
 				})
 			} else {
-				alert('회원 정보 삭제에 실패했습니다. 다시 시도해주십시오.')
+				alert('회원 탈퇴에 실패했습니다. 다시 시도해주십시오.')
 				window.location.reload();
 			}
 		});
