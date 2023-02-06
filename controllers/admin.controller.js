@@ -127,9 +127,9 @@ class AdminController {
         try {
             const { name } = await searchItemDataValidate.validateAsync(req.query);
 
-            const { status, item } = await this.adminService.searchItem(name);
+            const { status, itemList } = await this.adminService.searchItem(name);
 
-            return res.status(status).json({ item });
+            return res.status(status).json({ itemList });
         } catch (error) {
             next(error);
         }

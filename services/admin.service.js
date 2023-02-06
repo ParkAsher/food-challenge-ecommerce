@@ -198,14 +198,16 @@ class AdminService {
 
     searchItem = async (name) => {
         try {
-            const item = await this.adminRepository.searchItem(name);
-            // 회원이 없다면?
-            if (!item) {
-                const error = new NotFoundItem();
-                throw error;
-            }
+            const itemList = await this.adminRepository.searchItem(name);
 
-            return { status: 200, item };
+            const customItemList = itemList.map((item) => {
+                return {
+                    ...item.dataValues,
+                    createdAt: moment(item.createdAt).format('YYYY-MM-DD HH:mm:ss'),
+                };
+            });
+
+            return { status: 200, itemList: customItemList };
         } catch (error) {
             throw error;
         }

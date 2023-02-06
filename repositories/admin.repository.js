@@ -132,12 +132,13 @@ class AdminRepository {
 
     searchItem = async (name) => {
         try {
-            return await this.itemModel.findOne({
+            return await this.itemModel.findAll({
                 where: {
                     name: {
                         [Op.like]: `%${name}%`,
                     },
                 },
+                order: [['id', 'DESC']],
             });
         } catch (error) {
             throw error;
