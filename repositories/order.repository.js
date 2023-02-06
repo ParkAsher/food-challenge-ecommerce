@@ -1,10 +1,24 @@
-const { UserAlreadyExist } = require('../lib/customerror');
 const { User, Order, Orderitem, Basket, Item } = require('../models');
+const { sequelize } = require('../models');
+
+/* custom error */
+const { NotFoundOrderList } = require('../lib/customerror');
+const { UserAlreadyExist } = require('../lib/customerror');
 
 class orderRepository {
+    constructor(OrderModel) {
+        this.orderModel = OrderModel;
+    }
+
     // Order 테이블 저장
-    saveOrder = async (user_id, address, order_price, order_point, receipt_price) => {
-        const orderPoint = Number(order_point);
+    saveOrder = async (
+        user_id,
+        address,
+        order_price,
+        orderPoint,
+        receipt_price,
+        accumulatePoint
+    ) => {
         const orderTable = await Order.create({
             user_id,
             address,
@@ -13,16 +27,26 @@ class orderRepository {
             receipt_price,
         });
 
-        // 사용한 포인트 업데이트
-        if (orderPoint > 0) {
-            const findUserPoint = await User.findOne({
-                attributes: ['point'],
-                where: { id: user_id },
-            });
+        const findUserPoint = await User.findOne({
+            attributes: ['point'],
+            where: { id: user_id },
+        });
 
+        // User table point 적립 업데이트
+        await User.update(
+            {
+                point: Math.round(findUserPoint.point + accumulatePoint),
+            },
+            {
+                where: { id: user_id },
+            }
+        );
+
+        // User table point 사용 차감 업데이트
+        if (orderPoint > 0) {
             await User.update(
                 {
-                    point: findUserPoint.point - orderPoint,
+                    point: Math.round(findUserPoint.point - orderPoint),
                 },
                 {
                     where: { id: user_id },
@@ -51,6 +75,57 @@ class orderRepository {
         });
 
         return basketItems;
+    };
+
+    // 해당 유저의 주문내역 수
+    getOrderListCountByUserId = async (user_id) => {
+        try {
+            const orderList = await this.orderModel.findAll({
+                where: { user_id },
+                attributes: ['id'],
+            });
+            const orderCount = orderList.length;
+            return orderCount;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    // 해당 유저의 주문내역을 가져오기
+    getOrderInfoByUserId = async (user_id, page) => {
+        try {
+            const order = await this.orderModel.findAll({
+                where: { user_id },
+                attributes: ['id'],
+                offset: (page - 1) * 8,
+                limit: 8,
+                order: [['id', 'DESC']],
+            });
+
+            if (order.length === 0) {
+                const error = new NotFoundOrderList();
+                throw error;
+            }
+
+            const orderIds = order.map((o) => o.id);
+
+            const sql = `select a.order_id, c.createdAt, b.name, a.count, (b.price * a.count) as total_item_price, (b.price * a.count * 0.01) as save_point
+            from Orderitems as a
+            inner join Items as b
+            on a.item_id = b.id
+            inner join Orders as c
+            on a.order_id = c.id
+            where a.order_id In (:orderIds)`;
+
+            const orderList = await sequelize.query(sql, {
+                replacements: { orderIds },
+                type: sequelize.QueryTypes.SELECT,
+            });
+
+            return orderList;
+        } catch (error) {
+            throw error;
+        }
     };
 
     allOrderList = async (page) => {

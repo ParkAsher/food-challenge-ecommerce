@@ -112,6 +112,29 @@ class UserService {
             throw error;
         }
     };
+
+    getUserInfoById = async (id) => {
+        try {
+            const user = await this.userRepository.getUserInfoById(id);
+
+            // 존재하지 않는다면?
+            if (!user) {
+                const error = new UserNotFound();
+                throw error;
+            }
+
+            const userInfo = {
+                name: user.name,
+                nickname: user.nickname,
+                email: user.email,
+                point: user.point,
+            };
+
+            return userInfo;
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = UserService;

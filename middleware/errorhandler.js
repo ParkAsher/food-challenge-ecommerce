@@ -4,6 +4,11 @@ module.exports = (err, req, res, next) => {
     console.log(req.path);
     console.log(req.route.path);
 
+    /* User Not Found */
+    if (err.name === 'UserNotFound') {
+        return res.render('alert.ejs', { message: err.message, href: '/login' });
+    }
+
     /* token error */
     if (err.name === 'TokenNotFound') {
         return res.render('alert.ejs', { message: err.message, href: '/login' });
@@ -68,6 +73,31 @@ module.exports = (err, req, res, next) => {
             return res
                 .status(joiErrorStatus)
                 .json({ message: '포인트의 형식이 일치하지 않습니다.' });
+        }
+        if (joiErredKey === 'price') {
+            return res
+                .status(joiErrorStatus)
+                .json({ message: '가격의 형식이 일치하지 않습니다. ' });
+        }
+        if (joiErredKey === 'level') {
+            return res
+                .status(joiErrorStatus)
+                .json({ message: '난이도의 형식이 일치하지 않습니다. ' });
+        }
+        if (joiErredKey === 'stock') {
+            return res
+                .status(joiErrorStatus)
+                .json({ message: '수량의 형식이 일치하지 않습니다. ' });
+        }
+        if (joiErredKey === 'image') {
+            return res
+                .status(joiErrorStatus)
+                .json({ message: '이미지 주소의 형식이 일치하지 않습니다. ' });
+        }
+        if (joiErredKey === 'itemId') {
+            return res
+                .status(joiErrorStatus)
+                .json({ message: '상품 아이디의 형식이 일치하지 않습니다.' });
         }
     }
 
@@ -138,8 +168,10 @@ module.exports = (err, req, res, next) => {
         if (err.name === 'TokenNotFound') {
             return res.status(err.status).json({ message: err.message });
         }
-        if (err.name === "UserNotLogined") {
-            return res.status(err.status).json({ message: err.message });
+        if (err.name === 'UserNotLogined') {
+            if (err.name === 'UserNotLogined') {
+                return res.status(err.status).json({ message: err.message });
+            }
         }
     }
 
@@ -172,11 +204,44 @@ module.exports = (err, req, res, next) => {
         return res.status(400).json({ message: '수정에 실패했습니다.' });
     }
 
-    if (req.path === '/api/basket') {
-        console.log(req.path);
-        if (err.name === "TokenNotFound") {
-            return res.status(err.status).json({message: err.message})
+    /* 마이페이지 주문내역 */
+    if (req.route.path === '/mypage/:id') {
+        /* 주문내역이 없음 */
+        if (err.name === 'NotFoundOrderList') {
+            return res.status(err.status).json({ message: err.message });
         }
     }
-    
+
+    if (req.path === '/api/basket') {
+        console.log(req.path);
+        if (err.name === 'TokenNotFound') {
+            return res.status(err.status).json({ message: err.message });
+        }
+        if (err.name === 'TokenNotFound') {
+            return res.status(err.status).json({ message: err.message });
+        }
+    }
+
+    /* 이미지 업로드 */
+    if (req.path === '/api/admin/image') {
+        return res.status(400).json({ message: '이미지 업로드에 실패했습니다.' });
+    }
+
+    /* 관리자페이지 상품관리 상품 리스트 불러오기 */
+    if (req.path === '/api/admin/items') {
+        return res.status(400).json({ message: '데이터를 불러올 수 없습니다.' });
+    }
+
+    /* 상품 삭제 */
+    if (req.path === '/api/admin/item' && req.method === 'DELETE') {
+        return res.status(400).json({ message: '삭제에 실패했습니다.' });
+    }
+
+    /* 상품 수정 */
+    if (req.path === '/api/admin/item' && req.method === 'PUT') {
+        if (err.name === 'ItemNotUpdated') {
+            return res.status(err.status).json({ message: err.message });
+        }
+        return res.status(400).json({ message: '수정에 실패했습니다.' });
+    }
 };

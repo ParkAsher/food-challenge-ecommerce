@@ -70,6 +70,12 @@
       <h2 style="display:inline; color:red"> 총 결제금액</h2>
       <span class="card-price" style="color:red" id="totalToPay"></span>
     </div>
+
+    <div class="d-flex justify-content-between mb-3">
+      <h2 style="display:inline; color:green"> 적립 포인트 - 5%</h2>
+      <span class="card-price" style="color:green" id="accumulatePoint"></span>
+    </div>
+
     <div>
       <button onclick=buyOrder() type="button" class="btn btn-order btn-block" style="float:right;">
         결제
@@ -117,13 +123,13 @@ $(document).ready(() => {
   if (itemName) {
 
   let order_price = param.get('totalPrice');
-
+  let accumulatePoint = Math.round(order_price * 0.05)
   $('#order_price').append(order_price);
   $('#totalToPay').append(order_price);
 
   let temp_html = `<div class="card mb-4">
                   <div class="row no-gutters">
-                    <div class="col-4" style="background: #ffffff;" onclick="location.href='/detail?goodsId=1'">
+                    <div class="col-4" style="background: #ffffff;">
                       <img src="/극혐.avif" class="card-img-top h-100" alt="...">
                     </div>
                     <div class="col-sm-7 card-body px-3">
@@ -145,6 +151,7 @@ $(document).ready(() => {
                   </div>
                 </div>`
     $('#itemList').append(temp_html)
+    $('#accumulatePoint').append(accumulatePoint)
 
   } else {
     // 장바구니 리스트 가져오기 & 결제금액 계산
@@ -173,7 +180,7 @@ $(document).ready(() => {
 
           let temp_html = `<div class="card mb-4">
                             <div class="row no-gutters">
-                              <div class="col-4" style="background: #ffffff;" onclick="location.href='/detail?goodsId=1'">
+                              <div class="col-4" style="background: #ffffff;">
                                 <img src="/극혐.avif" class="card-img-top h-100" alt="...">
                               </div>
                               <div class="col-sm-7 card-body px-3">
@@ -200,6 +207,11 @@ $(document).ready(() => {
           let total = itemPriceArray.reduce((acc, cur) => acc + cur)
           $('#order_price').append(total);
           $('#totalToPay').append(total);
+  
+          // 적립 포인트
+          let accumulatePoint = Math.round(total * 0.05)
+          $('#accumulatePoint').append(accumulatePoint)
+
       },
     });
     }
@@ -226,7 +238,7 @@ $(document).ready(() => {
     }).open();
   }
 
-  // 결제금액 계산 함수
+  // 사용 버튼 눌렀을 시 결제금액 재계산 함수
   function getTotalPrice() {
 
     let order_point = Number($('#order_point').val())
@@ -248,11 +260,14 @@ $(document).ready(() => {
 
       return
 
-    } else {
+    } else { // 알맞은 포인트 입력 후 사용 눌렀을 때
       const updatePoint = myPoint - order_point
 
       $('#totalToPay').empty()
       $('#totalToPay').append(totalToPay);
+
+      $('#accumulatePoint').empty()
+      $('#accumulatePoint').append(Math.round(totalToPay * 0.05))
 
       $('#myPoint').empty()
       $('#myPoint').append(updatePoint);
@@ -281,7 +296,7 @@ $(document).ready(() => {
           data: {id, count, address, order_price, order_point, receipt_price},
           success: function () {
             customAlert('선택하신 상품을 성공적으로 구매하였습니다.', function () {
-              window.location.reload();
+              window.location.href='/'
             });
           },
           error: function (error) {
@@ -291,13 +306,15 @@ $(document).ready(() => {
     } else {
         const storageBasketItems = localStorage.getItem('basketItems')
         const basketItems = JSON.parse(storageBasketItems)
+
       $.ajax({
           type: 'POST',
           url: `/api/orders/`,
           data: {basketItems, address, order_price, order_point, receipt_price },
           success: function () {
             customAlert('선택하신 상품을 성공적으로 구매하였습니다.', function () {
-              window.location.reload();
+              localStorage.removeItem('basketItems')
+              window.location.href='/'
             });
           },
           error: function (error) {

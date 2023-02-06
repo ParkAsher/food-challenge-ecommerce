@@ -1,7 +1,9 @@
 const OrderRepository = require('../repositories/order.repository');
+const { Order } = require('../models/index');
+const moment = require('moment');
 
 class OrderService {
-    orderRepository = new OrderRepository();
+    orderRepository = new OrderRepository(Order);
 
     addToOrder = async (
         user_id,
@@ -13,13 +15,17 @@ class OrderService {
         order_point,
         receipt_price
     ) => {
+        const orderPoint = Number(order_point);
+        const accumulatePoint = order_price * 0.05;
+
         if (item_id) {
             const saveOrder = await this.orderRepository.saveOrder(
                 user_id,
                 address,
                 order_price,
-                order_point,
-                receipt_price
+                orderPoint,
+                receipt_price,
+                accumulatePoint
             );
 
             const order_id = saveOrder.id;
@@ -33,7 +39,8 @@ class OrderService {
                 address,
                 order_price,
                 order_point,
-                receipt_price
+                receipt_price,
+                accumulatePoint
             );
 
             const order_id = saveOrder.id;
@@ -60,6 +67,51 @@ class OrderService {
                 itemPrice: item.Item.price,
             };
         });
+    };
+
+    getOrderInfoByUserId = async (user_id, page) => {
+        try {
+            // 해당 유저의 주문내역을 전부 가져옴
+            const orderList = await this.orderRepository.getOrderInfoByUserId(user_id, page);
+
+            // 해당 유저의 주문내역의 count를 가져옴
+            const orderCount = await this.orderRepository.getOrderListCountByUserId(user_id);
+
+            // 총 페이지 수 : 한 페이지당 8개의 주문내역
+            let totalPage = Math.ceil(orderCount / 8);
+
+            // 화면에 보여줄 그룹 : 한 그룹당 보여줄 페이지 5개
+            let pageGroup = Math.ceil(page / 5);
+
+            // 한 그룹의 마지막 페이지 번호
+            let lastPage = pageGroup * 5;
+
+            // 한 그룹의 첫 페이지 번호
+            let firstPage = lastPage - 5 + 1 <= 0 ? 1 : lastPage - 5 + 1;
+
+            // 만약 마지막 페이지 번호가 총 페이지 수 보다 크다면?
+            if (lastPage > totalPage) {
+                lastPage = totalPage;
+            }
+
+            const customOrderList = orderList.map((o) => {
+                return {
+                    ...o,
+                    createdAt: moment(o.createdAt).format('YYYY-MM-DD HH:mm:ss'),
+                    save_point: parseInt(o.save_point),
+                };
+            });
+
+            return {
+                status: 200,
+                orderList: customOrderList,
+                firstPage,
+                lastPage,
+                totalPage,
+            };
+        } catch (error) {
+            throw error;
+        }
     };
 
     getAllOrder = async (page) => {

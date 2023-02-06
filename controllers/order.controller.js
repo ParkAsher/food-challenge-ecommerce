@@ -1,6 +1,7 @@
 const OrderService = require('../services/order.service');
+const { pageValidate } = require('../lib/joischema');
 
-class OrderContorller {
+class OrderController {
     orderService = new OrderService();
 
     saveOrder = async (req, res, next) => {
@@ -36,14 +37,26 @@ class OrderContorller {
         res.status(200).json({ getAllBasketItems });
     };
 
+    getOrderInfoByUserId = async (req, res, next) => {
+        try {
+            const { id: user_id } = req.params;
+            const { page } = await pageValidate.validateAsync(req.query);
+
+            const { status, orderList, firstPage, lastPage, totalPage } =
+                await this.orderService.getOrderInfoByUserId(user_id, page);
+            res.json({ count, firstPage, lastPage, totalPage, list });
+        } catch (error) {
+            next(error);
+        }
+
+    };
     orderList = async (req, res, next) => {
         const page = req.query.page || 1;
-        const { count, list, firstPage, lastPage, totalPage } = await this.orderService.getAllOrder(
-            page
-        );
-        res.json({ count, firstPage, lastPage, totalPage, list });
-    };
+        const { count, list, firstPage, lastPage, totalPage } =
+            await this.orderService.getAllOrder(page);
 
+        return res.status(status).json({ orderList, firstPage, lastPage, totalPage });
+    };
     findOneOrder = async (req, res, next) => {
         const { id } = req.params;
         const order = await this.orderService.findOneOrder(id);
@@ -51,4 +64,4 @@ class OrderContorller {
     };
 }
 
-module.exports = OrderContorller;
+module.exports = OrderController;
