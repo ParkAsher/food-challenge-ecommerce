@@ -1,20 +1,29 @@
-<div id="cart_wrap">
-    <table id="cart_table">
-        <thead>
-            <tr>
-              <th>상품이미지</th>
-              <th>상품명</th>
-              <th>수량</th>
-              <th>가격</th>
-              <th>적립</th>
-              <th>금액</th>
-            </tr>
-        </thead>
-    </table>
+<div class="basket-title-background"></div>
+<div class="basket-container">
+    <div class="basket-wrap">
+        <div class="basket-title">
+            <p>장바구니 목록</p>
+        </div>
+        <div class="cart-wrap" id="cart_wrap">
+            <table id="cart_table">
+                <thead>
+                    <tr>
+                        <th>상품이미지</th>
+                        <th>상품명</th>
+                        <th>수량</th>
+                        <th>적립포인트</th>
+                        <th>개당 가격</th>
+                        <th>총 금액</th>
+                        <th></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="price_wrap"></div>
+        <div id="total_wrap"></div>
+        <div id="button_wrap"></div>
+    </div>
 </div>
-<div id="price_wrap"></div>
-<div id="total_wrap"></div>
-<div id="button_wrap"></div>
 <script>
     fetch('http://localhost:5000/api/basket')
         .then((response) => response.json())
@@ -48,37 +57,49 @@
                 document.getElementById('button_wrap').appendChild(buttonDiv);
             } else if (data.data[0]) {
                 for (let i = 0; i < data.data.length; i++) {
-                    const row = `
-                    <td>
-                        <img src="${data.data[i].image}" alt="상품이미지">
-                    </td>
-                    <td>
-                        <span class="name">${data.data[i].name}</span>
-                    </td>
-                    <td>
-                        <span class="count">${data.data[i].count}</span>
-                    </td>
-                    <td>
-                        <span>${data.data[i].point}P</span>
-                    </td>
-                    <td>
-                        <span><span>(${data.data[i].price})</span><span class="price" >${data.data[i].totalPrice}</span>원<button id="${data.data[i].id}" onclick="del(this)">X</button></span>
-                    </td>
+                    const row = `<tr>
+                        <td>
+                            <img src="${data.data[i].image}" alt="상품이미지">
+                        </td>
+                        <td>
+                            <span class="name">${data.data[i].name}</span>
+                        </td>
+                        <td>
+                            <span class="count">${data.data[i].count}</span>
+                        </td>
+                        <td>
+                            <span>${data.data[i].point}P</span>
+                        </td>
+                        <td>
+                            <span>${data.data[i].price}원</span>                                     
+                        </td>
+                        <td>
+                            <span class="price" >
+                                ${data.data[i].totalPrice}원
+                            </span>
+                            
+                        </td>
+                        <td>
+                            <button type="button" class="delete-btn" id="${data.data[i].id}" onclick="del(this)">
+                                삭제
+                            </button>    
+                        </td>
+                    </tr>
                   
                   `;
                     const tr = document.createElement('tr');
                     tr.innerHTML = row;
                     document.getElementById('cart_table').appendChild(tr);
                 }
-                const totalPrice = `<span style="display: flex;justify-content: flex-end;margin-top:30px;font-weight: bold;">총합 ${data.price}원</span>`;
+                const totalPrice = `<span class="total-price">합계 ${data.price}원</span>`;
                 const money = document.createElement('div');
                 money.innerHTML = totalPrice;
                 document.getElementById('total_wrap').appendChild(money);
 
                 const button = `
                 <div style="margin-top:30px;display: flex;justify-content: space-around;margin-top:20px">
-                  <button onclick="location.href='/'">더 담으러 가기</button>
-                    <button onclick="location.href='/order'">구매하기</button>
+                  <button type="button" class="more-btn" onclick="location.href='/'">더 담으러 가기</button>
+                    <button type="button" class="buy-btn" onclick="location.href='/order'">구매하러 가기</button>
                     </div>
                     
                 `;
