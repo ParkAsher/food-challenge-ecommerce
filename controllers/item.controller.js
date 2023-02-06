@@ -19,7 +19,7 @@ class ItemContorller {
 
             const itemDetail = await this.itemService.findOneItem(id);
 
-            res.json({ data: itemDetail });
+            res.json({ itemDetail });
         } catch (err) {
             next(err);
         }

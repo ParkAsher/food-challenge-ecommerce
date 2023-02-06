@@ -1,70 +1,140 @@
+<div class="item-detail-background">
+    <div class="item-detail-wrap">
+        <div class="item-detail-title-wrap">
+            <p>상품 상세</p>
+        </div>
+        <div class="item-detail-form">
+            <div class="item-detail-image" id="item-detail-image"></div>
+            <div class="item-detail-content">
+                <div class="item-detail-name-wrap" id="item-detail-name-wrap"></div>
+                <div class="item-detail-desc">
+                    <div class="item-detail-desc-row">
+                        <div class="item-detail-desc-title">
+                            <p>상품 난이도</p>
+                        </div>
+                        <div id="item-detail-level" class="item-detail-desc-content"></div>
+                    </div>
+                    <div class="item-detail-desc-row">
+                        <div class="item-detail-desc-title">
+                            <p>개당 가격</p>
+                        </div>
+                        <div id="item-detail-price" class="item-detail-desc-content"></div>
+                    </div>
+                    <div class="item-detail-desc-row">
+                        <div class="item-detail-desc-title">
+                            <p>적립포인트</p>
+                        </div>
+                        <div id="item-detail-point" class="item-detail-desc-content"></div>
+                    </div>
+                    <div class="item-detail-desc-row">
+                        <div class="item-detail-desc-title">
+                            <p>잔여 수량</p>
+                        </div>
+                        <div id="item-detail-stock" class="item-detail-desc-content"></div>
+                    </div>
+                </div>
+                <div class="item-detail-purchase-wrap">
+                    <div class="item-detail-desc-row">
+                        <div class="item-detail-desc-title">
+                            <p>구매수량</p>
+                        </div>
+                        <div id="item-detail-stock" class="item-detail-desc-content">
+                            <button type="button" class="item-count-minus" onclick="minus()">
+                                -
+                            </button>
+                            <input type="text" name="count" value="1" id="count" min="1" />
+                            <button type="button" class="item-count-plus" onclick="plus()">
+                                +
+                            </button>
+                        </div>
+                    </div>
+                    <div class="item-detail-desc-row">
+                        <div class="item-detail-desc-title">
+                            <p>총 주문금액</p>
+                        </div>
+                        <div id="item-detail-total-price" class="item-detail-desc-content"></div>
+                    </div>
+                </div>
+                <div class="item-detail-purchase-btn-wrap">
+                    <button onclick="addMyCart()">장바구니</button>
+                    <button onclick="pass()">바로구매</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="info"></div>
 <script>
     const item_id = window.location.pathname.split('/')[2] || 1;
 
     fetch(`http://localhost:5000/api/items/${item_id}`)
         .then((response) => response.json())
-        .then(( data ) => {
-            if (data.message) {
-                alert(data.message)
-                return location.href = "/"
-            } else{
-            const row = `
-    <img src="/극혐.avif" alt="상품 이미지" style="margin-top:50px; margin-left:50px; width:500px;heigth:500px;">
-    <div>
-    <div style="margin-left:50px;margin-top:10px"><span>상품명</span><span id="name">${
-        data.data.name
-    }</span></div>
-    <div style="margin-left:50px;margin-top:10px"><span>챌린지 단계</span><span>${
-        data.data.level
-    }단계</span></div>
-    <div style="margin-left:50px;margin-top:10px"><span>가격</span><span id="price">${
-        data.data.price
-    }</span><span>원</span></div>
-    <div style="margin-left:50px;margin-top:10px"><span>적립포인트 ${
-        data.data.price * (5 / 100)
-    }</span><span>P</span></div>
-    <form action="" style="margin-left:50px;margin-top:10px">
-      <span>구매수량</span>
-      <input style="HEIGHT: 20px" onclick="javascript:this.form.count.value--;mul('minus')" type="button" value="-">
-      <input type="text" name="count" value="1" id="count" min="1">
-      <input style="HEIGHT: 20px" onclick="javascript:this.form.count.value++;mul('plus')" type="button" value="+">
-    </form>
-    <div style="margin-left:50px;margin-top:10px"><p id="total" style="display:inline-block">100</p><span>원</span></div>
-    <div style="margin-left:50px;margin-top:10px"><button onclick="addMyCart()">장바구니</button>
-    <button onclick="pass()">바로구매</button></div>
-    </div>
-    `;
+        .then((data) => {
+            const { message, itemDetail } = data;
+            if (message) {
+                alert(message);
+                return (location.href = '/');
+            } else {
+                const itemImageHtml = `
+                    <img src="${itemDetail.image}" />
+                `;
+                document.getElementById('item-detail-image').innerHTML = itemImageHtml;
 
-            const tr = document.createElement('div');
-            tr.innerHTML = row;
-            document.getElementById('info').appendChild(tr);
-}
+                const itemIdHtml = `<p id='item-name'>${itemDetail.name}</p>`;
+                document.getElementById('item-detail-name-wrap').innerHTML = itemIdHtml;
+
+                const itemLevelHtml = `<p id='item-level'>${itemDetail.level} 단계</p>`;
+                document.getElementById('item-detail-level').innerHTML = itemLevelHtml;
+
+                const itemPriceHtml = `<p id='item-price'>${Number(
+                    itemDetail.price
+                ).toLocaleString()} 원</p>`;
+                document.getElementById('item-detail-price').innerHTML = itemPriceHtml;
+
+                const itemPointHtml = `<p id='item-point'>${itemDetail.price * 0.05} P</p>`;
+                document.getElementById('item-detail-point').innerHTML = itemPointHtml;
+
+                const itemStockHtml = `<p id='item-stock'>${itemDetail.stock} 개</p>`;
+                document.getElementById('item-detail-stock').innerHTML = itemStockHtml;
+            }
         })
         .catch((err) => {
-                console.log(err)
-                location.href= "/"
-            });
-        
+            console.log(err);
+            location.href = '/';
+        });
 
-    function mul(type) {
-        // 결과를 표시할 element
-        const resultElement = document.getElementById('total');
-        const price = document.getElementById('price').innerText;
-        const multi = document.getElementById('count').value;
+    function plus() {
+        const stock = Number(document.getElementById('item-stock').innerText.split(' ')[0]);
+        let count = Number(document.getElementById('count').value);
+        if (count === stock) return;
 
-        // 현재 화면에 표시된 값
-        let number = resultElement.innerText;
+        count += 1;
 
-        // 더하기/빼기
-        if (type === 'plus') {
-            number = price * multi;
-        } else if (type === 'minus') {
-            number = price * multi;
-        }
+        const price = Number(
+            document.getElementById('item-price').innerText.split(' ')[0].split(',').join('')
+        );
 
-        // 결과 출력
-        resultElement.innerText = number;
+        document.getElementById('count').value = count;
+        document.getElementById('item-detail-total-price').innerHTML = `<p id="item-total-price">${
+            count * price
+        } 원</p>`;
+    }
+
+    function minus() {
+        let count = Number(document.getElementById('count').value);
+        if (count === 1) return;
+
+        count -= 1;
+
+        const price = Number(
+            document.getElementById('item-price').innerText.split(' ')[0].split(',').join('')
+        );
+
+        document.getElementById('count').value = count;
+        document.getElementById('item-detail-total-price').innerHTML = `<p id="item-total-price">${
+            count * price
+        } 원</p>`;
     }
 
     function addMyCart() {
@@ -81,29 +151,33 @@
         })
             .then((response) => response.json())
             .then((data) => {
-            if (data.message) {
-                alert(data.message)
-                return location.href = '/login';
-            }
-            
-            if (confirm("장바구니로 이동 하시겠습니까?")) {
-                location.href = '/basket';
-            } else {
-                location.href = '/';
-            }
+                if (data.message) {
+                    alert(data.message);
+                    return (location.href = '/login');
+                }
+
+                if (confirm('장바구니로 이동 하시겠습니까?')) {
+                    location.href = '/basket';
+                } else {
+                    location.href = '/';
+                }
             })
             .catch((err) => {
-                alert(err.message)
+                alert(err.message);
                 location.href = '/';
             });
     }
 
     function pass() {
         let count = document.getElementById('count').value;
-        let name = document.getElementById('name').innerHTML;
-        let price = document.getElementById('price').innerText;
-        let totalPrice = document.getElementById('total').innerText;
-        console.log(document.getElementById('name'));
+        let name = document.getElementById('item-name').innerText;
+        let price = document
+            .getElementById('item-price')
+            .innerText.split(' ')[0]
+            .split(',')
+            .join('');
+        let totalPrice = document.getElementById('item-total-price').innerText.split(' ')[0];
+        console.log(count, name, price, totalPrice);
 
         location.href = `/order?item_id=${item_id}&name=${name}&price=${price}&count=${count}&totalPrice=${totalPrice}`;
     }
