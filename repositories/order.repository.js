@@ -115,7 +115,8 @@ class orderRepository {
             on a.item_id = b.id
             inner join Orders as c
             on a.order_id = c.id
-            where a.order_id In (:orderIds)`;
+            where a.order_id In (:orderIds)
+            order by c.createdAt DESC`;
 
             const orderList = await sequelize.query(sql, {
                 replacements: { orderIds },

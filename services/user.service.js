@@ -14,6 +14,7 @@ const {
     IncorrectPassword,
     UserNotDeleted,
 } = require('../lib/customerror');
+const moment = require('moment/moment');
 
 class UserService {
     userRepository = new UserRepository(User);
@@ -129,10 +130,8 @@ class UserService {
             }
 
             const userInfo = {
-                name: user.name,
-                nickname: user.nickname,
-                email: user.email,
-                point: user.point,
+                ...user.dataValues,
+                createdAt: moment(user.createdAt).format('YYYY-MM-DD HH:mm:ss'),
             };
 
             return userInfo;

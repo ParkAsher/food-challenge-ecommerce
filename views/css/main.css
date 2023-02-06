@@ -5,10 +5,15 @@ a {
 }
 
 .con {
-    margin: 20px auto 0px auto;
+    margin: 2rem auto;
     text-align: center;
-    width: 95%;
-    max-width: 1200px;
+    width: 100%;
+    max-width: 1300px;
+}
+
+.menu-box {
+    padding: 2rem 0;
+    border-bottom: 0.5px solid lightcoral;
 }
 
 .menu-box > ul > li {
@@ -21,6 +26,7 @@ a {
     text-align: center;
     font-weight: bold;
     position: relative;
+    font-size: 1.5rem;
 }
 .menu-box > ul > li:hover > a {
     color: red;
@@ -28,9 +34,24 @@ a {
 }
 
 .mycards {
-    margin: 20px auto 0px auto;
-    width: 95%;
-    max-width: 1200px;
+    margin: 2rem auto;
+    width: 100%;
+    max-width: 1300px;
+}
+
+.mycards img {
+    height: 20rem;
+    object-fit: cover;
+}
+
+.mycards p.card-title {
+    font-weight: bold;
+    padding-bottom: 0.5rem;
+    border-bottom: 0.5px solid lightcoral;
+}
+
+.mycards p.card-text {
+    text-align: right;
 }
 
 /* swiper */

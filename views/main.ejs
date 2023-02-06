@@ -10,11 +10,11 @@
 
 <div class="con">
     <div class="menu-box">
-        <ul class="row" >
-            <li onclick= getItems(0) class="cell"><a href="#">전체보기</a></li>
-            <li onclick= getItems(1) class="cell"><a href="#">1단계 음식</a></li>
-            <li onclick= getItems(2) class="cell"><a href="#">2단계 음식</a></li>
-            <li onclick= getItems(3) class="cell"><a href="#">3단계 음식</a></li>
+        <ul class="row">
+            <li class="cell"><a href="?page=1&level=0">전체보기</a></li>
+            <li class="cell"><a href="?page=1&level=1">1단계 음식</a></li>
+            <li class="cell"><a href="?page=1&level=2">2단계 음식</a></li>
+            <li class="cell"><a href="?page=1&level=3">3단계 음식</a></li>
             <li onclick="location.href='/chatRoom'" class="cell"><a href="#">대화방</a></li>
         </ul>
     </div>
@@ -23,6 +23,7 @@
 <div class="mycards">
     <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box"></div>
 </div>
+<div id="pagination" class="pagination-btn-wrap"></div>
 
 <!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
@@ -44,71 +45,75 @@
         },
     });
 
+    const page = new URLSearchParams(location.search).get('page') || 1;
+    const level = new URLSearchParams(location.search).get('level') || 0;
+    getItems(page, level);
+
     // 아이템 전체조회
-    function getItems(level) {
+    function getItems(page, level) {
+        console.log(page, level);
+
         $('#cards-box').empty();
 
-        if (level === 0) {
-            $.ajax({
-                type: 'GET',
-                url: `/api/items`,
-                data: {},
-                headers: {
-                    //   authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-                success: function (response) {
-                    let rows = response['items'];
+        $.ajax({
+            type: 'GET',
+            url: `/api/items?page=${page}&level=${level}`,
+            success: function (response) {
+                const { itemsCount, itemList, firstPage, lastPage, totalPage } = response;
 
-                    for (let i = 0; i < rows.length; i++) {
-                        let item_id = rows[i]['item_id'];
-                        let name = rows[i]['name'];
-                        let price = rows[i]['price'];
-                        let image = rows[i]['image'];
+                console.log(itemList);
 
-                        let temp_html = `<div class="col">
+                itemList.map((item) => {
+                    let tempHtml = `
+                        <div class="col">
                                 <div class="card h-100">
-                                    <img onclick="location.href='/itemDetail/${item_id}'"; src="./극혐.avif"/class="card-img-top">
+                                    <img onclick="location.href='/itemDetail/${
+                                        item.item_id
+                                    }'" src="${item.image}" class="card-img-top">
                                     <div class="card-body">
-                                    <h5 class="card-title" style="text-align: center;">${name}</h5>
-                                    <p class="card-text" style="text-align: center;">${price}원</p>
+                                    <p class="card-title">${item.name}</p>
+                                    <p class="card-text">${Number(
+                                        item.price
+                                    ).toLocaleString()}원</p>
                                 </div>
                             </div>
-                        </div>`;
-                        $('#cards-box').append(temp_html);
-                    }
-                },
-            });
-        } else {
-            $.ajax({
-                type: 'GET',
-                url: `/api/items/level?level=${level}`,
-                data: {},
-                headers: {
-                    //   authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-                success: function (response) {
-                    let rows = response['itemsByLevel'];
-                    console.log(rows);
+                        </div>
+                    `;
+                    $('#cards-box').append(tempHtml);
+                });
 
-                    for (let i = 0; i < rows.length; i++) {
-                        let item_id = rows[i]['item_id'];
-                        let name = rows[i]['name'];
-                        let price = rows[i]['price'];
-                        let image = rows[i]['image'];
+                // pagination 버튼 생성
+                const pages = [];
 
-                        let temp_html = `<div class="col">
-                                <div class="card h-100">
-                                    <img onclick="location.href='/itemDetail/${item_id}'"; src="./별난음식.jpeg"/class="card-img-top">
-                                    <div class="card-body">
-                                    <h5 class="card-title" style="text-align: center;">${name}</h5>
-                                    <p class="card-text" style="text-align: center;">${price}원</p>
-                                </div>
-                            </div>
-                        </div>`;
-                        $('#cards-box').append(temp_html);
-                    }
-                },
-            });
-        }
+                // prev 버튼
+                if (page > 1) {
+                    const prev = `<a href='?page=${
+                        Number(page) - 1
+                    }&level=${level}'><div class="pagination-btn">이전</div></a>`;
+                    pages.push(prev);
+                }
+
+                // pages 버튼
+                for (let i = firstPage; i <= lastPage; i++) {
+                    const pageList =
+                        Number(page) === i
+                            ? `<a href='?page=${i}&level=${level}'><div class="pagination-btn active">${i}</div></a>`
+                            : `<a href='?page=${i}&level=${level}'><div class="pagination-btn">${i}</div></a>`;
+
+                    pages.push(pageList);
+                }
+
+                // next 버튼
+                if (page < lastPage) {
+                    const next = `<a href='?page=${
+                        Number(page) + 1
+                    }&level=${level}'><div class="pagination-btn">다음</div>`;
+                    pages.push(next);
+                }
+
+                document.getElementById('pagination').innerHTML = pages.join('');
+            },
+            error: function (response) {},
+        });
     }
 </script>
