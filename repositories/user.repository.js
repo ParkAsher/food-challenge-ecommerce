@@ -92,6 +92,31 @@ class UserRepository {
             throw error;
         }
     };
+
+    getUserInfoById = async (id) => {
+        try {
+            const user = await this.userModel.findOne({
+                attributes: ['name', 'nickname', 'email', 'point'],
+                where: { id },
+            });
+
+            return user;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    deleteUser = async (userInfo) => {
+        try {
+            return await this.userModel.destroy({
+                where: {
+                    id: userInfo.id,
+                },
+            });
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 module.exports = UserRepository;

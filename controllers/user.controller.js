@@ -7,6 +7,7 @@ const {
     getUserIdDataValidate,
     userUpdatePasswordDataValidate,
     userGetEmailDataValidate,
+    deleteUserDataValidate,
 } = require('../lib/joischema');
 
 class UserController {
@@ -78,6 +79,32 @@ class UserController {
             const { status, email } = await this.userService.getUserEmail(userInfo);
 
             return res.status(status).json({ email });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    getUserInfoById = async (req, res, next) => {
+        try {
+            const { id } = req.params;
+
+            const user = await this.userService.getUserInfoById(id);
+
+            return res.status(200).json({ user });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    deleteUser = async (req, res, next) => {
+        try {
+            res.clearCookie('accessToken');
+
+            const userInfo = await deleteUserDataValidate.validateAsync(req.params);
+
+            const { status, message } = await this.userService.deleteUser(userInfo);
+
+            return res.status(status).json({ message });
         } catch (error) {
             next(error);
         }

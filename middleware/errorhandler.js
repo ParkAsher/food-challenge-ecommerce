@@ -4,6 +4,11 @@ module.exports = (err, req, res, next) => {
     console.log(req.path);
     console.log(req.route.path);
 
+    /* User Not Found */
+    if (err.name === 'UserNotFound') {
+        return res.render('alert.ejs', { message: err.message, href: '/login' });
+    }
+
     /* token error */
     if (err.name === 'TokenNotFound') {
         return res.render('alert.ejs', { message: err.message, href: '/login' });
@@ -164,7 +169,9 @@ module.exports = (err, req, res, next) => {
             return res.status(err.status).json({ message: err.message });
         }
         if (err.name === 'UserNotLogined') {
-            return res.status(err.status).json({ message: err.message });
+            if (err.name === 'UserNotLogined') {
+                return res.status(err.status).json({ message: err.message });
+            }
         }
     }
 
@@ -197,8 +204,19 @@ module.exports = (err, req, res, next) => {
         return res.status(400).json({ message: '수정에 실패했습니다.' });
     }
 
+    /* 마이페이지 주문내역 */
+    if (req.route.path === '/mypage/:id') {
+        /* 주문내역이 없음 */
+        if (err.name === 'NotFoundOrderList') {
+            return res.status(err.status).json({ message: err.message });
+        }
+    }
+
     if (req.path === '/api/basket') {
         console.log(req.path);
+        if (err.name === 'TokenNotFound') {
+            return res.status(err.status).json({ message: err.message });
+        }
         if (err.name === 'TokenNotFound') {
             return res.status(err.status).json({ message: err.message });
         }
@@ -225,5 +243,13 @@ module.exports = (err, req, res, next) => {
             return res.status(err.status).json({ message: err.message });
         }
         return res.status(400).json({ message: '수정에 실패했습니다.' });
+    }
+
+    /* 상품 검색 */
+    if (req.path === '/api/admin/item' && req.method === 'GET') {
+        if (err.name === 'NotFoundItem') {
+            return res.status(err.status).json({ message: '해당 상품이 없습니다.' });
+        }
+        return res.stats(400).json({ message: '검색에 실패했습니다.' });
     }
 };

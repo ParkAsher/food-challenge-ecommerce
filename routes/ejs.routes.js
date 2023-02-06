@@ -6,7 +6,6 @@ const router = express.Router();
 
 /* View Mapping */
 router.get('/', auth, (req, res) => {
-
     const user = !res.locals.user ? null : res.locals.user; // 로그인 안한 상태면 user = null
 
     res.render('index.ejs', { components: 'main', user: user });
@@ -90,7 +89,7 @@ router.get('/itemDetail/:id', auth, (req, res) => {
 
 router.get('/order', auth, (req, res) => {
     const user = !res.locals.user ? null : res.locals.user; // 로그인 안한 상태면 user = null
-    
+
     res.render('index.ejs', { components: 'order', user: user });
 });
 
@@ -130,6 +129,20 @@ router.get('/adm/user-management', auth, (req, res, next) => {
 
         // 관리자인 경우
         res.render('admin_index.ejs', { components: 'userManagement' });
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.get('/mypage', auth, (req, res, next) => {
+    try {
+        // 만약 로그인이 되어있지 않다면
+        if (!res.locals.user) {
+            const error = new UserNotFound();
+            throw error;
+        }
+
+        res.render('index.ejs', { components: 'mypage', user: res.locals.user });
     } catch (error) {
         next(error);
     }

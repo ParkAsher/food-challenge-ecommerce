@@ -1,3 +1,5 @@
+const { Op } = require('sequelize');
+
 class AdminRepository {
     constructor(UserModel, ItemModel) {
         // DI
@@ -123,6 +125,21 @@ class AdminRepository {
                     where: { id: itemInfo.itemId },
                 }
             );
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    searchItem = async (name) => {
+        try {
+            return await this.itemModel.findAll({
+                where: {
+                    name: {
+                        [Op.like]: `%${name}%`,
+                    },
+                },
+                order: [['id', 'DESC']],
+            });
         } catch (error) {
             throw error;
         }

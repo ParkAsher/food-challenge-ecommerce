@@ -40,6 +40,7 @@
         <link rel="stylesheet" href="/css/find_email.css" />
         <link rel="stylesheet" href="/css/find_password.css" />
         <link rel="stylesheet" href="/css/update_password.css" />
+        <link rel="stylesheet" href="/css/mypage.css" />
 
         <title>푸드챌린지</title>
     </head>
@@ -57,6 +58,7 @@
         <% if (components === 'myBasket') { %> <%-include('basket.ejs') %> <% } %> 
         <% if (components === 'findPassword') { %><%-include('find_password.ejs') %> <% } %> 
         <% if (components === 'updatePassword') { %><%-include('update_password.ejs') %> <% } %>
+        <% if (components === 'mypage') { %> <%- include('mypage.ejs') %> <% } %>
         <% if (components === 'customerChat') { %> <%-include('customerChat.ejs') %> <% } %>
     </body>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>

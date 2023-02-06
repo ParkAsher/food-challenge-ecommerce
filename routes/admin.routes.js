@@ -17,5 +17,6 @@ router.post('/item', adminController.createItem);
 router.get('/items', adminController.getAllItems);
 router.delete('/item', adminController.deleteItem);
 router.put('/item', adminController.updateItem);
+router.get('/item', adminController.searchItem);
 
 module.exports = router;
