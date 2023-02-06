@@ -7,6 +7,7 @@ const {
     UserNotUpdated,
     ItemNotDeleted,
     ItemNotUpdated,
+    NotFoundItem,
 } = require('../lib/customerror');
 
 class AdminService {
@@ -190,6 +191,21 @@ class AdminService {
             }
 
             return { status: 200, message: '수정에 성공했습니다.' };
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    searchItem = async (name) => {
+        try {
+            const item = await this.adminRepository.searchItem(name);
+            // 회원이 없다면?
+            if (!item) {
+                const error = new NotFoundItem();
+                throw error;
+            }
+
+            return { status: 200, item };
         } catch (error) {
             throw error;
         }

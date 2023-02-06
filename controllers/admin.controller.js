@@ -6,6 +6,7 @@ const {
     createItemDataValidate,
     deleteItemDataValidate,
     updateItemDataValidate,
+    searchItemDataValidate,
 } = require('../lib/joischema');
 const AdminService = require('../services/admin.service');
 
@@ -117,6 +118,18 @@ class AdminController {
             const { status, message } = await this.adminService.updateItem(itemInfo);
 
             return res.status(status).json({ message });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    searchItem = async (req, res, next) => {
+        try {
+            const { name } = await searchItemDataValidate.validateAsync(req.query);
+
+            const { status, item } = await this.adminService.searchItem(name);
+
+            return res.status(status).json({ item });
         } catch (error) {
             next(error);
         }
