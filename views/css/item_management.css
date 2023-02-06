@@ -178,3 +178,25 @@
     color: #ffffff;
     border-radius: 5px;
 }
+
+.item-management-search-wrap {
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+}
+
+.item-management-search-wrap input {
+    height: 3rem;
+    padding-left: 1rem;
+}
+
+.item-management-search-wrap input:focus {
+    outline: none;
+}
+
+.item-management-search-wrap button {
+    height: 3rem;
+    background: none;
+    border: none;
+}

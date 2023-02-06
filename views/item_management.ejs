@@ -59,6 +59,12 @@
                 </div>
                 <div class="item-management-count-wrap" id="count"></div>
             </div>
+            <div class="item-management-search-wrap">
+                <input type="text" id="search-item-name" placeholder="상품 이름" />
+                <button type="button" onclick="itemSearch()">
+                    <span class="material-icons"> search </span>
+                </button>
+            </div>
         </div>
         <div class="table-wrap">
             <table id="table" class="table" border="1">
@@ -332,6 +338,51 @@
             error: function (response) {
                 alert(response.responseJSON.message);
                 window.location.reload();
+            },
+        });
+    }
+
+    function itemSearch() {
+        const itemName = document.getElementById('search-item-name').value;
+
+        $.ajax({
+            type: 'GET',
+            url: `/api/admin/item?name=${itemName}`,
+            success: function (response) {
+                const { itemList } = response;
+
+                const html = itemList.map((item) => {
+                    const stringifyItemObj = JSON.stringify(item);
+
+                    return `
+                    <tr>
+                        <td>${item.id}</td>
+                        <td>
+                            <img src='${item.image}' alt='상품이미지' />
+                        </td>
+                        <td>${item.name}</td>
+                        <td>${item.level}</td>
+                        <td>${item.price}</td>
+                        <td>${item.stock}</td>
+                        <td>${item.createdAt}</td>
+                        <td>
+                            <button type="button" class="item-update-btn" onclick='itemUpdateFormOpen(${stringifyItemObj})'>수정</button>
+                            <button type="button" class="item-delete-btn" onclick='itemDelete(${item.id})'>삭제</button>
+                        </td>
+                    </tr>    
+                `;
+                });
+
+                document.getElementById('itemList').innerHTML = html.join('');
+                document.getElementById('pagination').innerHTML = '';
+            },
+            error: function (response) {
+                const { message } = response.responseJSON;
+
+                const html = `<p>${message}</p>`;
+
+                document.getElementById('itemList').innerHTML = '';
+                document.getElementById('error-message').innerHTML = html;
             },
         });
     }

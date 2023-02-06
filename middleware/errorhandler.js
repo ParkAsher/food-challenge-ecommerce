@@ -244,4 +244,12 @@ module.exports = (err, req, res, next) => {
         }
         return res.status(400).json({ message: '수정에 실패했습니다.' });
     }
+
+    /* 상품 검색 */
+    if (req.path === '/api/admin/item' && req.method === 'GET') {
+        if (err.name === 'NotFoundItem') {
+            return res.status(err.status).json({ message: '해당 상품이 없습니다.' });
+        }
+        return res.stats(400).json({ message: '검색에 실패했습니다.' });
+    }
 };
