@@ -1,11 +1,16 @@
 <div id="cart_wrap">
-    <div style="display: flex; justify-content: space-around; margin-top: 20px">
-        <span style="font-size: 20px">장바구니</span>
-        <span style="font-size: 20px">상품명</span>
-        <span style="font-size: 20px">수량</span>
-        <span style="font-size: 20px">적립포인트</span>
-        <span style="font-size: 20px">금액</span>
-    </div>
+    <table id="cart_table">
+        <thead>
+            <tr>
+              <th>상품이미지</th>
+              <th>상품명</th>
+              <th>수량</th>
+              <th>가격</th>
+              <th>적립</th>
+              <th>금액</th>
+            </tr>
+        </thead>
+    </table>
 </div>
 <div id="price_wrap"></div>
 <div id="total_wrap"></div>
@@ -16,7 +21,7 @@
         .then((data) => {
             if (data.message) {
                 const row = `
-                <p style="font-size:50px;display: flex;justify-content: space-around;margin-top:20px">고객님 정말 죄송합니다... 다시 로그인 부탁 드려욧!</p>
+                <p style="font-size:50px;display: flex;justify-content: space-around;margin-top:20px">고객님 정말 죄송합니다. 다시 로그인 부탁 드려요</p>
               `;
 
                 const div = document.createElement('div');
@@ -25,7 +30,7 @@
             }
             if (!data.data[0]) {
                 const row = `
-                <p style="font-size:50px;display: flex;justify-content: space-around;margin-top:20px">텅텅 비었잖아욧! 얼른 담으러 가셔욧!</p>
+                <p style="font-size:50px;display: flex;justify-content: space-around;margin-top:20px">장바구니에 담은 상품이 없습니다.</p>
               `;
 
                 const div = document.createElement('div');
@@ -44,17 +49,26 @@
             } else if (data.data[0]) {
                 for (let i = 0; i < data.data.length; i++) {
                     const row = `
-                  <div style="margin-top:30px;display: flex;justify-content: space-around;margin-top:20px">
-                    <img src="${data.data[i].image}" alt="상품이미지">
-                    <span class="name">${data.data[i].name}</span>
-                    <span class="count">${data.data[i].count}</span>
-                    <span>${data.data[i].point}P</span>
-                    <span><span>(${data.data[i].price})</span><span class="price" >${data.data[i].totalPrice}</span>원<button id="${data.data[i].id}" onclick="del(this)">X</button></span>
-                  </div>
+                    <td>
+                        <img src="${data.data[i].image}" alt="상품이미지">
+                    </td>
+                    <td>
+                        <span class="name">${data.data[i].name}</span>
+                    </td>
+                    <td>
+                        <span class="count">${data.data[i].count}</span>
+                    </td>
+                    <td>
+                        <span>${data.data[i].point}P</span>
+                    </td>
+                    <td>
+                        <span><span>(${data.data[i].price})</span><span class="price" >${data.data[i].totalPrice}</span>원<button id="${data.data[i].id}" onclick="del(this)">X</button></span>
+                    </td>
+                  
                   `;
-                    const tr = document.createElement('div');
+                    const tr = document.createElement('tr');
                     tr.innerHTML = row;
-                    document.getElementById('cart_wrap').appendChild(tr);
+                    document.getElementById('cart_table').appendChild(tr);
                 }
                 const totalPrice = `<span style="display: flex;justify-content: flex-end;margin-top:30px;font-weight: bold;">총합 ${data.price}원</span>`;
                 const money = document.createElement('div');
