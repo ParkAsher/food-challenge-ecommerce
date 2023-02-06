@@ -1,4 +1,63 @@
-const socket = io.connect("/");
+const socket = io.connect('/');
+
+const nickname = $('#nickname').text();
+
+// 이 html로 연결될때 chatRoom 소켓으로 연결
+socket.emit('chatRoom');
+
+// 입장 메시지
+const enter = { message: `${nickname} 님이 입장했습니다.` };
+
+socket.emit('enterMessage', JSON.stringify(enter));
+socket.on('usercount', (num) => {
+    let html = `<div class="modal-title">그룹채팅(${num}명)</div>`
+
+    $('#chatHeader').append(html);
+});
+socket.on('enterMessage', (msg) => {
+    enterMessage(msg);
+});
+
+function enterMessage(message) {
+    const enter = JSON.parse(message);
+    let html = `<div class="enter" id="enter">${enter.message}</div>`;
+    console.log(html);
+    $('#chatLog').prepend(html);
+}
+
+document.forms.publish.onsubmit = function () {
+    let outgoingMessage = this.message.value;
+
+    if (outgoingMessage === '') return false;
+
+    const obj = { newMessage: { nickname: nickname, value: outgoingMessage } };
+    socket.emit('message', JSON.stringify(obj));
+    return false;
+};
+
+socket.on('message', (msg) => {
+    showMessage(msg);
+});
+
+function showMessage(message) {
+    const obj = JSON.parse(message);
+
+    if (nickname === obj.newMessage.nickname) {
+        let html = `
+                    <div class="myMsg">
+                        <span class="msg" id="myMsg">${obj.newMessage.value}</span>
+                    </div>`;
+        $('#chatLog').prepend(html);
+        $('#message').val('');
+    } else {
+        let html = `<div class="anotherMsg">
+                        <span class="anotherName">${obj.newMessage.nickname}</span>
+                        <span class="msg" id="receiveMsg">${obj.newMessage.value}</span>
+                    </div>`;
+        $('#chatLog').prepend(html);
+        $('#message').val('');
+    }
+}
 
 function socketOrderAlert(order_id, receipt_price) {
     socket.emit('PURCHASE', {
@@ -26,3 +85,5 @@ function purchaseNotification(order_id, receipt_price, date) {
         $('body').append(htmlTemp);
     }
 }
+
+

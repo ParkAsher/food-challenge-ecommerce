@@ -40,31 +40,22 @@
 <div class="chat" id="chat">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="alertModalLabel">그룹채팅</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span>&times;</span>
-          </button>
-        </div>
+        <div class="modal-header" id="chatHeader"></div>
+        <button onclick=location.reload() class="modal-title" style=" background-color: red; color: white; border:none; font-size: 9px; width:auto;">채팅방 나가기</button>
         <div class="modal-body" id="alertText">
             <div id="chatLog" style="overflow:auto; display:flex; flex-direction:column-reverse;"></div>
             <form id="chatForm" name="publish">
-                <input type="text" autocomplete="off" size="30" id="message" placeholder="메시지를 입력하세요">
+                <input type="text" autocomplete="off" size="20" id="message" placeholder="메시지를 입력하세요">
                 <input type="submit" value="보내기">
             </form>
-            <div id="memberWrap">
-                <div id="memberList">
-                    <div id="numberOfMembers"></div>
-                    <div id="memberSelect"></div>
-                </div>
-            </div>
-        </div>
+         </div>
         </div>
     </div>
 </div>
 
 <!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+<script src="/socket.js"></script>
 <script>
     // swiper library config
     let swiper = new Swiper('.mySwiper', {

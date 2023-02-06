@@ -41,11 +41,9 @@
         <link rel="stylesheet" href="/css/find_password.css" />
         <link rel="stylesheet" href="/css/update_password.css" />
         <link rel="stylesheet" href="/css/mypage.css" />
-        <link rel="stylesheet" href="/css/chatRoom.css" />
 
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
         <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-        <script src="/socket.js"></script>
 
         <title>푸드챌린지</title>
     </head>
@@ -64,6 +62,5 @@
         <% if (components === 'findPassword') { %><%-include('find_password.ejs') %> <% } %> 
         <% if (components === 'updatePassword') { %><%-include('update_password.ejs') %> <% } %>
         <% if (components === 'mypage') { %> <%- include('mypage.ejs') %> <% } %>
-        <% if (components === 'chatRoom') { %> <%-include('chatRoom.ejs') %> <% } %>
     </body>
     </html>

@@ -154,13 +154,6 @@ router.get('/basket', auth, (req, res, next) => {
     res.render('index.ejs', { components: 'myBasket', user: user });
 });
 
-router.get('/chatRoom', auth, (req, res, next) => {
-    const user = !res.locals.user ? null : res.locals.user; // 로그인 안한 상태면 user = null
-
-    res.render('index.ejs', { components: 'chatRoom', user: user });
-
-})
-
 router.get('/adm/item-management', auth, (req, res, next) => {
     try {
         // 로그인을 하지 않았는 경우
