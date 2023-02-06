@@ -43,16 +43,13 @@
         <link rel="stylesheet" href="/css/mypage.css" />
         <link rel="stylesheet" href="/css/chatRoom.css" />
 
-        
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
         <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-        
+        <script src="/socket.js"></script>
+
         <title>푸드챌린지</title>
     </head>
     <body>
-        <script>const socket = io.connect("/");</script>
-        <script src="/socket.js"></script>
-
         <!-- header -->
         <%- include('header.ejs') %>
 
@@ -69,4 +66,4 @@
         <% if (components === 'mypage') { %> <%- include('mypage.ejs') %> <% } %>
         <% if (components === 'chatRoom') { %> <%-include('chatRoom.ejs') %> <% } %>
     </body>
-]</html>
+    </html>

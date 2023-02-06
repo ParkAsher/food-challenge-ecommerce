@@ -6,18 +6,9 @@
         </nav>
             <div id="chatWrap">
                 <div id="chatHeader">Everyone</div>
-                <div id="chatLog">
-                    <!-- <div class="anotherMsg">
-                        <span class="anotherName">Jo</span>
-                        <span class="msg" id="receiveMsg"></span>
-                    </div>
-                    <div class="myMsg">
-                        <span class="msg" id="myMsg"></span>
-                    </div> -->
+                <div id="chatLog" style="overflow: auto; display:flex; flex-direction:column-reverse;">
                 </div>
-
                 <div class="enter" id="enter"></div>
- 
                 <form id="chatForm" name="publish">
                     <input type="text" autocomplete="off" size="30" id="message" placeholder="메시지를 입력하세요">
                     <input type="submit" value="보내기">
@@ -32,7 +23,7 @@
         </div>
     </div>
 
-    <script>
+    <script>        
         const nickname = $('#nickname').text()
 
         $(document).ready(function () {  
@@ -78,13 +69,13 @@
                     <div class="myMsg">
                         <span class="msg" id="myMsg">${obj.newMessage.value}</span>
                     </div>`
-                $('#chatLog').append(html)
+                $('#chatLog').prepend(html)
             } else {
                 let html = `<div class="anotherMsg">
                         <span class="anotherName">Jo</span>
                         <span class="msg" id="receiveMsg">${obj.newMessage.value}</span>
                     </div>`
-                $('#chatLog').append(html)
+                $('#chatLog').prepend(html)
             }
         }
 
