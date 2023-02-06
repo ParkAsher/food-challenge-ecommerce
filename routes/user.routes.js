@@ -13,5 +13,6 @@ router.patch('/password', userController.updatePassword);
 
 router.post('/email', userController.getUserEmail);
 router.get('/mypage/:id', userController.getUserInfoById);
+router.delete('/mypage/:id', userController.deleteUser);
 
 module.exports = router;

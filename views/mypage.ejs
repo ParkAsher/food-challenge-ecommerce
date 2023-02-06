@@ -21,6 +21,7 @@
 	</table>
 	<div class="empty-list" id="empty-list"></div>
 	<div id="pagination" class="pagination-btn-wrap"></div>
+	<button type="button" id="delete-btn">계정 삭제</button>
 </body>
 
 <script>
@@ -120,6 +121,24 @@
 				document.getElementById('pagination').innerHTML = pages.join('');
 			}
 		})
+
+		// 계정 삭제버튼
+		document.getElementById("delete-btn").addEventListener("click", function() {
+			const inputMessage = prompt('회원 탈퇴를 원하신다면 입력란에 "회원탈퇴"를 입력해주세요.','')
+			
+			if(inputMessage === '회원탈퇴'){
+				$.ajax({
+					type: 'DELETE',
+					url: `/api/users/mypage/${id}`,
+					success: function (response) {
+						alert('회원 탈퇴 처리되었습니다.');
+						window.location.reload();
+					},
+				})
+			} else {
+				alert('회원 탈퇴에 실패했습니다. 다시 시도해주십시오.')
+				window.location.reload();
+			}
+		});
 	}
-	
 </script>

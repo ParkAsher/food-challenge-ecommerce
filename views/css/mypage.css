@@ -11,7 +11,7 @@
 .mypage-insert::after {
 	content: "";
 	flex-grow: 1;
-	border-top: solid 5px #AAC63C;
+	border-top: solid 5px #e94540;
 	margin: 0 50px;
 }
 
@@ -82,6 +82,6 @@
 
 .pagination-btn.active {
     border: none;
-    background-color: #AAC63C;
+    background-color: #e94540;
     color: #ffffff;
 }
