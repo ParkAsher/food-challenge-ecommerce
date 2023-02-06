@@ -315,6 +315,7 @@ $(document).ready(() => {
           url: `/api/orders/`,
           data: {basketItems, address, order_price, order_point, receipt_price },
           success: function () {
+            localStorage.removeItem('basketItems')
             customAlert('선택하신 상품을 성공적으로 구매하였습니다.', function () {
               window.location.href='/'
             });

@@ -22,7 +22,6 @@
 <script>
         $(document).ready(function () {
           const socket = io.connect("/");
-          localStorage.removeItem('basketItems')
           getItems(0)
 
         // 이 ejs 연결될때 customerRoom 소켓으로 연결
