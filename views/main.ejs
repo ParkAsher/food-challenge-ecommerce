@@ -15,7 +15,7 @@
             <li onclick= getItems(1) class="cell"><a href="#">1단계 음식</a></li>
             <li onclick= getItems(2) class="cell"><a href="#">2단계 음식</a></li>
             <li onclick= getItems(3) class="cell"><a href="#">3단계 음식</a></li>
-            <li onclick="locatioin.href='/customerChat'" class="cell"><a href="#">대화방</a></li>
+            <li onclick="location.href='/chatRoom'" class="cell"><a href="#">대화방</a></li>
         </ul>
     </div>
 </div>
@@ -28,11 +28,8 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 <script>
         $(document).ready(function () {
-          const socket = io.connect("/");
           getItems(0)
 
-        // 이 ejs 연결될때 customerRoom 소켓으로 연결
-        socket.emit("customerRoom")
         });
     // swiper library config
     let swiper = new Swiper('.mySwiper', {

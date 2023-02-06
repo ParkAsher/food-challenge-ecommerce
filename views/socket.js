@@ -1,4 +1,3 @@
-const socket = io.connect("/");
     
     function socketOrderAlert(order_id, receipt_price) {
         socket.emit('PURCHASE', {

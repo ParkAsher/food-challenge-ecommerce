@@ -7,34 +7,31 @@ const io = socketIo(http);
 io.on('connection', (socket) => {
     console.log(socket.id, '새로운 소켓이 연결됐어요!');
   
-    // 손님은 이 방으로 들어가게 하기
-    socket.on('customerRoom', () => {
-      socket.join('customerRoom');
-      console.log(socket.rooms, '손님 방으로 들어왔어요!');
-    });
+    // 모두 이 방으로 들어가게 하기
+    socket.on('chatRoom', () => {
+      socket.join('chatRoom');
+      console.log(socket.rooms, '채팅방에 들어왔어요!');
   
-    // admin 은 이 방으로 들어가게 하기
-    socket.on('adminRoom', () => {
-      socket.join('adminRoom');
-      console.log(socket.rooms);
-  
-      // 입장했을 때 클라이언트로부터 메세지를 전달 받음
+      // 입장 메시지
       socket.on('enterMessage', (msg) => {
         console.log('Enter Message received: ' + msg);
   
-        // 전달 받은 메세지를 '사장방' 한테만 메세지 보내기
-        io.to('adminRoom').emit('enterMessage', msg);
+        socket.broadcast.emit('enterMessage', msg);
       });
     });
   
+    // 방 인원 숫자
     socket.emit('usercount', io.engine.clientsCount);
-  
+
+    // 메시지 핸들
     socket.on('message', (msg) => {
       console.log('Message received: ' + msg);
   
       io.emit('message', msg);
     });
-  
+
+    
+    // 구매 시 알림이벤트
     socket.on('PURCHASE', (data) => {
       console.log('PURCHASE', data);
       const emitData = {
