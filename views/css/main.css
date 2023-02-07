@@ -114,21 +114,20 @@ a {
   }
 
 .chat {
-    width: 15%;
+    width: 22%;
     display:none;
     position: fixed;
-    left: 84%;
+    left: 78%;
     top: 20%;
   }
 
-.input[type=text] {
-	width: 10px;
-	height: 10px;
-	font-size: 10px;
-}
 
   ::placeholder {
     font-size: 12px;
+}
+
+.span {
+    display:inline-block;
 }
 
 
