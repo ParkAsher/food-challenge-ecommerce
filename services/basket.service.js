@@ -8,8 +8,8 @@ class BasketService {
         if (myItems.length < 1) {
             return await this.basketRepository.addMyBasket(user_id, item_id, count);
         }
-        
-        const updateCount = myItems[0].count + count
+
+        const updateCount = myItems[0].count + count;
 
         return await this.basketRepository.updateItemCount(user_id, item_id, updateCount);
     };
@@ -22,13 +22,13 @@ class BasketService {
 
         const myItem = await findAll.map((item) => {
             return {
-                id: item.Item[0].id,
-                name: item.Item[0].name,
+                id: item.Item.id,
+                name: item.Item.name,
                 count: item.count,
-                price: item.Item[0].price,
-                totalPrice: item.Item[0].price * item.count,
-                point: item.Item[0].price * item.count * (5 / 100),
-                image: item.Item[0].image,
+                price: item.Item.price,
+                totalPrice: item.Item.price * item.count,
+                point: item.Item.price * item.count * (5 / 100),
+                image: item.Item.image,
             };
         });
 

@@ -28,7 +28,6 @@ class BasketController {
         const { id: user_id } = res.locals.user;
 
         const { myItem, totalPrice } = await this.basketController.findItemInBasket(user_id);
-
         res.json({ data: myItem, price: totalPrice });
     };
 
