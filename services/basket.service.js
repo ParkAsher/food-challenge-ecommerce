@@ -8,8 +8,8 @@ class BasketService {
         if (myItems.length < 1) {
             return await this.basketRepository.addMyBasket(user_id, item_id, count);
         }
-        
-        const updateCount = myItems[0].count + count
+
+        const updateCount = myItems[0].count + count;
 
         return await this.basketRepository.updateItemCount(user_id, item_id, updateCount);
     };
