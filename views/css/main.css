@@ -78,28 +78,26 @@ a {
   
 .chatIcon {
     display: block;
-    width: 10%;
+    width: 200px;
     height: auto;
     left: 88%;
     top: 80%;
     position: fixed;
+    transform: scale(0.8);
+    transition-duration: 0.4s;
+
 }
 
-.overlay {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-    transition: .5s ease;
-  }
+.chatIcon:hover {
+    transform: scale(1.4);
+    transition-duration: 0.4s;
+}
 
-.container:hover .overlay {
-    opacity: 1;
-  }
+.container {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+}
 
 .imgText {
     color: black;
@@ -129,7 +127,6 @@ a {
 .span {
     display:inline-block;
 }
-
 
 .reverse {
     font-size:5px;

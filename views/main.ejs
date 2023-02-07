@@ -26,13 +26,8 @@
 </div>
 <div id="pagination" class="pagination-btn-wrap"></div>
 
-<div class="container">
     <!-- <img onclick="location.href='/chatRoom'" src="./image/icon.png" height="90px" width="100px" radius="50%" class="chatIcon"> -->
-    <img onclick=customAlert() src="./image/icon.png" height="90px" width="100px" radius="50%" class="chatIcon">
-    <div class="overlay">
-      <div class="imgText">실시간 채팅하기</div>
-    </div>
-</div>      
+    <img onclick=customAlert() src="./image/icon.png" class="chatIcon">    
 
 
 <div class="chat" id="chat">
@@ -83,9 +78,7 @@
             url: `/api/items?page=${page}&level=${level}`,
             success: function (response) {
                 const { itemsCount, itemList, firstPage, lastPage, totalPage } = response;
-
-                console.log(itemList);
-
+                
                 itemList.map((item) => {
                     let tempHtml = `
                         <div class="col">

@@ -15,7 +15,9 @@
 }
 
 .header .header-wrap {
-    width: 1600px;
+
+    max-width: 2000px;
+    padding: 0 10%;
     height: 100%;
     background: transparent;
     margin: 0 auto;
@@ -65,3 +67,9 @@
     background: none;
     border: none;
 }
+
+/* @media (max-width: 1600px) {
+    .header-wrap {
+        width: 100% !important
+    }
+} */
