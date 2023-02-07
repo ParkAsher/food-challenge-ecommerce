@@ -142,3 +142,10 @@
 	font-weight: bold;
 	font-size: 24px;
 }
+
+.goBuy{
+	top: 0px;
+	color: blue !important;
+    background-color: #ffffff !important;
+    border-color: blue !important;
+}

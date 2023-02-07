@@ -39,7 +39,7 @@
             }
             if (!data.data[0]) {
                 const row = `
-                <p style="font-size:50px;display: flex;justify-content: space-around;margin-top:20px">장바구니에 담은 상품이 없습니다.</p>
+                <p style="font-size:30px;display: flex;justify-content: space-around;margin-top:20px">장바구니에 담은 상품이 없습니다.</p>
               `;
 
                 const div = document.createElement('div');
@@ -48,7 +48,7 @@
 
                 const button = `
                 <div style="margin-top:30px;display: flex;justify-content: space-around;margin-top:20px">
-                  <button onclick="location.href='/'">구매하러 가기</button>
+                  <button onclick="location.href='/'" class="btn goBuy">구매하러 가기</button>
                     </div>
                     
                 `;
@@ -57,6 +57,11 @@
                 document.getElementById('button_wrap').appendChild(buttonDiv);
             } else if (data.data[0]) {
                 for (let i = 0; i < data.data.length; i++) {
+                    
+                    let point = data.data[i].point.toLocaleString()
+                    let price = data.data[i].price.toLocaleString()
+                    let totalPrice = data.data[i].totalPrice.toLocaleString()
+
                     const row = `<tr>
                         <td>
                             <img src="${data.data[i].image}" alt="상품이미지">
@@ -68,15 +73,15 @@
                             <span class="count">${data.data[i].count}</span>
                         </td>
                         <td>
-                            <span>${data.data[i].point}P</span>
+                            <span>${point}P</span>
                         </td>
                         <td>
-                            <span>${data.data[i].price}원</span>                                     
+                            <span>${price}원</span>                                     
                         </td>
                         <td>
                             <span class="price" >
-                                ${data.data[i].totalPrice}원
-                            </span>
+                                ${totalPrice}
+                            </span>원
                             
                         </td>
                         <td>
@@ -91,7 +96,9 @@
                     tr.innerHTML = row;
                     document.getElementById('cart_table').appendChild(tr);
                 }
-                const totalPrice = `<span class="total-price">합계 ${data.price}원</span>`;
+                let finalTotalPrice = data.price.toLocaleString()
+
+                const totalPrice = `<span class="total-price">합계 ${finalTotalPrice}원</span>`;
                 const money = document.createElement('div');
                 money.innerHTML = totalPrice;
                 document.getElementById('total_wrap').appendChild(money);
@@ -123,11 +130,11 @@
         })
             .then((response) => response.json())
             .then((response) => {
-                alert('삭완!');
+                customAlert('삭제가 완료 되었습니다.');
                 window.location.reload();
             })
             .catch((err) => {
-                alert(err.message);
+                customAlert(err.message);
                 window.location.reload();
             });
     }
