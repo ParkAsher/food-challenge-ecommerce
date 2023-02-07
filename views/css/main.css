@@ -196,6 +196,11 @@ a {
     color: #fff;
 }
 
+.admMsg > .msg {
+    background-color: red;
+    color: #fff;
+}
+
 .enter {
     font-size:13px;
     text-align:center; 
