@@ -27,6 +27,11 @@
             <div class="login-btn-wrap">
                 <button type="button" onclick="login()">로그인</button>
             </div>
+            <div class="social-login-btn-wrap">
+                <a href="http://localhost:5000/auth/kakao">
+                    <img src="./image/kakao_login_large_wide.png" />
+                </a>
+            </div>
             <div class="register-link-wrap">
                 <a href="/register">아직 회원이 아니십니까?</a>
             </div>
@@ -54,6 +59,19 @@
                 const html = `<p>${message}</p>`;
 
                 document.getElementById('error-message-wrap').innerHTML = html;
+            },
+        });
+    }
+
+    function kakao() {
+        $.ajax({
+            type: 'GET',
+            url: '/auth/kakao',
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (response) {
+                console.log(response);
             },
         });
     }
