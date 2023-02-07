@@ -71,7 +71,7 @@ class orderRepository {
     basketList = async (user_id) => {
         const basketItems = await Basket.findAll({
             where: { user_id },
-            include: [{ model: Item, attributes: ['price', 'name'] }],
+            include: [{ model: Item, attributes: ['name', 'price', 'image'] }],
         });
 
         return basketItems;

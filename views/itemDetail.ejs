@@ -77,7 +77,7 @@
                 return (location.href = '/');
             } else {
                 const itemImageHtml = `
-                    <img src="${itemDetail.image}" />
+                    <img id="itemImage" src="${itemDetail.image}" />
                 `;
                 document.getElementById('item-detail-image').innerHTML = itemImageHtml;
 
@@ -90,7 +90,9 @@
                 const itemPriceHtml = `<p id='item-price'>${Number(
                     itemDetail.price
                 ).toLocaleString()} 원</p>`;
+
                 document.getElementById('item-detail-price').innerHTML = itemPriceHtml;
+                document.getElementById('item-detail-total-price').innerHTML = itemPriceHtml;
 
                 const itemPointHtml = `<p id='item-point'>${itemDetail.price * 0.05} P</p>`;
                 document.getElementById('item-detail-point').innerHTML = itemPointHtml;
@@ -107,6 +109,7 @@
     function plus() {
         const stock = Number(document.getElementById('item-stock').innerText.split(' ')[0]);
         let count = Number(document.getElementById('count').value);
+  
         if (count === stock) return;
 
         count += 1;
@@ -176,9 +179,11 @@
             .innerText.split(' ')[0]
             .split(',')
             .join('');
-        let totalPrice = document.getElementById('item-total-price').innerText.split(' ')[0];
+        let image = document.getElementById('itemImage').src;
+        let totalPrice = $('#item-total-price').text()
+
         console.log(count, name, price, totalPrice);
 
-        location.href = `/order?item_id=${item_id}&name=${name}&price=${price}&count=${count}&totalPrice=${totalPrice}`;
+        location.href = `/order?item_id=${item_id}&name=${name}&price=${price}&count=${count}&totalPrice=${totalPrice}&image=${image}`;
     }
 </script>

@@ -1,3 +1,5 @@
+<% if (user !== null) { %> <%- include('nickname.ejs') %> <% } %> 
+
 <!-- Swiper -->
 <div class="swiper mySwiper">
     <div class="swiper-wrapper">
@@ -24,8 +26,29 @@
 </div>
 <div id="pagination" class="pagination-btn-wrap"></div>
 
+    <!-- <img onclick="location.href='/chatRoom'" src="./image/icon.png" height="90px" width="100px" radius="50%" class="chatIcon"> -->
+    <img onclick=customAlert() src="./image/icon.png" class="chatIcon">    
+
+
+<div class="chat" id="chat">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header" id="chatHeader"></div>
+        <button onclick=location.reload() class="modal-title" style=" background-color: red; color: white; border:none; font-size: 9px; width:auto;">채팅방 나가기</button>
+        <div class="modal-body" id="alertText">
+            <div id="chatLog" style="overflow:auto; display:flex; flex-direction:column-reverse;"></div>
+            <form id="chatForm" name="publish">
+                <input type="text" autocomplete="off" size="1" id="message" placeholder="메시지를 입력하세요">
+                <input type="submit" value="보내기">
+            </form>
+         </div>
+        </div>
+    </div>
+</div>
+
 <!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+<script src="/socket.js"></script>
 <script>
     // swiper library config
     let swiper = new Swiper('.mySwiper', {
@@ -55,9 +78,7 @@
             url: `/api/items?page=${page}&level=${level}`,
             success: function (response) {
                 const { itemsCount, itemList, firstPage, lastPage, totalPage } = response;
-
-                console.log(itemList);
-
+                
                 itemList.map((item) => {
                     let tempHtml = `
                         <div class="col">

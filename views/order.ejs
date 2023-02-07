@@ -58,9 +58,9 @@
       <h5 style="display: inline">사용포인트</h5>
       <input type="text" class="form-control"
         style="text-align:right; width:170px; height:30px; font-size:15px; margin-left:auto;" placeholder=0
-        id="order_point"/>
-      <button onclick=getTotalPrice() type="button" class="btn btn-success btn-block"
-              id="useMyPoint" style="height:30px; display:flex; align-items:center">
+        id="order_point" />
+      <button onclick=getTotalPrice() type="button" class="btn btn-success btn-block" id="useMyPoint"
+        style="height:30px; display:flex; align-items:center">
         사용
       </button>
     </div>
@@ -80,7 +80,8 @@
       <button onclick=buyOrder() type="button" class="btn btn-order btn-block" style="float:right;">
         결제
       </button>
-      <button onclick="location.href='javascript:history.back()'" type="button" class="btn btn-cancel btn-block" style="float:right; margin-right:5px">
+      <button onclick="location.href='javascript:history.back()'" type="button" class="btn btn-cancel btn-block"
+        style="float:right; margin-right:5px">
         취소
       </button>
     </div>
@@ -109,28 +110,29 @@
   </div>
 </div>
 
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="/socket.js"></script>
 <script>
   let query = window.location.search;
   let param = new URLSearchParams(query);
 
-$(document).ready(() => {
-  let itemName = param.get('name');
-  let itemPrice = param.get('price');
-  let count = param.get('count');
-  let item_id = param.get('item_id');
+  $(document).ready(() => {
+    let itemName = param.get('name');
+    let itemPrice = Number(param.get('price')).toLocaleString()
+    let count = param.get('count');
+    let item_id = param.get('item_id');
+    let image = param.get('image');
 
-  if (itemName) {
+    if (itemName) {
 
-  let order_price = param.get('totalPrice');
-  let accumulatePoint = Math.round(order_price * 0.05)
-  $('#order_price').append(order_price);
-  $('#totalToPay').append(order_price);
+      let order_price = param.get('totalPrice');
+      let accumulatePoint = Math.round(order_price * 0.05)
+      $('#order_price').append(order_price);
+      $('#totalToPay').append(order_price);
 
-  let temp_html = `<div class="card mb-4">
+      let temp_html = `<div class="card mb-4">
                   <div class="row no-gutters">
                     <div class="col-4" style="background: #ffffff;">
-                      <img src="/극혐.avif" class="card-img-top h-100" alt="...">
+                      <img src=${image} class="card-img-top h-100" alt="...">
                     </div>
                     <div class="col-sm-7 card-body px-3">
                       <div class="flex-fill mt-3">
@@ -140,48 +142,49 @@ $(document).ready(() => {
                         </div>
                         <div class="d-flex justify-content-between mb-3">
                           <h5 style="display: inline">가격</h5>
-                          <span class="card-price" id="itemPrice">${itemPrice}</span>
+                          <span class="card-price" id="itemPrice">${itemPrice}원</span>
                         </div>
                         <div class="d-flex justify-content-between mb-3">
                           <h5 style="display: inline">수량</h5>
-                          <span class="card-price" id="count">${count}</span>
+                          <span class="card-price" id="count">${count}개</span>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>`
-    $('#itemList').append(temp_html)
-    $('#accumulatePoint').append(accumulatePoint)
+      $('#itemList').append(temp_html)
+      $('#accumulatePoint').append(accumulatePoint)
 
-  } else {
-    // 장바구니 리스트 가져오기 & 결제금액 계산
-    getBasketItems()
+    } else {
+      // 장바구니 리스트 가져오기 & 결제금액 계산
+      getBasketItems()
 
-    function getBasketItems() {
-    $.ajax({
-      type: 'GET',
-      url: `/api/orders/basketList`,
-      data: {},
-      success: function (response) {
-        let rows = response['getAllBasketItems'];
-        localStorage.setItem('basketItems', JSON.stringify(rows))
+      function getBasketItems() {
+        $.ajax({
+          type: 'GET',
+          url: `/api/orders/basketList`,
+          data: {},
+          success: function (response) {
+            let rows = response['getAllBasketItems'];
+            localStorage.setItem('basketItems', JSON.stringify(rows))
 
-        let itemPriceArray = []
+            let itemPriceArray = []
 
-        for (let i = 0; i < rows.length; i++) {
-          let basket_id = rows[i]['basket_id'];
-          let item_id = rows[i]['item_id']
-          let itemPrice = rows[i]['itemPrice']
-          let itemName = rows[i]['itemName']
-          let count = rows[i]['count'];
-          let eachItemTotal = itemPrice * count
-          
-          itemPriceArray.push(eachItemTotal)
+            for (let i = 0; i < rows.length; i++) {
+              let basket_id = rows[i]['basket_id'];
+              let item_id = rows[i]['item_id']
+              let itemPrice = rows[i]['itemPrice']
+              let itemName = rows[i]['itemName']
+              let count = rows[i]['count'];
+              let image = rows[i]['image'];
+              let eachItemTotal = itemPrice * count
 
-          let temp_html = `<div class="card mb-4">
+              itemPriceArray.push(eachItemTotal)
+
+              let temp_html = `<div class="card mb-4">
                             <div class="row no-gutters">
                               <div class="col-4" style="background: #ffffff;">
-                                <img src="/극혐.avif" class="card-img-top h-100" alt="...">
+                                <img src=${image} class="card-img-top h-100" alt="...">
                               </div>
                               <div class="col-sm-7 card-body px-3">
                                 <div class="flex-fill mt-3">
@@ -201,22 +204,22 @@ $(document).ready(() => {
                               </div>
                             </div>
                           </div>`
-          $('#itemList').append(temp_html);
-        }
+              $('#itemList').append(temp_html);
+            }
 
-          let total = itemPriceArray.reduce((acc, cur) => acc + cur)
-          $('#order_price').append(total);
-          $('#totalToPay').append(total);
-  
-          // 적립 포인트
-          let accumulatePoint = Math.round(total * 0.05)
-          $('#accumulatePoint').append(accumulatePoint)
+            let total = itemPriceArray.reduce((acc, cur) => acc + cur)
+            $('#order_price').append(total);
+            $('#totalToPay').append(total);
 
-      },
-    });
+            // 적립 포인트
+            let accumulatePoint = Math.round(total * 0.05)
+            $('#accumulatePoint').append(accumulatePoint)
+
+          },
+        });
+      }
     }
-  }  
-})
+  })
 
   // findAddr() 함수 정의
   function findAddr() {
@@ -289,38 +292,40 @@ $(document).ready(() => {
     let order_point = $('#order_point').val()
     let receipt_price = $('#totalToPay').text()
 
-      if ( id ) {
-        $.ajax({
-          type: 'POST',
-          url: `/api/orders/`,
-          data: {id, count, address, order_price, order_point, receipt_price},
-          success: function () {
-            customAlert('선택하신 상품을 성공적으로 구매하였습니다.', function () {
-              window.location.href='/'
-            });
-          },
-          error: function (error) {
-            customAlert(error.responseJSON.errorMessage);
-          }
-        });
+    if (id) {
+      $.ajax({
+        type: 'POST',
+        url: `/api/orders/`,
+        data: { id, count, address, order_price, order_point, receipt_price },
+        success: function (response) {
+          let order_id = response['saveOrder'].id
+          socketOrderAlert(order_id, receipt_price)
+          customAlert('선택하신 상품을 성공적으로 구매하였습니다.', function () {
+            window.location.href = '/'
+          });
+        },
+        error: function (error) {
+          customAlert(error.responseJSON.errorMessage);
+        }
+      });
     } else {
-        const storageBasketItems = localStorage.getItem('basketItems')
-        const basketItems = JSON.parse(storageBasketItems)
+      const storageBasketItems = localStorage.getItem('basketItems')
+      const basketItems = JSON.parse(storageBasketItems)
 
       $.ajax({
-          type: 'POST',
-          url: `/api/orders/`,
-          data: {basketItems, address, order_price, order_point, receipt_price },
-          success: function () {
-            customAlert('선택하신 상품을 성공적으로 구매하였습니다.', function () {
-              localStorage.removeItem('basketItems')
-              window.location.href='/'
-            });
-          },
-          error: function (error) {
-            customAlert(error.responseJSON.errorMessage);
-          }
-        });
+        type: 'POST',
+        url: `/api/orders/`,
+        data: { basketItems, address, order_price, order_point, receipt_price },
+        success: function () {
+          localStorage.removeItem('basketItems')
+          customAlert('선택하신 상품을 성공적으로 구매하였습니다.', function () {
+            window.location.href = '/'
+          });
+        },
+        error: function (error) {
+          customAlert(error.responseJSON.errorMessage);
+        }
+      });
     }
   }
 
