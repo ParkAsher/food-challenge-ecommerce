@@ -1,4 +1,4 @@
-<% if (user !== null) { %> <%- include('nickname.ejs') %> <% } %> 
+<% if (user !== null) { %> <%- include('getUser.ejs') %> <% } %> 
 
 <!-- Swiper -->
 <div class="swiper mySwiper">
@@ -27,7 +27,7 @@
 <div id="pagination" class="pagination-btn-wrap"></div>
 
     <!-- <img onclick="location.href='/chatRoom'" src="./image/icon.png" height="90px" width="100px" radius="50%" class="chatIcon"> -->
-    <img onclick=customAlert() src="./image/icon.png" class="chatIcon">    
+    <img onclick=enterAlert() src="./image/icon.png" class="chatIcon">    
 
 
 <div class="chat" id="chat">

@@ -38,8 +38,9 @@ io.on('connection', (socket) => {
         ...data,
         date: new Date().toISOString(),
       };
-  
+      
       io.emit('PURCHASE_ALERT', emitData);
+
     });
 
     socket.on('disconnect', () => {
