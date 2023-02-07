@@ -57,8 +57,10 @@
             url: '/api/users/register',
             data: userInfo,
             success: function (response) {
-                customAlert(response.message);
-                window.location.href = '/';
+                customAlert(response.message, function () {
+                    window.location.href = '/login'
+                });
+                
             },
             error: function (response) {
                 $('.error-message-wrap').empty();
