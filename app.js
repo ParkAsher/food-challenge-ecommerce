@@ -13,7 +13,7 @@ const http = createServer(app);
 
 /* router */
 const router = require('./routes');
-const kakaoRouter = require('./routes/auth.routes'); // KAKAO LOGIN Router
+const kakaoRouter = require('./routes/kakao.routes'); // KAKAO LOGIN Router
 const ejsRouter = require('./routes/ejs.routes');
 const errorHandler = require('./middleware/errorhandler');
 
