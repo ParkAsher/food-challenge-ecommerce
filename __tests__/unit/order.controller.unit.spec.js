@@ -1,11 +1,10 @@
 const OrderController = require('../../controllers/order.controller.js');
 
-// posts.controller.js 에서는 아래 5개의 Method만을 사용합니다.
 let mockOrderService = {
-  saveOrder: jest.fn(),
-  getBasketList: jest.fn(),
+  addToOrder: jest.fn(),
+  getBasket: jest.fn(),
   getOrderInfoByUserId: jest.fn(),
-  orderList: jest.fn(),
+  getAllOrder: jest.fn(),
   findOneOrder: jest.fn(),
   searchOrder: jest.fn(),
 };
@@ -17,140 +16,113 @@ let mockRequest = {
 let mockResponse = {
   status: jest.fn(),
   json: jest.fn(),
+  locals: jest.fn(),
 };
 
 let orderController = new OrderController();
-// orderController의 Service를 Mock Service로 변경
 orderController.orderService = mockOrderService;
 
 describe('Layered Architecture Pattern Order Controller Unit Test', () => {
-  // 각 test가 실행되기 전에 실행
   beforeEach(() => {
-    jest.resetAllMocks(); // 모든 Mock을 초기화
+    jest.resetAllMocks();
 
-    // 메서드 체이닝으로 인해 반환값이 Response(자신: this)로 설정되어야한다
     mockResponse.status = jest.fn(() => {
       return mockResponse;
     });
+
+    mockResponse.locals.user = jest.fn(() => {
+        return mockResponse
+      });
   });
 
-  test('Order Controller getOrders Method by Success', async () => {
-    // OrderService의 orderList Method를 실행했을 때 Return 값을 변수로 선언
-    const ordersReturnValue = [
-      {
-        postId: 2,
-        nickname: 'Nickname_2',
-        title: 'Title_2',
-        createdAt: new Date('07 October 2011 15:50 UTC'),
-        updatedAt: new Date('07 October 2011 15:50 UTC'),
-      },
-      {
-        postId: 1,
-        nickname: 'Nickname_1',
-        title: 'Title_1',
-        createdAt: new Date('06 October 2011 15:50 UTC'),
-        updatedAt: new Date('06 October 2011 15:50 UTC'),
-      },
-    ];
+  test('Order Controller getBasketList Method by Success', async () => {
+        const getAllBasketItems = [
+              {
+                "basket_id": 20,
+                "item_id": 13,
+                "count": 1,
+                "itemName": "라오수깐",
+                "image": "https://food-challenge-ecommerce.kr.object.ncloudstorage.com/item/1675663593011.PNG",
+                "itemPrice": 70000
+              },
+              {
+                "basket_id": 21,
+                "item_id": 11,
+                "count": 1,
+                "itemName": "발롯",
+                "image": "https://food-challenge-ecommerce.kr.object.ncloudstorage.com/item/1675663642850.PNG",
+                "itemPrice": 12000
+              }
+            ]
 
-    // PostService의 findAllPost Method를 실행했을 때 Return 값을 postsReturnValue 변수로 설정합니다.
-    mockPostService.findAllPost = jest.fn(() => {
-      return postsReturnValue
+    mockOrderService.getBasket = jest.fn(() => {
+      return getAllBasketItems
     });
 
-    // PostsController의 getPosts Method를 실행합니다.
-    await postsController.getPosts(mockRequest, mockResponse);
+    await orderController.getBasketList(mockRequest, mockResponse);
 
-    /** PostsController.getPosts 비즈니스 로직 **/
-    // 1. PostService의 findAllPost Method를 1회 호출합니다.
-    // 2. res.status는 1번 호출되고, 200의 값을 반환합니다.
-    // 3. findAllPost Method에서 반환된 posts 변수의 값을 res.json Method를 이용해 { data: posts }의 형식으로 반환합니다.
+    expect(mockOrderService.getBasket).toHaveBeenCalledTimes(1);
 
-    // 1. PostService의 findAllPost Method를 1회 호출합니다.
-    expect(mockPostService.findAllPost).toHaveBeenCalledTimes(1);
-
-    // 2. res.status는 1번 호출되고, 200의 값을 반환합니다.
     expect(mockResponse.status).toHaveBeenCalledTimes(1);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
 
-    // 3. findAllPost Method에서 반환된 posts 변수의 값을 res.json Method를 이용해 { data: posts }의 형식으로 반환합니다.
-    expect(mockResponse.json).toHaveBeenCalledWith({
-      data: postsReturnValue,
-    });
+    expect(mockResponse.json).toHaveBeenCalledWith({ getAllBasketItems });
   });
+  
 
-  test('Posts Controller createPost Method by Success', async () => {
-    // PostsController의 createPost Method가 실행되기 위한 Body 입력 인자들입니다.
-    const createPostRequestBodyParams = {
-      nickname: 'Nickname_Success',
-      password: 'Password_Success',
-      title: 'Title_Success',
-      content: 'Content_Success',
+  test('Order Controller saveOrder Method by Success', async () => {
+    const saveOrderReqBody = {
+        id: 1,
+        item_id: 1,
+        basketItems: undefined,
+        count: 1,
+        address: "success",
+        order_price: 123,
+        order_point: 123,
+        receipt_price: 123,
+      }
+
+    mockRequest.body = saveOrderReqBody;
+
+    const saveOrder = {
+        id: 1,
+        basketItems: 'd',
+        count: 1,
+        address: "success",
+        order_price: 123,
+        order_point: 123,
+        receipt_price: 123,
     };
 
-    // 입력 인자를 createPost Method를 실행할 때 삽입하지않고, mockRequest의 body를 createPostRequestBodyParams 변수로 설정합니다.
-    mockRequest.body = createPostRequestBodyParams;
+    mockOrderService.addToOrder = jest.fn(() => saveOrder );
 
-    // PostService의 createPost의 Return 값을 설정하는 변수입니다.
-    const createPostReturnValue = {
-      postId: 90,
-      nickname: 'Nickname_Success',
-      title: 'Title_Success',
-      content: 'Content_Success',
-      createdAt: new Date().toString(),
-      updatedAt: new Date().toString(),
-    };
+    await orderController.saveOrder(mockRequest, mockResponse);
 
-    // PostService.createPost Method의 Return 값을 createPostReturnValue 변수로 설정합니다.
-    mockPostService.createPost = jest.fn(() => createPostReturnValue);
-
-    // PostsController의 createPost Method를 실행합니다.
-    await postsController.createPost(mockRequest, mockResponse);
-
-    /** PostsController.createPost 성공 케이스 **/
-    // 1. req.body에 들어있는 값을 바탕으로 PostService.cretePost가 호출됩니다.
-    // 2. res.status는 1번 호출되고, 201의 값으로 호출됩니다.
-    // 3. PostService.cretePost에서 반환된 createPostData 변수를 이용해 res.json Method가 호출됩니다.
-
-    // 1. req.body에 들어있는 값을 바탕으로 PostService.cretePost가 호출됩니다.
-    expect(mockPostService.createPost).toHaveBeenCalledTimes(1);
-    expect(mockPostService.createPost).toHaveBeenCalledWith(
-      createPostRequestBodyParams.nickname,
-      createPostRequestBodyParams.password,
-      createPostRequestBodyParams.title,
-      createPostRequestBodyParams.content
+    expect(mockOrderService.addToOrder).toHaveBeenCalledTimes(1);
+    expect(mockOrderService.addToOrder).toHaveBeenCalledWith(
+        saveOrderReqBody.user_id,
+        saveOrderReqBody.item_id,
+        saveOrderReqBody.basketItems,
+        saveOrderReqBody.count,
+        saveOrderReqBody.address,
+        saveOrderReqBody.order_price,
+        saveOrderReqBody.order_point,
+        saveOrderReqBody.receipt_price,
     );
 
-    // 2. res.status는 1번 호출되고, 201의 값으로 호출됩니다.
     expect(mockResponse.status).toHaveBeenCalledTimes(1);
     expect(mockResponse.status).toHaveBeenCalledWith(201);
-
-    // 3. PostService.cretePost에서 반환된 createPostData 변수를 이용해 res.json Method가 호출됩니다.
-    expect(mockResponse.json).toHaveBeenCalledWith({
-      data: createPostReturnValue,
-    });
+    expect(mockResponse.json).toHaveBeenCalledWith({ saveOrder });
   });
 
-  test('Posts Controller createPost Method by Invalid Params Error', async () => {
-    // PostsController의 createPost Method가 실행될 때 에러가 발생하는 Body 입력 인자
+  test('Order Controller saveOrder Method by Invalid Params Error', async () => {
     mockRequest.body = {};
 
-    // PostsController의 createPost Method를 실행합니다.
-    await postsController.createPost(mockRequest, mockResponse);
+    await orderController.saveOrder(mockRequest, mockResponse);
 
-    /** PostsController.createPost 에러 케이스 by InvalidParamsError **/
-    // 1-1. req.body에 들어있는 값을 바탕으로 각 변수들이 객체 구조분해 할당됩니다.
-    // 1-2. 필수로 전달되어야 하는 title 값이 존재하지 않아 InvalidParamsError가 발생합니다.
-    // 1-3. res.status는 1번 호출되고, 400번의 Http Status Code가 호출됩니다.
-    // 2. res.json의 값은 { errorMessage: "InvalidParamsError" }의 형식을 가집니다.
-
-
-    // 1-3. res.status는 1번 호출되고, 400번의 Http Status Code가 호출됩니다.
     expect(mockResponse.status).toHaveBeenCalledTimes(1);
     expect(mockResponse.status).toHaveBeenCalledWith(400);
-
-    // 2. res.json Method가 호출될 때 { errorMessage: "InvalidParamsError" }의 형식을 가집니다.
-    expect(mockResponse.json).toHaveBeenCalledWith({ errorMessage: "InvalidParamsError" })
+    expect(mockResponse.json).toHaveBeenCalledWith({ errorMessage: "주문금액이 없습니다!" })
 
   });
 });

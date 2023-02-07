@@ -4,9 +4,11 @@
     "description": "",
     "main": "server.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "jest --foreceExit",
         "start": "nodemon server.js",
-        "prettify": "prettier --write *.js **/*.js"
+        "prettify": "prettier --write *.js **/*.js",
+        "test:unit": "jest __tests__/unit -- forceExit",
+        "test:integration": "jest __tests__/integration --forceExit"
     },
     "keywords": [],
     "author": "",
