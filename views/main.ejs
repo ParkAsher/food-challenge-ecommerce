@@ -1,4 +1,4 @@
-<div style="display:none" id="nickname"><%=user.nickname %></div>
+<% if (user !== null) { %> <%- include('nickname.ejs') %> <% } %> 
 
 <!-- Swiper -->
 <div class="swiper mySwiper">
@@ -43,7 +43,7 @@
         <div class="modal-body" id="alertText">
             <div id="chatLog" style="overflow:auto; display:flex; flex-direction:column-reverse;"></div>
             <form id="chatForm" name="publish">
-                <input type="text" autocomplete="off" size="20" id="message" placeholder="메시지를 입력하세요">
+                <input type="text" autocomplete="off" size="1" id="message" placeholder="메시지를 입력하세요">
                 <input type="submit" value="보내기">
             </form>
          </div>
