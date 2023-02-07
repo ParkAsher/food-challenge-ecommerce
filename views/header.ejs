@@ -43,10 +43,10 @@
             type: 'GET',
             url: '/api/users/logout',
             success: function (response) {
-                window.location.reload();
+                window.location.href='/';
             },
             error: function (response) {
-                alert(response.responseJSON);
+                customAlert(response.responseJSON);
                 window.location.reload();
             },
         });

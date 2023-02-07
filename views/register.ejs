@@ -57,7 +57,7 @@
             url: '/api/users/register',
             data: userInfo,
             success: function (response) {
-                alert(response.message);
+                customAlert(response.message);
                 window.location.href = '/';
             },
             error: function (response) {

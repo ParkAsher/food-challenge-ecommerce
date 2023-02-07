@@ -1,3 +1,5 @@
+<% if (user !== null) { %> <%- include('getUser.ejs') %> <% } %> 
+
 <div class="wrap">
   <div class="mb-3">
     <h4><i class="fa fa-bars" aria-hidden="true"></i> 상품 정보</h4>
@@ -17,7 +19,7 @@
   <div>
     <div class="form-group mb-3">
       <label for="exampleInputName">받는 사람</label>
-      <input type="text" class="form-control mt-2" id="recipient" placeholder=<%=user.name %> />
+      <input type="text" class="form-control mt-2" id="recipient" placeholder= <%=user.name %> />
     </div>
 
     <div class="form-group mb-3">
@@ -50,7 +52,7 @@
     <div class="d-flex justify-content-between mb-3">
       <h5 style="display:inline; color:green">보유포인트</h5>
       <span class="card-price" id="myPoint" style="color:green">
-        <%= user.point %>
+        <%= user.point.toLocaleString() %>
       </span>
     </div>
 
@@ -73,7 +75,7 @@
 
     <div class="d-flex justify-content-between mb-3">
       <h2 style="display:inline; color:green"> 적립 포인트 - 5%</h2>
-      <span class="card-price" style="color:green" id="accumulatePoint"></span>
+      <span class="card-price" style="color:green" id="accumulatePoint">P</span>
     </div>
 
     <div>
@@ -88,29 +90,8 @@
   </div>
 </div>
 
-
-<!-- Modalalert-->
-<div class="modal text-left" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="alertModalLabel">알림</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" id="alertText"></div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-sparta btn-confirm" data-dismiss="modal">
-          확인
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script src="/socket.js"></script>
+
 <script>
   let query = window.location.search;
   let param = new URLSearchParams(query);
@@ -121,10 +102,10 @@
     let count = param.get('count');
     let item_id = param.get('item_id');
     let image = param.get('image');
+    let order_price = param.get('totalPrice');
 
     if (itemName) {
 
-      let order_price = param.get('totalPrice');
       let accumulatePoint = Math.round(order_price * 0.05)
       $('#order_price').append(order_price);
       $('#totalToPay').append(order_price);
@@ -137,8 +118,8 @@
                     <div class="col-sm-7 card-body px-3">
                       <div class="flex-fill mt-3">
                         <div class="d-flex justify-content-between mb-3">
-                          <h5 style="display:inline">상품</h5>
-                          <span class="card-price" id="itemName">${itemName}</span>
+                          <h5 style="display:inline; "font-weight:bolder">상품</h5>
+                          <span style="font-weight:bolder" class="card-price" id="itemName">${itemName}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-3">
                           <h5 style="display: inline">가격</h5>
@@ -156,9 +137,8 @@
       $('#accumulatePoint').append(accumulatePoint)
 
     } else {
-      // 장바구니 리스트 가져오기 & 결제금액 계산
       getBasketItems()
-
+      // 장바구니 리스트 가져오기 & 결제금액 계산
       function getBasketItems() {
         $.ajax({
           type: 'GET',
@@ -173,11 +153,11 @@
             for (let i = 0; i < rows.length; i++) {
               let basket_id = rows[i]['basket_id'];
               let item_id = rows[i]['item_id']
-              let itemPrice = rows[i]['itemPrice']
+              let itemPrice = rows[i]['itemPrice'].toLocaleString();
               let itemName = rows[i]['itemName']
-              let count = rows[i]['count'];
+              let count = rows[i]['count'].toLocaleString();
               let image = rows[i]['image'];
-              let eachItemTotal = itemPrice * count
+              let eachItemTotal = itemPrice.split(',').join('') * count.split(',').join('')
 
               itemPriceArray.push(eachItemTotal)
 
@@ -189,16 +169,16 @@
                               <div class="col-sm-7 card-body px-3">
                                 <div class="flex-fill mt-3">
                                   <div class="d-flex justify-content-between mb-3">
-                                    <h5 style="display:inline">상품</h5>
-                                    <span class="card-price" id="itemName">${itemName}</span>
+                                    <h5 style="display:inline; font-weight:bolder">상품</h5>
+                                    <span style="font-weight:bolder" class="card-price" id="itemName">${itemName}</span>
                                   </div>
                                   <div class="d-flex justify-content-between mb-3">
                                     <h5 style="display: inline">가격</h5>
-                                    <span class="card-price" id="itemPrice">${itemPrice}</span>
+                                    <span class="card-price" id="itemPrice">${itemPrice}원</span>
                                   </div>
                                   <div class="d-flex justify-content-between mb-3">
                                     <h5 style="display: inline">수량</h5>
-                                    <span class="card-price" id="count">${count}</span>
+                                    <span class="card-price" id="count">${count}개</span>
                                   </div>
                                 </div>
                               </div>
@@ -208,11 +188,11 @@
             }
 
             let total = itemPriceArray.reduce((acc, cur) => acc + cur)
-            $('#order_price').append(total);
-            $('#totalToPay').append(total);
+            $('#order_price').append(total.toLocaleString());
+            $('#totalToPay').append(total.toLocaleString());
 
             // 적립 포인트
-            let accumulatePoint = Math.round(total * 0.05)
+            let accumulatePoint = Math.round(total * 0.05).toLocaleString()
             $('#accumulatePoint').append(accumulatePoint)
 
           },
@@ -245,9 +225,9 @@
   function getTotalPrice() {
 
     let order_point = Number($('#order_point').val())
-    let order_price = Number($('#order_price').text())
+    let order_price = $('#order_price').text().split(',').join('')
     let totalToPay = order_price - order_point
-    const myPoint = $('#myPoint').text()
+    const myPoint = $('#myPoint').text().split(',').join('')
 
     $('#tooMuchPointUse').empty()
 
@@ -267,13 +247,13 @@
       const updatePoint = myPoint - order_point
 
       $('#totalToPay').empty()
-      $('#totalToPay').append(totalToPay);
+      $('#totalToPay').append(totalToPay.toLocaleString());
 
       $('#accumulatePoint').empty()
-      $('#accumulatePoint').append(Math.round(totalToPay * 0.05))
+      $('#accumulatePoint').append(Math.round(totalToPay * 0.05).toLocaleString())
 
       $('#myPoint').empty()
-      $('#myPoint').append(updatePoint);
+      $('#myPoint').append(updatePoint.toLocaleString());
       $('#useMyPoint').hide()
       $('input[type=text][id=order_point]').prop('readonly', true);
     }
@@ -288,9 +268,9 @@
     let add1 = $('#address').val()
     let add2 = $('#addressDetail').val()
     let address = add1 + ' ' + add2
-    let order_price = $('#order_price').text()
+    let order_price = $('#order_price').text().split(',').join('')
     let order_point = $('#order_point').val()
-    let receipt_price = $('#totalToPay').text()
+    let receipt_price = $('#totalToPay').text().split(',').join('')
 
     if (id) {
       $.ajax({
@@ -328,14 +308,5 @@
       });
     }
   }
-
-  // 모달 알림창
-  function customAlert(text, confirmCallback) {
-    $('#alertText').text(text);
-    $('#alertModal').modal('show');
-    if (confirmCallback) {
-      $('#alertModal .btn-confirm').click(confirmCallback);
-    }
-  }
-
+  
 </script>

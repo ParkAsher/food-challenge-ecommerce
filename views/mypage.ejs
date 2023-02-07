@@ -174,12 +174,12 @@
                     type: 'DELETE',
                     url: `/api/users/mypage/${id}`,
                     success: function (response) {
-                        alert('회원 탈퇴 처리되었습니다.');
+                        customAlert('회원 탈퇴 처리되었습니다.');
                         window.location.reload();
                     },
                 });
             } else {
-                alert('회원 탈퇴에 실패했습니다. 다시 시도해주십시오.');
+                customAlert('회원 탈퇴에 실패했습니다. 다시 시도해주십시오.');
                 window.location.reload();
             }
         });
