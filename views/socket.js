@@ -49,12 +49,19 @@ function showMessage(message) {
     const obj = JSON.parse(message);
 
     if (nickname === obj.newMessage.nickname) {
-        let html = `
-                    <div class="myMsg">
+        let html = `<div class="myMsg">
                         <span class="msg" id="myMsg">${obj.newMessage.value}</span>
                     </div>`;
         $('#chatLog').prepend(html);
         $('#message').val('');
+        
+    } else if (nickname === '관리자') {
+        let html = `<div class="admMsg">
+                        <span class="msg" id="myMsg">${obj.newMessage.value}</span>
+                    </div>`;
+        $('#chatLog').prepend(html);
+        $('#message').val('');
+
     } else {
         let html = `<div class="anotherMsg">
                         <span class="anotherName">${obj.newMessage.nickname}</span>
