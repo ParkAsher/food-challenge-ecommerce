@@ -122,14 +122,13 @@ a {
   }
 
 
-  ::placeholder {
+::placeholder {
     font-size: 12px;
 }
 
 .span {
     display:inline-block;
 }
-
 
 
 .reverse {
