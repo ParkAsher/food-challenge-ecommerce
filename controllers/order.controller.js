@@ -5,33 +5,41 @@ class OrderController {
     orderService = new OrderService();
 
     saveOrder = async (req, res, next) => {
-        const { id: user_id } = res.locals.user;
-        const {
-            id: item_id,
-            basketItems,
-            count,
-            address,
-            order_price,
-            order_point,
-            receipt_price,
-        } = req.body;
+        try {
+            const { id: user_id } = res.locals.user;
+            const {
+                id: item_id,
+                basketItems,
+                count,
+                address,
+                order_price,
+                order_point,
+                receipt_price,
+            } = req.body;
 
-        const saveOrder = await this.orderService.addToOrder(
-            user_id,
-            item_id,
-            basketItems,
-            count,
-            address,
-            order_price,
-            order_point,
-            receipt_price
-        );
+            if ( !order_price || !receipt_price ) {
+                throw new Error('주문금액이 없습니다!')
+            }
 
-        res.status(201).json({ saveOrder });
+            const saveOrder = await this.orderService.addToOrder(
+                user_id,
+                item_id,
+                basketItems,
+                count,
+                address,
+                order_price,
+                order_point,
+                receipt_price
+            );
+            res.status(201).json({ saveOrder });
+        } catch (err) {
+            res.status(400).json({ errorMessage: err.message });
+        }
     };
 
     getBasketList = async (req, res, next) => {
         const { id: user_id } = res.locals.user;
+
         const getAllBasketItems = await this.orderService.getBasket(user_id);
 
         res.status(200).json({ getAllBasketItems });
