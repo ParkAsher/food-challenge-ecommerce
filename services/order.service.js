@@ -66,8 +66,9 @@ class OrderService {
             return {
                 basket_id: item.id,
                 item_id: item.item_id,
-                itemName: item.Item.name,
                 count: item.count,
+                itemName: item.Item.name,
+                image: item.Item.image,
                 itemPrice: item.Item.price,
             };
         });
