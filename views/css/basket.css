@@ -143,9 +143,22 @@
 	font-size: 24px;
 }
 
-.goBuy{
-	top: 0px;
-	color: blue !important;
-    background-color: #ffffff !important;
-    border-color: blue !important;
+.go-buy-btn {
+	border-radius:5px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:24px;
+	padding:22px 40px;
+	text-decoration:none;
+	background-color:#ff9a42;
+	border:1px solid #ff9a42;
+	text-shadow:0px 1px 0px #b23e35;
+
+	margin-top: 10rem;
+}
+
+.go-buy-btn:hover {
+	background-color:#ff7300;
 }

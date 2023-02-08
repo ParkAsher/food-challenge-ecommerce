@@ -40,6 +40,7 @@
             if (!data.data[0]) {
                 const row = `
                 <p style="font-size:30px;display: flex;justify-content: space-around;margin-top:20px">장바구니에 담은 상품이 없습니다.</p>
+                <br></br>
               `;
 
                 const div = document.createElement('div');
@@ -47,8 +48,8 @@
                 document.getElementById('cart_wrap').appendChild(div);
 
                 const button = `
-                <div style="margin-top:30px;display: flex;justify-content: space-around;margin-top:20px">
-                  <button onclick="location.href='/'" class="btn goBuy">구매하러 가기</button>
+                <div class="empty-basket" style="margin-top:30px;display: flex;justify-content: space-around;margin-top:20px">
+                  <button onclick="location.href='/'" class="go-buy-btn">구매하러 가기</button>
                     </div>
                     
                 `;
