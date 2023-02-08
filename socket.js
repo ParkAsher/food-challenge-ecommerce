@@ -36,5 +36,7 @@ io.on('connection', (socket) => {
         io.emit('PURCHASE_ALERT', emitData);
     });
 
-    socket.on('disconnect');
+    socket.on('disconnect', () => {
+        console.log(socket.id, '연결이 끊어졌어요!');
+    });
 });
