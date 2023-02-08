@@ -1,8 +1,4 @@
 module.exports = (err, req, res, next) => {
-    console.log('Error Handling Middleware');
-    console.log(err);
-    console.log(req.path);
-    console.log(req.route.path);
 
     /* token expired */
     if (err.name === 'TokenExpiredError') {
@@ -218,7 +214,6 @@ module.exports = (err, req, res, next) => {
     }
 
     if (req.path === '/api/basket') {
-        console.log(req.path);
         if (err.name === 'TokenNotFound') {
             return res.status(err.status).json({ message: err.message });
         }

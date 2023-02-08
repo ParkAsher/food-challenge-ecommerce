@@ -6,8 +6,6 @@ class ItemContorller {
     getAllItems = async (req, res, next) => {
         const { page, level } = req.query;
 
-        console.log(page, level);
-
         const { status, itemsCount, itemList, firstPage, lastPage, totalPage } =
             await this.itemService.findAllItems(page, level);
         return res.status(status).json({ itemsCount, itemList, firstPage, lastPage, totalPage });
