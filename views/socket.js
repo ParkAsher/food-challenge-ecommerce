@@ -10,16 +10,17 @@ function enterAlert() {
         // 입장 메시지
         const enter = { message: `${nickname} 님이 입장했습니다.` };
         socket.emit('enterMessage', JSON.stringify(enter));
-        socket.on('usercount', (num) => {
-            let html = `<div class="modal-title">그룹채팅(${num}명)</div>`;
-        
-            $('#chatHeader').append(html);
-        });
         socket.on('enterMessage', (msg) => {
             enterMessage(msg);
         });
     } else return
 }
+
+socket.on('usercount', (num) => {
+    let html = `<div class="modal-title">그룹채팅(${num}명)</div>`;
+
+    $('#chatHeader').append(html);
+});
 
 function enterMessage(message) {
     const enter = JSON.parse(message);
