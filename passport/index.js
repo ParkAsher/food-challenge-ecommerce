@@ -32,6 +32,7 @@ module.exports = (app) => {
                             nickname: `KAKAO${profile.id}`,
                             password: await bcrypt.hash('a00000000', 10),
                             phone: '01000000000',
+                            point: 3000,
                         });
                         done(null, newUser);
                     }
