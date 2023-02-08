@@ -17,7 +17,6 @@ function enterAlert() {
 }
 
 socket.on('usercount', (num) => {
-    console.log(num, 'num')
     let html = `<div class="modal-title">그룹채팅(${num}명)</div>`;
 
     $('#chatHeader').append(html);
