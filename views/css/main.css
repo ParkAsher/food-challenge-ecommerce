@@ -177,6 +177,10 @@ a {
     margin-bottom: 5px;
 }
 
+.admMsg {
+    text-align: right;
+}
+
 .msg {
     display: inline-block;
     border-radius: 15px;
@@ -238,3 +242,4 @@ a {
     color: #0084FF;
     font-size: 5px;
 }
+
