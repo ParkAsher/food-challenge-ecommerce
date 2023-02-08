@@ -63,6 +63,23 @@ class orderRepository {
             item_id,
             count,
         });
+
+        const findItemStock = await Item.findOne({
+            attributes: ['stock'],
+            where: { id: item_id },
+        });
+
+        const updateStock = findItemStock.stock - Number(count);
+
+        await Item.update(
+            {
+                stock: updateStock,
+            },
+            {
+                where: { id: item_id },
+            }
+        );
+
         return orderItemTable;
     };
 
