@@ -1,0 +1,159 @@
+<% if (user !== null) { %> <%- include('getUser.ejs') %> <% } %>
+
+<!-- Swiper -->
+<div class="swiper mySwiper">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide"><img src="./image/banner001.png" alt="banner" /></div>
+        <div class="swiper-slide"><img src="./image/banner002.png" alt="banner" /></div>
+        <div class="swiper-slide"><img src="./image/banner003.png" alt="banner" /></div>
+    </div>
+    <div class="swiper-pagination"></div>
+</div>
+
+<div class="con">
+    <div class="menu-box">
+        <ul class="row">
+            <li class="cell"><a href="?page=1&level=0">전체보기</a></li>
+            <li class="cell"><a href="?page=1&level=1">1단계 음식</a></li>
+            <li class="cell"><a href="?page=1&level=2">2단계 음식</a></li>
+            <li class="cell"><a href="?page=1&level=3">3단계 음식</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="mycards">
+    <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box"></div>
+</div>
+<div id="pagination" class="pagination-btn-wrap"></div>
+
+<!-- <img onclick="location.href='/chatRoom'" src="./image/icon.png" height="90px" width="100px" radius="50%" class="chatIcon"> -->
+<img onclick="enterAlert()" src="./image/icon.png" class="chatIcon" />
+
+<div class="chat" id="chat">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" id="chatHeader"></div>
+            <button
+                onclick="location.reload()"
+                class="modal-title"
+                style="
+                    background-color: red;
+                    color: white;
+                    border: none;
+                    font-size: 9px;
+                    width: auto;
+                "
+            >
+                채팅방 나가기
+            </button>
+            <div class="modal-body" id="alertText">
+                <div
+                    id="chatLog"
+                    style="overflow: auto; display: flex; flex-direction: column-reverse"
+                ></div>
+
+                <form id="chatForm" name="publish">
+                    <input
+                        type="text"
+                        autocomplete="off"
+                        size="1"
+                        id="message"
+                        placeholder="메시지를 입력하세요"
+                    />
+                    <input type="submit" value="보내기" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+<script src="/socket.js"></script>
+<script>
+    // swiper library config
+    let swiper = new Swiper('.mySwiper', {
+        loop: true,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickalbe: false,
+        },
+    });
+
+    const page = new URLSearchParams(location.search).get('page') || 1;
+    const level = new URLSearchParams(location.search).get('level') || 0;
+
+    $(`li:nth-child(${Number(level) + 1})`).css('color', 'red');
+
+    getItems(page, level);
+
+    // 아이템 전체조회
+    function getItems(page, level) {
+        console.log(page, level);
+
+        $('#cards-box').empty();
+
+        $.ajax({
+            type: 'GET',
+            url: `/api/items?page=${page}&level=${level}`,
+            success: function (response) {
+                const { itemsCount, itemList, firstPage, lastPage, totalPage } = response;
+
+                itemList.map((item) => {
+                    let tempHtml = `
+                        <div class="col">
+                                <div class="card h-100">
+                                    <img onclick="location.href='/itemDetail/${
+                                        item.item_id
+                                    }'" src="${item.image}" class="card-img-top">
+                                    <div class="card-body">
+                                    <p class="card-title">${item.name}</p>
+                                    <p class="card-text">${Number(
+                                        item.price
+                                    ).toLocaleString()}원</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    $('#cards-box').append(tempHtml);
+                });
+
+                // pagination 버튼 생성
+                const pages = [];
+
+                // prev 버튼
+                if (page > 1) {
+                    const prev = `<a href='?page=${
+                        Number(page) - 1
+                    }&level=${level}'><div class="pagination-btn">이전</div></a>`;
+                    pages.push(prev);
+                }
+
+                // pages 버튼
+                for (let i = firstPage; i <= lastPage; i++) {
+                    const pageList =
+                        Number(page) === i
+                            ? `<a href='?page=${i}&level=${level}'><div class="pagination-btn active">${i}</div></a>`
+                            : `<a href='?page=${i}&level=${level}'><div class="pagination-btn">${i}</div></a>`;
+
+                    pages.push(pageList);
+                }
+
+                // next 버튼
+                if (page < lastPage) {
+                    const next = `<a href='?page=${
+                        Number(page) + 1
+                    }&level=${level}'><div class="pagination-btn">다음</div>`;
+                    pages.push(next);
+                }
+
+                document.getElementById('pagination').innerHTML = pages.join('');
+            },
+            error: function (response) {},
+        });
+    }
+</script>

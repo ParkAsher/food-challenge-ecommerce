@@ -1,0 +1,54 @@
+<% if ( ['login', 'register', 'findEmail', 'findPassword', 'updatePassword'].includes(components)) {
+%>
+<div class="header none-background-header">
+    <div class="header-wrap">
+        <div class="logo">
+            <a href="/">푸드챌린지</a>
+        </div>
+    </div>
+</div>
+<% } else { %>
+<div class="header">
+    <div class="header-wrap">
+        <div class="logo">
+            <a href="/">푸드챌린지</a>
+        </div>
+        <div class="header-btn-wrap">
+            <% if (!user) { %>
+            <div class="header-btn-register">
+                <a href="/register">회원가입</a>
+            </div>
+            <div class="header-btn-login">
+                <a href="/login">로그인</a>
+            </div>
+            <% } else { %>
+            <div class="header-btn-basket">
+                <a href="/basket">장바구니</a>
+            </div>
+            <div class="header-btn-mypage">
+                <a href="/mypage">마이페이지</a>
+            </div>
+            <div class="header-btn-logout">
+                <button type="button" onclick="logout()">로그아웃</button>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+<% } %>
+
+<script>
+    function logout() {
+        $.ajax({
+            type: 'GET',
+            url: '/api/users/logout',
+            success: function (response) {
+                window.location.href='/';
+            },
+            error: function (response) {
+                customAlert(response.responseJSON);
+                window.location.reload();
+            },
+        });
+    }
+</script>

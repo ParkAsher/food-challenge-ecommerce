@@ -1,0 +1,78 @@
+<div class="login-background">
+    <div class="login-wrap">
+        <div class="login-form">
+            <div class="login-title-wrap">
+                <p>로그인</p>
+            </div>
+            <div class="login-email-wrap">
+                <input type="text" id="email" class="login-email-input" placeholder="Email" />
+            </div>
+            <div class="login-password-wrap">
+                <input
+                    type="password"
+                    id="password"
+                    class="login-password-input"
+                    placeholder="Password"
+                />
+            </div>
+            <div id="error-message-wrap" class="error-message-wrap"></div>
+            <div class="login-find-link-wrap">
+                <div class="login-find-link-email-wrap">
+                    <a href="/find_email">이메일 찾기</a>
+                </div>
+                <div class="login-find-link-password-wrap">
+                    <a href="/find_password">비밀번호 찾기</a>
+                </div>
+            </div>
+            <div class="login-btn-wrap">
+                <button type="button" onclick="login()">로그인</button>
+            </div>
+            <div class="social-login-btn-wrap">
+                <a href="http://localhost:5000/auth/kakao">
+                    <img src="./image/kakao_login_large_wide.png" />
+                </a>
+            </div>
+            <div class="register-link-wrap">
+                <a href="/register">아직 회원이 아니십니까?</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function login() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        const userInfo = { email, password };
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/users/login',
+            data: userInfo,
+            success: function (response) {
+                window.location.href = '/';
+            },
+            error: function (response) {
+                const { message } = response.responseJSON;
+
+                const html = `<p>${message}</p>`;
+
+                document.getElementById('error-message-wrap').innerHTML = html;
+            },
+        });
+    }
+
+    function kakao() {
+        $.ajax({
+            type: 'GET',
+            url: '/auth/kakao',
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (response) {
+                console.log(response);
+            },
+        });
+    }
+</script>

@@ -1,0 +1,196 @@
+<% if (user !== null) { %> <%- include('getUser.ejs') %> <% } %> 
+
+<div class="item-detail-background">
+    <div class="item-detail-wrap">
+        <div class="item-detail-title-wrap">
+            <p>상품 상세</p>
+        </div>
+        <div class="item-detail-form">
+            <div class="item-detail-image" id="item-detail-image"></div>
+            <div class="item-detail-content">
+                <div class="item-detail-name-wrap" id="item-detail-name-wrap"></div>
+                <div class="item-detail-desc">
+                    <div class="item-detail-desc-row">
+                        <div class="item-detail-desc-title">
+                            <p>상품 난이도</p>
+                        </div>
+                        <div id="item-detail-level" class="item-detail-desc-content"></div>
+                    </div>
+                    <div class="item-detail-desc-row">
+                        <div class="item-detail-desc-title">
+                            <p>개당 가격</p>
+                        </div>
+                        <div id="item-detail-price" class="item-detail-desc-content"></div>
+                    </div>
+                    <div class="item-detail-desc-row">
+                        <div class="item-detail-desc-title">
+                            <p>적립포인트</p>
+                        </div>
+                        <div id="item-detail-point" class="item-detail-desc-content"></div>
+                    </div>
+                    <div class="item-detail-desc-row">
+                        <div class="item-detail-desc-title">
+                            <p>잔여 수량</p>
+                        </div>
+                        <div id="item-detail-stock" class="item-detail-desc-content"></div>
+                    </div>
+                </div>
+                <div class="item-detail-purchase-wrap">
+                    <div class="item-detail-desc-row">
+                        <div class="item-detail-desc-title">
+                            <p>구매수량</p>
+                        </div>
+                        <div id="item-detail-stock" class="item-detail-desc-content">
+                            <button type="button" class="item-count-minus" onclick="minus()">
+                                -
+                            </button>
+                            <input type="text" name="count" value="1" id="count" min="1" />
+                            <button type="button" class="item-count-plus" onclick="plus()">
+                                +
+                            </button>
+                        </div>
+                    </div>
+                    <div class="item-detail-desc-row">
+                        <div class="item-detail-desc-title">
+                            <p>총 주문금액</p>
+                        </div>
+                        <div id="item-detail-total-price" class="item-detail-desc-content"></div>
+                    </div>
+                </div>
+                <div class="item-detail-purchase-btn-wrap">
+                    <button onclick="addMyCart()">장바구니</button>
+                    <button onclick="pass()">바로구매</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="info"></div>
+<script>
+    const item_id = window.location.pathname.split('/')[2]
+
+    fetch(`http://localhost:5000/api/items/${item_id}`)
+        .then((response) => response.json())
+        .then((data) => {
+            const { message, itemDetail } = data;
+            if (message) {
+                customAlert(message);
+                return (location.href = '/');
+            } else {
+                const itemImageHtml = `
+                    <img id="itemImage" src="${itemDetail.image}" />
+                `;
+                document.getElementById('item-detail-image').innerHTML = itemImageHtml;
+
+                const itemIdHtml = `<p id='item-name'>${itemDetail.name}</p>`;
+                document.getElementById('item-detail-name-wrap').innerHTML = itemIdHtml;
+
+                const itemLevelHtml = `<p id='item-level'>${itemDetail.level} 단계</p>`;
+                document.getElementById('item-detail-level').innerHTML = itemLevelHtml;
+
+                const itemPriceHtml = `<p id='item-price'>${Number(
+                    itemDetail.price
+                ).toLocaleString()} 원</p>`;
+
+                document.getElementById('item-detail-price').innerHTML = itemPriceHtml;
+                document.getElementById('item-detail-total-price').innerHTML = itemPriceHtml;
+
+                const itemPointHtml = `<p id='item-point'>${itemDetail.price * 0.05} P</p>`;
+                document.getElementById('item-detail-point').innerHTML = itemPointHtml;
+
+                const itemStockHtml = `<p id='item-stock'>${itemDetail.stock} 개</p>`;
+                document.getElementById('item-detail-stock').innerHTML = itemStockHtml;
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            location.href = '/';
+        });
+
+    function plus() {
+        const stock = Number(document.getElementById('item-stock').innerText.split(' ')[0]);
+        let count = Number(document.getElementById('count').value);
+  
+        if (count === stock) return;
+
+        count += 1;
+
+        const price = Number(
+            document.getElementById('item-price').innerText.split(' ')[0].split(',').join('')
+        );
+        
+        document.getElementById('count').value = count;
+        document.getElementById('item-detail-total-price').innerHTML = `<p id="item-total-price">${
+            count * price
+        } 원</p>`;
+    }
+
+    function minus() {
+        let count = Number(document.getElementById('count').value);
+        if (count === 1) return;
+
+        count -= 1;
+
+        const price = Number(
+            document.getElementById('item-price').innerText.split(' ')[0].split(',').join('')
+        );
+
+        document.getElementById('count').value = count;
+        document.getElementById('item-detail-total-price').innerHTML = `<p id="item-total-price">${
+            count * price
+        } 원</p>`;
+    }
+
+    function addMyCart() {
+        const data = {
+            count: document.getElementById('count').value,
+        };
+
+        fetch(`http://localhost:5000/api/items/${item_id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.message) {
+                    customAlert(data.message);
+                    return (location.href = '/login');
+                }
+
+                if (customAlert('장바구니로 상품을 담았습니다.',function() {
+                    window.location.href = '/basket';
+                })) {
+                }
+            })
+            .catch((err) => {
+                customAlert(err.message);
+                location.href = '/';
+            });
+    }
+
+    function pass() {
+        const user_id = $('#user').text();
+
+        if (user_id) {
+            let count = document.getElementById('count').value;
+            let name = document.getElementById('item-name').innerText;
+            let price = document
+            .getElementById('item-price')
+            .innerText.split(' ')[0]
+            .split(',')
+            .join('');
+            let image = document.getElementById('itemImage').src;
+            let totalPrice = Number(document.getElementById('item-detail-total-price').innerText.split(' ')[0].split(',').join(''))
+
+            location.href = `/order?item_id=${item_id}&name=${name}&price=${price}&count=${count}&totalPrice=${totalPrice}&image=${image}`;
+        } else {
+            customAlert('로그인 후 이용 가능합니다.', function () {
+            window.location.href = '/login'
+          });
+        }
+}
+</script>

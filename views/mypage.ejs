@@ -1,0 +1,188 @@
+<div class="mypage-title-background"></div>
+<div class="mypage-container">
+    <div class="mypage-wrap">
+        <div class="mypage-title">
+            <p>마이페이지</p>
+        </div>
+        <div class="mypage-my-info-wrap"></div>
+
+        <div class="mypage-order-list-title">
+            <p>주문내역</p>
+        </div>
+        <div class="mypage-order-list">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>주문번호</th>
+                        <th>상품명</th>
+                        <th>구매수량</th>
+                        <th>총금액</th>
+                        <th>적립포인트</th>
+                        <th>구매시기</th>
+                    </tr>
+                </thead>
+                <tbody id="order-list"></tbody>
+            </table>
+        </div>
+        <div id="pagination" class="pagination-btn-wrap"></div>
+        <div class="mypage-delete-user-title">
+            <p>회원탈퇴</p>
+        </div>
+        <div class="mypage-delete-user-warning">
+            <p>회원탈퇴 시 복구가 불가능합니다.</p>
+            <p>탈퇴회원의 개인정보는 회원탈퇴 시 즉시 삭제됩니다.</p>
+            <p>회원탈퇴 시 보유하고 계신 포인트는 즉시 소멸됩니다.</p>
+            <p>그래도 탈퇴하시겠습니까?</p>
+        </div>
+        <div class="mypage-delete-user-btn-wrap">
+            <button type="button" id="delete-btn">회원탈퇴</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        const id = '<%- JSON.stringify(user.id) %>';
+        getMypage(id);
+    });
+
+    function getMypage(id) {
+        $.ajax({
+            type: 'GET',
+            url: `/api/users/mypage/${id}`,
+            success: function (response) {
+                let { user } = response;
+
+                let temp_html = `
+                    <div class="user-info-row">
+                        <div class="user-info-title">
+                            <p>이름</p>
+                        </div>
+                        <div class="user-info-value">
+                            <p>${user.name}</p>
+                        </div>
+                        <div class="user-info-title">
+                            <p>닉네임</p>
+                        </div>
+                        <div class="user-info-value">
+                            <p>${user.nickname}</p>
+                        </div>
+                    </div>
+                    <div class="user-info-row">
+                        <div class="user-info-title">
+                            <p>이메일</p>
+                        </div>
+                        <div class="user-info-value">
+                            <p>${user.email}</p>
+                        </div>
+                        <div class="user-info-title">
+                            <p>휴대폰 번호</p>
+                        </div>
+                        <div class="user-info-value">
+                            <p>${user.phone}</p>
+                        </div>
+                    </div>
+                    <div class="user-info-row">
+                        <div class="user-info-title">
+                            <p>가입일자</p>
+                        </div>
+                        <div class="user-info-value">
+                            <p>${user.createdAt}</p>
+                        </div>
+                        <div class="user-info-title">
+                            <p>잔여포인트</p>
+                        </div>
+                        <div class="user-info-value">
+                            <p>${user.point}</p>
+                        </div>
+                    </div>
+				`;
+                $('.mypage-my-info-wrap').append(temp_html);
+            },
+        });
+
+        const page = new URLSearchParams(location.search).get('page') || 1;
+
+        $.ajax({
+            type: 'GET',
+            url: `/api/orders/mypage/${id}?page=${page}`,
+            error: function (error) {
+                $('#empty-list').append('<p>주문 내역이 없습니다.</p>');
+            },
+            success: function (response) {
+                const { status, orderList, firstPage, lastPage, totalPage } = response;
+                let rows = response.orderList;
+
+                // 테이블에 주문목록 붙이기 : 페이지당 8개
+                const html = orderList.map((order) => {
+                    const orderObj = JSON.stringify(order);
+                    return `
+						<tr>
+							<td>${order.order_id}</td>
+							<td>${order.name}</td>
+							<td>${order.count}</td>
+							<td>${order.total_item_price}</td>
+							<td>${order.save_point}</td>
+							<td>${order.createdAt}</td>
+						</tr>
+					`;
+                });
+                $('#order-list').append(html);
+
+                // pagination 버튼 생성
+                const pages = [];
+
+                // prev 버튼
+                if (page > 1) {
+                    const prev = `
+						<a href='?page=${Number(page) - 1}'><div class="pagination-btn"><</div></a>
+					`;
+                    pages.push(prev);
+                }
+
+                // pages 버튼
+                for (let i = firstPage; i <= lastPage; i++) {
+                    const pageList =
+                        Number(page) === i
+                            ? `<a href='?page=${i}'><div class="pagination-btn active">${i}</div></a>`
+                            : `<a href='?page=${i}'><div class="pagination-btn">${i}</div></a>`;
+
+                    pages.push(pageList);
+                }
+
+                // next 버튼
+                if (page < totalPage) {
+                    const next = `
+						<a href='?page=${Number(page) + 1}'><div class="pagination-btn">></div>
+					`;
+                    pages.push(next);
+                }
+
+                document.getElementById('pagination').innerHTML = pages.join('');
+            },
+        });
+
+        // 계정 삭제버튼
+        document.getElementById('delete-btn').addEventListener('click', function () {
+            const inputMessage = prompt(
+                '회원 탈퇴를 원하신다면 입력란에 "회원탈퇴"를 입력해주세요.',
+                ''
+            );
+
+            if (inputMessage === '회원탈퇴') {
+                $.ajax({
+                    type: 'DELETE',
+                    url: `/api/users/mypage/${id}`,
+                    success: function (response) {
+                        customAlert('회원 탈퇴 처리되었습니다.');
+                        window.location.reload();
+                    },
+                });
+            } else {
+                customAlert('회원 탈퇴에 실패했습니다. 다시 시도해주십시오.', function () {
+                    window.location.reload();
+                });
+            }
+        });
+    }
+</script>

@@ -1,0 +1,23 @@
+.wrap {
+  width: 80%;
+  max-width: 600px;
+  margin: 40px auto;
+}
+
+.wrapa {
+    width: 80%;
+    max-width: 600px;
+    margin: auto;
+  }
+  .btn-order {
+    color: #ffffff !important;
+    background-color: #000000 !important;
+    border-color: #000000 !important;
+  }
+
+  .btn-cancel {
+    color: #ffffff !important;
+    background-color: #d90808 !important;
+    border-color: #d90808 !important;
+  }
+  

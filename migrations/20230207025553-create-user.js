@@ -29,7 +29,6 @@ module.exports = {
             },
             phone: {
                 allowNull: false,
-                unique: true,
                 type: Sequelize.STRING,
             },
             point: {
