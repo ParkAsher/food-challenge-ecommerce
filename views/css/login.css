@@ -129,13 +129,13 @@
     margin-bottom: 2rem;
 }
 
-.social-login-btn-wrap button {
+.social-login-btn-wrap a {
     width: 100%;
     background: none;
     border: none;
 }
 
-.social-login-btn-wrap button img {
+.social-login-btn-wrap a img {
     width: 100%;
     object-fit: contain;
 }

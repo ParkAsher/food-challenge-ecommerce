@@ -1,19 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 
 dotenv.config();
 
-router.get('/kakao', passport.authenticate('kakao'));
-router.get(
-    '/kakao/callback',
-    passport.authenticate('kakao', {
-        failureRedirect: '/',
-    }),
-    (req, res) => {
-        console.log(req.user);
+class SocialLoginController {
+    socialLogin = async (req, res) => {
         const accessToken = jwt.sign(
             {
                 id: req.user.id,
@@ -26,7 +17,7 @@ router.get(
         );
         res.cookie('accessToken', accessToken);
         res.redirect('/');
-    }
-);
+    };
+}
 
-module.exports = router;
+module.exports = SocialLoginController;
