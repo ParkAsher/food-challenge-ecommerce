@@ -3,16 +3,17 @@ const nickname = $('#nickname').text();
 const socket = io.connect('/');
 
 function enterAlert() {
-    // chatRoom 소켓으로 연결
-    socket.emit('chatRoom');
-
-    $('#chat').css('display', 'block');
+    if (nickname) {
+        socket.emit('chatRoom');
+        $('#chat').css('display', 'block');
+    } else return
 }
 
 // 입장 메시지
 const enter = { message: `${nickname} 님이 입장했습니다.` };
 
 socket.emit('enterMessage', JSON.stringify(enter));
+console.log('test 1')
 socket.on('usercount', (num) => {
     let html = `<div class="modal-title">그룹채팅(${num}명)</div>`;
 
