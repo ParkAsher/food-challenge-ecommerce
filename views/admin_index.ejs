@@ -32,12 +32,47 @@
         <link rel="stylesheet" href="/css/admin_header.css" />
         <link rel="stylesheet" href="/css/user_management.css" />
         <link rel="stylesheet" href="/css/item_management.css" />
+        <link rel="stylesheet" href="/css/modal.css" />
+
+        <script src="/modal.js"></script>
 
         <title>푸드챌린지 관리자페이지</title>
     </head>
     <body>
         <!-- header -->
         <%- include('admin_header.ejs') %>
+
+        <!-- custome alert -->
+        <div
+            class="modal text-left"
+            id="alertModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="alertModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="alertModalLabel">알림</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="alertText"></div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-outline-sparta btn-confirm"
+                            data-dismiss="modal"
+                        >
+                            확인
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- body -->
         <div class="admin-manage-btn-wrap">
             <div class="admin-manage-user-btn-wrap">

@@ -13,7 +13,7 @@ const http = createServer(app);
 
 /* router */
 const router = require('./routes');
-const kakaoRouter = require('./routes/kakao.routes'); // KAKAO LOGIN Router
+const socialLoginRouter = require('./routes/socialLogin.routes'); // Social Login Router
 const ejsRouter = require('./routes/ejs.routes');
 const errorHandler = require('./middleware/errorhandler');
 
@@ -28,7 +28,7 @@ app.use(
 );
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', router);
-app.use('/auth', kakaoRouter);
+app.use('/auth', socialLoginRouter);
 app.use(ejsRouter);
 app.use(errorHandler);
 

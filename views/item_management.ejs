@@ -216,8 +216,9 @@
             document.getElementById('pagination').innerHTML = pages.join('');
         },
         error: function (response) {
-            customAlert(response.responseJSON.message);
-            window.location.href = '/';
+            customAlert(response.responseJSON.message, function () {
+                window.location.href = '/';
+            });
         },
     });
 
@@ -238,8 +239,9 @@
                 document.getElementById('item-image-url').value = response.filePath;
             },
             error: function (response) {
-                customAlert(response.responseJSON.message);
-                window.location.reload();
+                customAlert(response.responseJSON.message, function () {
+                    window.location.reload();
+                });
             },
         });
     });
@@ -261,8 +263,9 @@
                 document.getElementById('update-item-image-url').value = response.filePath;
             },
             error: function (response) {
-                customAlert(response.responseJSON.message);
-                window.location.reload();
+                customAlert(response.responseJSON.message, function () {
+                    window.location.reload();
+                });
             },
         });
     });
@@ -281,12 +284,14 @@
             url: '/api/admin/item',
             data: itemInfo,
             success: function (response) {
-                customAlert(response.message);
-                window.location.reload();
+                customAlert(response.message, function () {
+                    window.location.reload();
+                });
             },
             error: function (response) {
-                customAlert(response.responseJSON.message);
-                window.location.reload();
+                customAlert(response.responseJSON.message, function () {
+                    window.location.reload();
+                });
             },
         });
     }
@@ -297,12 +302,14 @@
                 type: 'DELETE',
                 url: `/api/admin/item?itemId=${id}`,
                 success: function (response) {
-                    customAlert(response.message);
-                    window.location.reload();
+                    customAlert(response.message, function () {
+                        window.location.reload();
+                    });
                 },
                 error: function (response) {
-                    customAlert(response.responseJSON.message);
-                    window.location.reload();
+                    customAlert(response.responseJSON.message, function () {
+                        window.location.reload();
+                    });
                 },
             });
         }
@@ -332,12 +339,14 @@
             url: '/api/admin/item',
             data: itemInfo,
             success: function (response) {
-                customAlert(response.message);
-                window.location.reload();
+                customAlert(response.message, function () {
+                    window.location.reload();
+                });
             },
             error: function (response) {
-                customAlert(response.responseJSON.message);
-                window.location.reload();
+                customAlert(response.responseJSON.message, function () {
+                    window.location.reload();
+                });
             },
         });
     }
