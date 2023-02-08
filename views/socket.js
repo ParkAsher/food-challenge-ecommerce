@@ -48,14 +48,15 @@ socket.on('message', (msg) => {
 function showMessage(message) {
     const obj = JSON.parse(message);
 
-    if (nickname === obj.newMessage.nickname) {
-        let html = `<div class="myMsg">
-                        <span class="msg" id="myMsg">${obj.newMessage.value}</span>
+    if (obj.newMessage.nickname === '관리자') {
+        let html = `<div class="admMsg">
+                        <span class="anotherName">${obj.newMessage.nickname}</span>
+                        <span class="msg" id="admMsg">${obj.newMessage.value}</span>
                     </div>`;
         $('#chatLog').prepend(html);
         $('#message').val('');
-    } else if (nickname === '관리자') {
-        let html = `<div class="admMsg">
+    } else if (nickname === obj.newMessage.nickname) {
+        let html = `<div class="myMsg">
                         <span class="msg" id="myMsg">${obj.newMessage.value}</span>
                     </div>`;
         $('#chatLog').prepend(html);
