@@ -54,7 +54,7 @@ class OrderService {
                 await this.orderRepository.saveOrderItem(order_id, item_id, count);
             }
 
-            await this.basketRepository.afterOrderdeleteItemInBasket(user_id)
+            await this.basketRepository.afterOrderdeleteItemInBasket(user_id);
             return saveOrder;
         }
     };

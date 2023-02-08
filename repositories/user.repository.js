@@ -34,8 +34,9 @@ class UserRepository {
                 email: userInfo.email,
                 password: userInfo.password,
                 phone: userInfo.phone,
+                point: 3000,
             });
-            return { status: 200, message: '회원가입에 성공했습니다.' };
+            return { status: 200, message: '회원가입 성공! \n3000 포인트가 지급되었습니다.' };
         } catch (error) {
             throw error;
         }
