@@ -18,10 +18,10 @@ io.on('connection', (socket) => {
 
             socket.broadcast.emit('enterMessage', msg);
         });
-
-        // 방 인원 숫자
-        socket.emit('usercount', io.engine.clientsCount);
     });
+
+    // 방 인원 숫자
+    socket.emit('usercount', io.engine.clientsCount);
 
     // 메시지 핸들
     socket.on('message', (msg) => {
