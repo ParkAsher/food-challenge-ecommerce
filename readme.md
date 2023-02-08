@@ -16,7 +16,7 @@
 
 <br/>
 
-**<h3>당신의 챌린지레벨을 체험해불 수 있는 좋은 기회입니다 :heavy_exclamation_mark:
+**<h3>당신의 챌린지레벨을 체험해볼 수 있는 좋은 기회입니다 :heavy_exclamation_mark:
 :heavy_exclamation_mark:</h3>**
 
 <br/>
