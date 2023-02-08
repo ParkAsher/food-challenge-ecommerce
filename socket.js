@@ -14,6 +14,7 @@ io.on('connection', (socket) => {
 
         // 입장 메시지
         socket.on('enterMessage', (msg) => {
+            console.log('asdjfkajshdfkahsdflk')
             console.log('Enter Message received: ' + msg);
 
             socket.broadcast.emit('enterMessage', msg);
